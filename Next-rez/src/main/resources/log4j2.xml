@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration packages="com.itrail.test.log4j.plugins" status="WARN" monitorInterval="60">
+    
+    <Appenders>
+    
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>
+        </Console>
+    
+        
+        <RollingFile name="LogToRollingFile" fileName="${sys:jboss.server.log.dir}/epd/rest.web.log" filePattern="${sys:jboss.server.log.dir}/epd/arch/$${date:MM-dd}/rest.web-%d{dd.MM.yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} %-5level [%t]  %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        
+        
+        <RollingFile name="LogToAnimalS" fileName="${sys:jboss.server.log.dir}/requestAnimal/rest.web.log" 
+                     filePattern="${sys:jboss.server.log.dir}/requestAnimal/arch/$${date:MM-dd}/requestAnimal/rest.web-%d{dd.MM.yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} %-5level [%t]  %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1 MB"/>
+            </Policies>
+        </RollingFile>
+        
+        <JDBC name="dbZooStore" tableName="EVENT_LOGS">
+
+            <DataSource jndiName="java:jboss/datasources/ExampleDS"/>
+            <Column name="ID" pattern="%u" isUnicode="false"/>
+            <Column name="DATE_TIME" isEventTimestamp="true" isUnicode="false"/>
+            <Column name="CLASS" pattern="%logger" isUnicode="false"/>
+            <Column name="LEVEL" pattern="%level" isUnicode="false"/>
+            <Column name="MESSAGE" pattern="%message" isUnicode="false"/>
+            <Column name="EXCEPTION" pattern="%ex{full}" isClob="true" isUnicode="false"/>
+        </JDBC>
+      
+        <MyAppender name="ABC">
+             <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>
+        </MyAppender> 
+    </Appenders>
+        
+    <Loggers>
+        <Logger name="com.itrail.test.rest.impl" additivity="true" >
+            <AppenderRef ref="LogToAnimalS" />
+        </Logger>
+        
+        <AsyncLogger name="dbZooStore" level="info" includeLocation="true" >
+            <AppenderRef ref="dbZooStore" />
+        </AsyncLogger>
+        
+        
+        <AsyncRoot  level = "DEBUG">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="LogToRollingFile" />
+            <AppenderRef ref="ABC" />
+        </AsyncRoot>   
+    </Loggers>
+</Configuration>
