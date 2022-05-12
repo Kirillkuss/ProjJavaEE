@@ -44,6 +44,8 @@
         <MyAppender name="ABC">
              <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>
         </MyAppender> 
+        
+        <JPA name="JpaAppender" persistenceUnitName="default" entityClassName="com.itrail.test.app.model.LogView" ignoreExceptions="false" />
     </Appenders>
         
     <Loggers>
@@ -55,11 +57,16 @@
             <AppenderRef ref="dbZooStore" />
         </AsyncLogger>
         
+        <AsyncLogger name="JpaAppender" level="info">
+            <AppenderRef ref="JpaAppender" />
+        </AsyncLogger>
+        
         
         <AsyncRoot  level = "DEBUG">
             <AppenderRef ref="Console" />
             <AppenderRef ref="LogToRollingFile" />
             <AppenderRef ref="ABC" />
+
         </AsyncRoot>   
     </Loggers>
 </Configuration>

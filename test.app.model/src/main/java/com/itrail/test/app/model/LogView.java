@@ -5,31 +5,31 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
-
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
 /**
  *
  * @author barysevich_k
  */
 @Entity
 @Table(name = "LOGGERSTABLE")
-@ApiModel(description = "Таблица логов")
-public class LogView implements Serializable  {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@ApiModel(description = "Таблица логов") 
+public class LogView extends BasicLogEventEntity  {
+    private LogEvent wrappedEvent;
+
     @Column(name = "LOG_ID")
     @ApiModelProperty(value    = "Ид лога", 
                       name     = "IdLogger", 
                       dataType = "Integer", 
                       example  = "1", 
-                      required = true)
-    private Integer id;
+                    required = true)
+    @Id
+    private Long id;
+    
     
     @Column(name = "date")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -51,14 +51,16 @@ public class LogView implements Serializable  {
     public LogView() {
     }
 
-    public LogView(Integer id, LocalDateTime date, String text) {
-        this.id = id;
-        this.date = date;
-        this.text = text;
+    public LogView(LogEvent wrappedEvent) {
+        super(wrappedEvent);
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDateTime getDate() {
@@ -67,10 +69,6 @@ public class LogView implements Serializable  {
 
     public String getText() {
         return text;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public void setDate(LocalDateTime date) {
@@ -84,9 +82,9 @@ public class LogView implements Serializable  {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 13 * hash + Objects.hashCode(this.id);
-        hash = 13 * hash + Objects.hashCode(this.date);
-        hash = 13 * hash + Objects.hashCode(this.text);
+            hash = 13 * hash + Objects.hashCode(this.id);
+            hash = 13 * hash + Objects.hashCode(this.date);
+            hash = 13 * hash + Objects.hashCode(this.text);
         return hash;
     }
 
@@ -110,8 +108,7 @@ public class LogView implements Serializable  {
         }
         return Objects.equals(this.date, other.date);
     }
-
-
+    
     @Override
     public String toString() {
         return "LogView{" + "id=" + id + ", date=" + date + ", text=" + text + '}';
