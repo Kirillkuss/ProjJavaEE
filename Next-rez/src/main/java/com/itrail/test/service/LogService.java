@@ -1,4 +1,3 @@
-
 package com.itrail.test.service;
 
 import com.itrail.test.app.model.LogView;

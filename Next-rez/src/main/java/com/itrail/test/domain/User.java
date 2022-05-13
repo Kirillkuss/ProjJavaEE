@@ -78,7 +78,7 @@ public class User {
     private BigDecimal wallet;
     
     
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     @JoinTable(name = "USER_ANIMAL", joinColumns = @JoinColumn(name = "USER_ID"),
                               inverseJoinColumns = @JoinColumn(name = "ANIMAL_ID"))
     @ApiModelProperty(value    = "Питомцы пользователя ",

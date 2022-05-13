@@ -1,4 +1,5 @@
 package com.itrail.test.rest;
+
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
 import io.swagger.annotations.Api;

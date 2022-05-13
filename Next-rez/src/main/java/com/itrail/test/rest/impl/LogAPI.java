@@ -19,6 +19,7 @@ public class LogAPI implements LogResource{
     public BaseResponse getLog() {
         BaseResponse bs = new BaseResponse(200, "success");
         bs.setData(service.getAllLog());
+        //System.out.println("ListLog>>> " + service.getAllLog());
        return bs;
     }
     
