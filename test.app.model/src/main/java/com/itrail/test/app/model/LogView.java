@@ -32,10 +32,10 @@ import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
 public class LogView extends BasicLogEventEntity  {
     private LogEvent wrappedEvent;
     @Id
-    @Column(name = "LOG_ID")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value    = "Ид лога", 
-                      name     = "IdLogger", 
+                      name     = "id", 
                       dataType = "Long", 
                       example  = "1", 
                       required = true)

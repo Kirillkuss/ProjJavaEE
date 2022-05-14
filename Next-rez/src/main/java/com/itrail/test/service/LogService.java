@@ -1,6 +1,8 @@
 package com.itrail.test.service;
 
+import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogView;
+import com.itrail.test.domain.BaseResponse;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -42,6 +44,28 @@ public class LogService {
     
     public void createLog(LogView logi){
        entityManager.merge(logi);
+    }
+    
+    
+    public BaseResponse<List<LogView>> getFoundLog(FilterLog filterLog){
+        BaseResponse<List<LogView>> f = new BaseResponse(0, "success");
+        try{
+            f.setData(getFil());
+            return f;
+        } catch(Exception e){
+            return BaseResponse.error(980, e);
+        }
+
+    }
+    
+    
+    private List<LogView> getFil(){
+        FilterLog fil = new FilterLog();
+        return entityManager.createQuery("SELECT e FROM LogView e where :idFil is null or e.id = :idFil AND "
+                + ":dateFil is null or e.date = :dateFil")
+                .setParameter("idFil", fil.getId())
+                .setParameter("dateFil", fil.getDate())
+                .getResultList();  
     }
     
 }

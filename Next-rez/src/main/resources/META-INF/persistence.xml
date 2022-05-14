@@ -7,7 +7,7 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
         <class>com.itrail.test.app.model.LogView</class>
-        <!--jar-file>D:\Project\test\test.app.model\target\test.app.model-1.0.jar</jar-file!-->
+        <class>com.itrail.test.app.model.FilterLog</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>

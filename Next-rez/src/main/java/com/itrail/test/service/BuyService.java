@@ -113,7 +113,8 @@ public class BuyService {
                                                 + " AND :olderid is null or o.idOrder = :olderid")
                                    .setParameter("userid", rq.getIdUser())
                                    .setParameter("timeOrder", rq.getTime())
-                                   .setParameter("olderid", rq.getIdOrderRq()).getResultList(); 
+                                   .setParameter("olderid", rq.getIdOrderRq()).getResultList();
+             //   return em.createQuery("select o FROM Order o").getResultList(); 
     }
     /**
      *Формирование неограниченого количество заказов
