@@ -40,6 +40,17 @@
             <Column name="MESSAGE" pattern="%message" isUnicode="false"/>
             <Column name="EXCEPTION" pattern="%ex{full}" isClob="true" isUnicode="false"/>
         </JDBC>
+        
+        <JDBC name = "dbAn" tableName = "ANIMALREST" ignoreExceptions="false">
+            <DataSource jndiName="java:jboss/datasources/ExampleDS"/>
+            <Column name="ANIMAL_ID" pattern="%u" isUnicode="false"/>
+            <Column name="type_animal" pattern="%type_animal" isUnicode="false" />
+            <Column name="coat_animal" pattern="%coat_animal" isUnicode="false" />
+            <Column name="count_animal" pattern="%count_animal" isUnicode="false"/>
+            <Column name="USER_ID" pattern="true" isUnicode="false"/>
+	</JDBC> 
+        
+        
       
         <MyAppender name="ABC">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>

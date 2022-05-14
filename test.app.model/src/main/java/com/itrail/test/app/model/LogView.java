@@ -1,11 +1,14 @@
 package com.itrail.test.app.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.itrail.test.app.core.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,18 +16,20 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Transient;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
+
 /**
  *
  * @author barysevich_k
  */
+
+
 @Entity
 @Table(name = "LOGGERSTABLE")
-@ApiModel(description = "Таблица логов") 
+@ApiModel(description = "Таблица логов")
+@JsonInclude(Include.NON_DEFAULT)
 public class LogView extends BasicLogEventEntity  {
-    @Transient
     private LogEvent wrappedEvent;
     @Id
     @Column(name = "LOG_ID")
@@ -43,7 +48,14 @@ public class LogView extends BasicLogEventEntity  {
                       dataType = "String", 
                       example  = "12.04.2022 11:02:42", 
                       required = true)
-    private LocalDateTime date = LocalDateTime.now();
+    private LocalDateTime date;
+    @Column(name = "level")
+    @ApiModelProperty(value = "Уровень лога",
+                      name  = "level",
+                      dataType = "String",
+                      example = "error",
+                      required = true)
+    private String levels;
     
     @Column(name = "text")
     @ApiModelProperty(value    = "сообщение", 
@@ -51,16 +63,24 @@ public class LogView extends BasicLogEventEntity  {
                       dataType = "String", 
                       example  = "message", 
                       required = true)
-    private String text ;
-
+    private String text;
+    
+ 
     public LogView() {
     }
-
     public LogView(LogEvent wrappedEvent) {
         super(wrappedEvent);
+        if(wrappedEvent != null){
+            setDate(Instant.ofEpochMilli(wrappedEvent.getTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+            if(wrappedEvent.getMessage() != null){
+                setText(wrappedEvent.getMessage().toString());
+            }
+            if(wrappedEvent.getLevel() !=null){
+                setLevels(wrappedEvent.getLevel().toString());
+            }
+        }
+        
     }
-
-
 
     public Long getId() {
         return id;
@@ -78,6 +98,14 @@ public class LogView extends BasicLogEventEntity  {
         this.date = date;
     }
 
+    public String getLevels() {
+        return levels;
+    }
+
+    public void setLevels(String levels) {
+        this.levels = levels;
+    }
+
     public String getText() {
         return text;
     }
@@ -86,14 +114,14 @@ public class LogView extends BasicLogEventEntity  {
         this.text = text;
     }
 
-
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 37 * hash + Objects.hashCode(this.wrappedEvent);
-        hash = 37 * hash + Objects.hashCode(this.id);
-        hash = 37 * hash + Objects.hashCode(this.date);
-        hash = 37 * hash + Objects.hashCode(this.text);
+        hash = 97 * hash + Objects.hashCode(this.wrappedEvent);
+        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 97 * hash + Objects.hashCode(this.date);
+        hash = 97 * hash + Objects.hashCode(this.levels);
+        hash = 97 * hash + Objects.hashCode(this.text);
         return hash;
     }
 
@@ -109,6 +137,9 @@ public class LogView extends BasicLogEventEntity  {
             return false;
         }
         final LogView other = (LogView) obj;
+        if (!Objects.equals(this.levels, other.levels)) {
+            return false;
+        }
         if (!Objects.equals(this.text, other.text)) {
             return false;
         }
@@ -123,11 +154,8 @@ public class LogView extends BasicLogEventEntity  {
 
     @Override
     public String toString() {
-        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", text=" + text + '}';
+        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", levels=" + levels + ", text=" + text + '}';
     }
-
     
 
-
- 
 }
