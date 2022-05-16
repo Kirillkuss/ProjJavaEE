@@ -1,6 +1,7 @@
 package com.itrail.test.rest;
 
 import com.itrail.test.app.model.FilterLog;
+import com.itrail.test.app.model.LogResponse;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.exception.mapper.ItException;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiResponses;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 /**
@@ -29,13 +31,12 @@ public interface LogResource {
         @ApiResponse(code = 200, message = "LOGGER", response = LogView.class)})
     public BaseResponse getLog();
     
-    
     @POST
+    @Path("/request")
     @ApiOperation(value = "Поиск логгов")
     @ApiResponses(value ={
-        @ApiResponse(code = 200, message ="Поиск логгов", response = LogView.class)})
-    public LogView getListFilterLog(@ApiParam(required = true) FilterLog filterLog) throws ItException ;
-    
-    
+        @ApiResponse(code = 200, message ="Поиск логгов")})
+    public LogResponse getListFilterLog(@ApiParam(required = false) FilterLog filterLog) throws ItException ;
+
 }
 

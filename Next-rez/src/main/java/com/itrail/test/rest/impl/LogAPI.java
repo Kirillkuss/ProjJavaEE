@@ -2,6 +2,7 @@
 package com.itrail.test.rest.impl;
 
 import com.itrail.test.app.model.FilterLog;
+import com.itrail.test.app.model.LogResponse;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.exception.mapper.ItException;
@@ -27,16 +28,12 @@ public class LogAPI implements LogResource{
     }
 
     @Override
-    public LogView getListFilterLog(FilterLog filterLog) throws ItException {
-//        BaseResponse<List<LogView>> bs = service.getFoundLog(filterLog);
-//        if (bs.getCode() != 0) {
-//            throw new ItException(bs.getCode(), bs.getMessage());
-//        }
-//        return service.getFoundLog(filterLog).getData();
-            return new LogView(service.getFoundLog(filterLog).getData());
-          //return null;
-    }
+    public LogResponse getListFilterLog(FilterLog filterLog) throws ItException {
+        BaseResponse <List<LogView>> bs = service.getFoundLog(filterLog);
+        if (bs.getCode() != 0) {
+            throw new ItException(bs.getCode(), bs.getMessage());
+        }
+        return new LogResponse(service.getFoundLog(filterLog).getData());
+    } 
 
-    
-    
 }
