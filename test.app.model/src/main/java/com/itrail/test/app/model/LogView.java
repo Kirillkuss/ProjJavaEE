@@ -47,14 +47,14 @@ public class LogView extends BasicLogEventEntity  {
                       name     = "date", 
                       dataType = "String", 
                       example  = "12.04.2022 11:02:42", 
-                      required = true)
+                      required = false)
     private LocalDateTime date;
     @Column(name = "levels")
     @ApiModelProperty(value = "Уровень лога",
                       name  = "levels",
                       dataType = "String",
                       example = "error",
-                      required = true)
+                      required = false)
     private String levels;
     
     @Column(name = "text")
@@ -62,7 +62,7 @@ public class LogView extends BasicLogEventEntity  {
                       name     = "text", 
                       dataType = "String", 
                       example  = "message", 
-                      required = true)
+                      required = false)
     private String text;
     
  

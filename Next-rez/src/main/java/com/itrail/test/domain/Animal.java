@@ -33,7 +33,7 @@ public class Animal implements Serializable {
                       name     = "idAnimal",
                       dataType = "Integer",
                       example  = "1",
-                      required = true)
+                      required = false)
     private Integer idAnimal;
     
     @Column(name = "type_animal")   @Size(min = 1, max = 20)        
@@ -41,7 +41,7 @@ public class Animal implements Serializable {
                       name     = "type",
                       dataType = "String",
                       example  = "dog",
-                      required = true)
+                      required = false)
     private String type;
     
     @Column(name = "coat_animal")
@@ -49,7 +49,7 @@ public class Animal implements Serializable {
                       name     = "coat",
                       dataType = "String",
                       example  = "800.3",
-                      required = true)
+                      required = false)
     private BigDecimal coat;
     
     
@@ -58,7 +58,7 @@ public class Animal implements Serializable {
                       name     = "count",
                       dataType = "Integer",
                       example  = "1",
-                      required = true)
+                      required = false)
     private Integer count;
     
     

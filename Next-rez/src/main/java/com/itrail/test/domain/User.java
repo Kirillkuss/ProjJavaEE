@@ -65,7 +65,7 @@ public class User {
                       name     = "phone",
                       dataType = "String",
                       example  = "+375333453345",
-                      required = false)
+                      required = true)
     private String phone;
     
     

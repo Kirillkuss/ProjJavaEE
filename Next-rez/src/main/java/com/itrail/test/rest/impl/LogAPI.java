@@ -8,6 +8,8 @@ import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.exception.mapper.ItException;
 import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
+import java.time.LocalDateTime;
+
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;

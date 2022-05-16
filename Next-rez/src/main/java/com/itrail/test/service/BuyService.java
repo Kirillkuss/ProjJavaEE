@@ -153,6 +153,7 @@ public class BuyService {
         Animal ani = em.find(Animal.class, idAnimal);
         User us = em.find(User.class, idUser);
         Integer a = ani.getCoat().compareTo(us.getWallet());
+        System.out.println("idAnimal>>> " + idAnimal);
      
         if (a > -1) throw new ItException(50," Not enough money to buy an animal ");    
         if( ani.getCount() <= 0) throw new ItException(51,"No animals in the store");

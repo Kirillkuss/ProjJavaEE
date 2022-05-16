@@ -3,6 +3,8 @@ package com.itrail.test.service;
 import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -49,18 +51,18 @@ public class LogService {
 
     
     public BaseResponse<List<LogView>> getFoundLog(FilterLog filterLog) {
-        FilterLog fil = new FilterLog();
         BaseResponse<List<LogView>> f = new BaseResponse(0, "success");
         try {
-            f.setData(entityManager.createQuery("SELECT e FROM LogView e where :idFil is null or e.id = :idFil AND "
-                                                + ":dateFil is null or e.date = :dateFil")
-                                                .setParameter("idFil", fil.getId())
-                                                .setParameter("dateFil", fil.getDate())
+            f.setData(entityManager.createQuery("SELECT e FROM LogView e WHERE e.id =:idFilter or e.date BETWEEN :dateFromFilter AND :dateToFilter")
+                                                .setParameter("idFilter", filterLog.getId())
+                                                .setParameter("dateFromFilter", filterLog.getDateFrom())
+                                                .setParameter("dateToFilter", filterLog.getDateTo())
+                                                .setMaxResults(filterLog.getLimit())
                                                 .getResultList());
             return f;
         } catch (Exception e) {
             return BaseResponse.error(980, e);
         }
     }
-
+    
 }

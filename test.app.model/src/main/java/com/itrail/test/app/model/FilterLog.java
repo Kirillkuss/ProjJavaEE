@@ -27,15 +27,33 @@ public class FilterLog implements Serializable {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(value = "Ид лога", name="id", dataType="Long", example = "1")
+    @ApiModelProperty(value = "Ид лога", name="id", dataType="Long",example ="1")
     private Long id;
     
-    @Column(name="date")
+    @Column(name="dateFrom")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @ApiModelProperty(value = "Время", name="date",dataType="String", example = "12.04.2022 11:02:42")
-    private LocalDateTime date;
+    @ApiModelProperty(value = "Время", name="dateFrom",dataType="String", example = "12.05.2022 11:02:42")
+    private LocalDateTime dateFrom;
+    
+    @Column(name="dateTo")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @ApiModelProperty(value = "Время", name="dateTo",dataType="String", example = "12.06.2022 11:02:42")
+    private LocalDateTime dateTo;
+    
+    @Column(name="limite")
+    @ApiModelProperty(value="Количество", name ="limit", dataType="Integer", example = "100")
+    private Integer limit;
+    
 
     public FilterLog() {
+        
+    }
+
+    public FilterLog(Long id, LocalDateTime dateFrom, LocalDateTime dateTo, Integer limite) {
+        this.id = id;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+        this.limit = limite;
     }
 
     public Long getId() {
@@ -46,19 +64,37 @@ public class FilterLog implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getDateFrom() {
+        return dateFrom;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setDateFrom(LocalDateTime dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public LocalDateTime getDateTo() {
+        return dateTo;
+    }
+
+    public void setDateTo(LocalDateTime dateTo) {
+        this.dateTo = dateTo;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimite(Integer limit) {
+        this.limit = limit;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 61 * hash + Objects.hashCode(this.id);
-        hash = 61 * hash + Objects.hashCode(this.date);
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.id);
+        hash = 47 * hash + Objects.hashCode(this.dateFrom);
+        hash = 47 * hash + Objects.hashCode(this.dateTo);
+        hash = 47 * hash + Objects.hashCode(this.limit);
         return hash;
     }
 
@@ -77,16 +113,17 @@ public class FilterLog implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        return Objects.equals(this.date, other.date);
+        if (!Objects.equals(this.dateFrom, other.dateFrom)) {
+            return false;
+        }
+        if (!Objects.equals(this.dateTo, other.dateTo)) {
+            return false;
+        }
+        return Objects.equals(this.limit, other.limit);
     }
 
     @Override
     public String toString() {
-        return "FilterLog{" + "id=" + id + ", date=" + date + '}';
+        return "FilterLog{" + "id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", limit=" + limit + '}';
     }
-     
-
-
-    
-    
 }

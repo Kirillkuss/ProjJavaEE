@@ -10,11 +10,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.time.LocalDateTime;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 /**
  *
@@ -36,7 +39,8 @@ public interface LogResource {
     @ApiOperation(value = "Поиск логгов")
     @ApiResponses(value ={
         @ApiResponse(code = 200, message ="Поиск логгов")})
-    public LogResponse getListFilterLog(@ApiParam(required = false) FilterLog filterLog) throws ItException ;
-
+    public LogResponse getListFilterLog(@ApiParam(required = false)FilterLog filterLog) throws ItException ;
+    
+   
 }
 
