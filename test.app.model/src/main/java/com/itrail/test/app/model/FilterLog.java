@@ -27,33 +27,47 @@ public class FilterLog implements Serializable {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(value = "Ид лога", name="id", dataType="Long",example ="1")
+    @ApiModelProperty(value    = "Ид лога",
+                      name     = "id",
+                      dataType = "Long",
+                      example  = "1")
     private Long id;
     
     @Column(name="dateFrom")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @ApiModelProperty(value = "Время", name="dateFrom",dataType="String", example = "12.05.2022 11:02:42")
+    @ApiModelProperty(value    = "Время",
+                      name     = "dateFrom",
+                      dataType = "String",
+                      example  = "12.05.2022 11:02:42")
     private LocalDateTime dateFrom;
     
     @Column(name="dateTo")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @ApiModelProperty(value = "Время", name="dateTo",dataType="String", example = "12.06.2022 11:02:42")
+    @ApiModelProperty(value    = "Время",
+                      name     = "dateTo",
+                      dataType = "String",
+                      example  = "12.06.2022 11:02:42")
     private LocalDateTime dateTo;
     
     @Column(name="limite")
     @ApiModelProperty(value="Количество", name ="limit", dataType="Integer", example = "100")
     private Integer limit;
     
+    @Column(name="offsete")
+    @ApiModelProperty(value="Начало", name="offset", dataType="Integer",example="12")
+    private Integer offset;
+    ;
 
     public FilterLog() {
         
     }
 
-    public FilterLog(Long id, LocalDateTime dateFrom, LocalDateTime dateTo, Integer limite) {
+    public FilterLog(Long id, LocalDateTime dateFrom, LocalDateTime dateTo, Integer limit, Integer offset) {
         this.id = id;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
-        this.limit = limite;
+        this.limit = limit;
+        this.offset = offset;
     }
 
     public Long getId() {
@@ -84,17 +98,26 @@ public class FilterLog implements Serializable {
         return limit;
     }
 
-    public void setLimite(Integer limit) {
+    public void setLimit(Integer limit) {
         this.limit = limit;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.id);
-        hash = 47 * hash + Objects.hashCode(this.dateFrom);
-        hash = 47 * hash + Objects.hashCode(this.dateTo);
-        hash = 47 * hash + Objects.hashCode(this.limit);
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 97 * hash + Objects.hashCode(this.dateFrom);
+        hash = 97 * hash + Objects.hashCode(this.dateTo);
+        hash = 97 * hash + Objects.hashCode(this.limit);
+        hash = 97 * hash + Objects.hashCode(this.offset);
         return hash;
     }
 
@@ -119,11 +142,15 @@ public class FilterLog implements Serializable {
         if (!Objects.equals(this.dateTo, other.dateTo)) {
             return false;
         }
-        return Objects.equals(this.limit, other.limit);
+        if (!Objects.equals(this.limit, other.limit)) {
+            return false;
+        }
+        return Objects.equals(this.offset, other.offset);
     }
 
     @Override
     public String toString() {
-        return "FilterLog{" + "id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", limit=" + limit + '}';
+        return "FilterLog{" + "id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", limit=" + limit + ", offset=" + offset + '}';
     }
+
 }

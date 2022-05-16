@@ -58,6 +58,7 @@ public class LogService {
                                                 .setParameter("dateFromFilter", filterLog.getDateFrom())
                                                 .setParameter("dateToFilter", filterLog.getDateTo())
                                                 .setMaxResults(filterLog.getLimit())
+                                                .setFirstResult(filterLog.getOffset())
                                                 .getResultList());
             return f;
         } catch (Exception e) {
