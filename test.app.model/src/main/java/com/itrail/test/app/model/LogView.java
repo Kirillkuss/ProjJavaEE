@@ -46,10 +46,10 @@ public class LogView extends BasicLogEventEntity  {
     @ApiModelProperty(value    = "дата", 
                       name     = "date", 
                       dataType = "String", 
-                      example  = "12.04.2022 11:02:42", 
+                      example  = "2022.04.12 11:02:42", 
                       required = false)
     private LocalDateTime date;
-    @Column(name = "levels")
+    @Column(name = "Levels")
     @ApiModelProperty(value = "Уровень лога",
                       name  = "levels",
                       dataType = "String",
@@ -57,13 +57,13 @@ public class LogView extends BasicLogEventEntity  {
                       required = false)
     private String levels;
     
-    @Column(name = "text")
+    @Column(name = "Messages")
     @ApiModelProperty(value    = "сообщение", 
-                      name     = "text", 
+                      name     = "messages", 
                       dataType = "String", 
                       example  = "message", 
                       required = false)
-    private String text;
+    private String messages;
     
  
     public LogView() {
@@ -73,7 +73,7 @@ public class LogView extends BasicLogEventEntity  {
         if(wrappedEvent != null){
             setDate(Instant.ofEpochMilli(wrappedEvent.getTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime());
             if(wrappedEvent.getMessage() != null){
-                setText(wrappedEvent.getMessage().toString());
+                setMessages(wrappedEvent.getMessage().toString());
             }
             if(wrappedEvent.getLevel() !=null){
                 setLevels(wrappedEvent.getLevel().toString());
@@ -98,7 +98,7 @@ public class LogView extends BasicLogEventEntity  {
         this.date = date;
     }
 
-    public String getLevels() {
+    public String getlevel() {
         return levels;
     }
 
@@ -106,12 +106,12 @@ public class LogView extends BasicLogEventEntity  {
         this.levels = levels;
     }
 
-    public String getText() {
-        return text;
+    public String getmessage() {
+        return messages;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setMessages(String message) {
+        this.messages = message;
     }
 
     @Override
@@ -121,7 +121,7 @@ public class LogView extends BasicLogEventEntity  {
         hash = 97 * hash + Objects.hashCode(this.id);
         hash = 97 * hash + Objects.hashCode(this.date);
         hash = 97 * hash + Objects.hashCode(this.levels);
-        hash = 97 * hash + Objects.hashCode(this.text);
+        hash = 97 * hash + Objects.hashCode(this.messages);
         return hash;
     }
 
@@ -140,7 +140,7 @@ public class LogView extends BasicLogEventEntity  {
         if (!Objects.equals(this.levels, other.levels)) {
             return false;
         }
-        if (!Objects.equals(this.text, other.text)) {
+        if (!Objects.equals(this.messages, other.messages)) {
             return false;
         }
         if (!Objects.equals(this.wrappedEvent, other.wrappedEvent)) {
@@ -154,7 +154,7 @@ public class LogView extends BasicLogEventEntity  {
 
     @Override
     public String toString() {
-        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", levels=" + levels + ", text=" + text + '}';
+        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", level=" + levels + ", message=" + messages + '}';
     }
     
 

@@ -35,7 +35,7 @@ public interface LogResource {
     @Path("/request")
     @ApiOperation(value = "Поиск логгов")
     @ApiResponses(value ={
-        @ApiResponse(code = 200, message ="Поиск логгов")})
+        @ApiResponse(code = 200, message ="Поиск логгов",response = LogView.class)})
     public LogResponse getListFilterLog(@ApiParam(required = false)FilterLog filterLog) throws ItException ;
     
    

@@ -37,7 +37,7 @@ public class AnimalTwoAPI implements AnimalResourceTwo{
     public BaseResponse getAnimalById(Integer idAnimal) {
         BaseResponse bs = new BaseResponse(200, "success");
         bs.setData(service.getAnimalById(idAnimal));
-                LOGGER.info("method getAnimalById");
+                LOGGER.error("method getAnimalById");
         return bs;
     }
 

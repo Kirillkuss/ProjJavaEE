@@ -38,7 +38,7 @@ public class FilterLog implements Serializable {
     @ApiModelProperty(value    = "Время",
                       name     = "dateFrom",
                       dataType = "String",
-                      example  = "12.05.2022 11:02:42")
+                      example  = "2022.05.15 11:02:42")
     private LocalDateTime dateFrom;
     
     @Column(name="dateTo")
@@ -46,7 +46,7 @@ public class FilterLog implements Serializable {
     @ApiModelProperty(value    = "Время",
                       name     = "dateTo",
                       dataType = "String",
-                      example  = "12.06.2022 11:02:42")
+                      example  = "2022.06.18 11:02:42")
     private LocalDateTime dateTo;
     
     @Column(name="limite")
@@ -95,6 +95,8 @@ public class FilterLog implements Serializable {
     }
 
     public Integer getLimit() {
+        if(limit == null){limit = 1000;}
+        if(limit < 0){limit = 1000;}
         return limit;
     }
 
@@ -103,6 +105,8 @@ public class FilterLog implements Serializable {
     }
 
     public Integer getOffset() {
+        if(offset == null) {offset = 0;}
+        if(offset < 0) {offset = 0;}
         return offset;
     }
 
