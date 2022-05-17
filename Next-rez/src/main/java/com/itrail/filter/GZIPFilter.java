@@ -31,7 +31,7 @@ public class GZIPFilter implements javax.servlet.Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        LOGGER.log(Level.INFO,"Remote host" + request.getRemoteHost());
+       // LOGGER.log(Level.INFO,"Remote host" + request.getRemoteHost());
         chain.doFilter(request, response);
     }   
     

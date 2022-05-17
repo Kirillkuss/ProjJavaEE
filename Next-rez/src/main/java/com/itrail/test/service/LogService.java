@@ -11,6 +11,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.QueryException;
 
 /**
  *
@@ -18,6 +21,8 @@ import javax.transaction.Transactional;
  */
 @Stateless
 public class LogService {
+    
+    private static final Logger LOGGER = LogManager.getLogger(LogService.class);
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -49,19 +54,27 @@ public class LogService {
 
     
     public BaseResponse<List<LogView>> getFoundLog(FilterLog filterLog) {
-        BaseResponse<List<LogView>> f = new BaseResponse(0, "success");
-        try {
-            f.setData(entityManager.createQuery("SELECT e FROM LogView e WHERE e.id =:idFilter or e.date BETWEEN :dateFromFilter AND :dateToFilter")
-                                                .setParameter("idFilter", filterLog.getId())
-                                                .setParameter("dateFromFilter", filterLog.getDateFrom())
-                                                .setParameter("dateToFilter", filterLog.getDateTo())
-                                                .setMaxResults(filterLog.getLimit())
-                                                .setFirstResult(filterLog.getOffset())
-                                                .getResultList());
-            return f;
-        } catch (Exception e) {
-            return BaseResponse.error(980, e);
+        BaseResponse<List<LogView>> f = new BaseResponse(0, "success"); 
+        try{
+        f.setData(entityManager.createQuery("SELECT e FROM LogView e WHERE e.date BETWEEN :dateFromFilter AND :dateToFilter AND e.levels = :infoFilter")
+                //.setParameter("idFilter", filterLog.getId())
+                .setParameter("dateFromFilter", filterLog.getDateFrom())
+                .setParameter("dateToFilter", filterLog.getDateTo())
+                .setParameter("infoFilter", filterLog.getInfo())
+                .setMaxResults(filterLog.getLimit())
+                .setFirstResult(filterLog.getOffset())
+                .getResultList());
+        }catch(Exception e){
+           // f.setMessage(e.getMessage());
+            LOGGER.error(e.getMessage());  
         }
+ 
+//        f.setData(entityManager.createNativeQuery("SELECT *sa from LOGGERSTABLE e;")
+//                                                // where e.date between :dateFromFilter and :dateToFilter
+//                                           // .setParameter("dateFromFilter", filterLog.getDateFrom())
+//                                            //.setParameter("dateToFilter", filterLog.getDateTo())
+//                                            .getResultList()); //через SQL 
+        return f;
     }
     
 }

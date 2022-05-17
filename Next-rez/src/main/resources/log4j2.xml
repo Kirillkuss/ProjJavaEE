@@ -56,7 +56,7 @@
             <AppenderRef ref="dbZooStore" />
         </AsyncLogger>
                 
-        <AsyncLogger name="JpaAppender " level="info" >
+        <AsyncLogger name="JpaAppender " level="DEBUG" >
             <AppenderRef ref="JpaAppender" />
         </AsyncLogger>
          

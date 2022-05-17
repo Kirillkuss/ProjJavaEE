@@ -5,7 +5,6 @@ import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Context;
-
 /**
  * Configures JAX-RS for the application.
  *
@@ -13,8 +12,6 @@ import javax.ws.rs.core.Context;
  */
 @ApplicationPath("/api")
 public class Application extends javax.ws.rs.core.Application {
-    
-
     public Application(@Context ServletConfig servletconfig) {
   
         BeanConfig beanConfig = new BeanConfig();

@@ -64,6 +64,9 @@ public class LogView extends BasicLogEventEntity  {
                       example  = "message", 
                       required = false)
     private String messages;
+    @Column(name = "StackTrace")
+    @ApiModelProperty(required = false)
+    private String stackTrace;
     
  
     public LogView() {
@@ -78,9 +81,21 @@ public class LogView extends BasicLogEventEntity  {
             if(wrappedEvent.getLevel() !=null){
                 setLevels(wrappedEvent.getLevel().toString());
             }
+            if(wrappedEvent.getThrown() !=null){
+                setStackTrace(wrappedEvent.getThrown().toString());
+            }
         }
         
     }
+
+    public String getStackTrace() {
+        return stackTrace;
+    }
+
+    public void setStackTrace(String stackTrace) {
+        this.stackTrace = stackTrace;
+    }
+    
 
     public Long getId() {
         return id;
@@ -116,12 +131,13 @@ public class LogView extends BasicLogEventEntity  {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.wrappedEvent);
-        hash = 97 * hash + Objects.hashCode(this.id);
-        hash = 97 * hash + Objects.hashCode(this.date);
-        hash = 97 * hash + Objects.hashCode(this.levels);
-        hash = 97 * hash + Objects.hashCode(this.messages);
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.wrappedEvent);
+        hash = 89 * hash + Objects.hashCode(this.id);
+        hash = 89 * hash + Objects.hashCode(this.date);
+        hash = 89 * hash + Objects.hashCode(this.levels);
+        hash = 89 * hash + Objects.hashCode(this.messages);
+        hash = 89 * hash + Objects.hashCode(this.stackTrace);
         return hash;
     }
 
@@ -143,6 +159,9 @@ public class LogView extends BasicLogEventEntity  {
         if (!Objects.equals(this.messages, other.messages)) {
             return false;
         }
+        if (!Objects.equals(this.stackTrace, other.stackTrace)) {
+            return false;
+        }
         if (!Objects.equals(this.wrappedEvent, other.wrappedEvent)) {
             return false;
         }
@@ -154,8 +173,10 @@ public class LogView extends BasicLogEventEntity  {
 
     @Override
     public String toString() {
-        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", level=" + levels + ", message=" + messages + '}';
+        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", levels=" + levels + ", messages=" + messages + ", stackTrace=" + stackTrace + '}';
     }
+
+  
     
 
 }

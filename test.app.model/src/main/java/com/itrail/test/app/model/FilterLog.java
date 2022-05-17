@@ -50,24 +50,37 @@ public class FilterLog implements Serializable {
     private LocalDateTime dateTo;
     
     @Column(name="limite")
-    @ApiModelProperty(value="Количество", name ="limit", dataType="Integer", example = "100")
+    @ApiModelProperty(value    = "Количество",
+                      name     = "limit",
+                      dataType = "Integer",
+                      example  = "100")
     private Integer limit;
     
     @Column(name="offsete")
-    @ApiModelProperty(value="Начало", name="offset", dataType="Integer",example="12")
+    @ApiModelProperty(value    = "Начало",
+                      name     = "offset",
+                      dataType = "Integer",
+                      example  = "12")
     private Integer offset;
-    ;
+    
+    @Column(name="info")
+    @ApiModelProperty(value    = "Статус",
+                      name     = "info",
+                      dataType = "String",
+                      example  = "ERROR")
+    private String info;
 
     public FilterLog() {
         
     }
 
-    public FilterLog(Long id, LocalDateTime dateFrom, LocalDateTime dateTo, Integer limit, Integer offset) {
+    public FilterLog(Long id, LocalDateTime dateFrom, LocalDateTime dateTo, Integer limit, Integer offset, String info) {
         this.id = id;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.limit = limit;
         this.offset = offset;
+        this.info = info;
     }
 
     public Long getId() {
@@ -114,14 +127,23 @@ public class FilterLog implements Serializable {
         this.offset = offset;
     }
 
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
+        int hash = 7;
         hash = 97 * hash + Objects.hashCode(this.id);
         hash = 97 * hash + Objects.hashCode(this.dateFrom);
         hash = 97 * hash + Objects.hashCode(this.dateTo);
         hash = 97 * hash + Objects.hashCode(this.limit);
         hash = 97 * hash + Objects.hashCode(this.offset);
+        hash = 97 * hash + Objects.hashCode(this.info);
         return hash;
     }
 
@@ -137,6 +159,9 @@ public class FilterLog implements Serializable {
             return false;
         }
         final FilterLog other = (FilterLog) obj;
+        if (!Objects.equals(this.info, other.info)) {
+            return false;
+        }
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -154,7 +179,7 @@ public class FilterLog implements Serializable {
 
     @Override
     public String toString() {
-        return "FilterLog{" + "id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", limit=" + limit + ", offset=" + offset + '}';
+        return "FilterLog{" + "id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", limit=" + limit + ", offset=" + offset + ", info=" + info + '}';
     }
-
+    
 }
