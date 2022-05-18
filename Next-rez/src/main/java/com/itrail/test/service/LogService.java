@@ -76,11 +76,12 @@ public class LogService {
 //                                            .setParameter(3, filterLog.getDateTo())
 //                                            .setParameter(1, filterLog.getInfo())
 //                                            .getResultList()); //через SQL 
-        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a;").getResultList());
+        f.setData(entityManager.createNativeQuery("SELECT *s from LOGGERSTABLE a;").getResultList());
         
         }catch(Exception e){
             LOGGER.error(e.getMessage());
-          //  LOGGER.error(Arrays.toString(e.getStackTrace()).length()); //13618
+            //LOGGER.error(Arrays.toString(e.getStackTrace()).length()); //13618
+           // LOGGER.error(Arrays.toString(e.getStackTrace()));
             System.out.println("getStackTrace>>>>" + Arrays.toString(e.getStackTrace()));
         }
         return f;

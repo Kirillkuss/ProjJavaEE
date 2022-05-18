@@ -19,6 +19,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -58,7 +60,7 @@ public class LogView extends BasicLogEventEntity  {
                       required = false)
     private String levels;
     
-    @Column(name = "Messages")
+    @Column(name = "Messages", length = 14000)
     @ApiModelProperty(value    = "сообщение", 
                       name     = "messages", 
                       dataType = "String", 
@@ -66,6 +68,7 @@ public class LogView extends BasicLogEventEntity  {
                       required = false)
     private String messages;
     @Column(name = "StackTrace")
+    @Type(type = "text")
     @ApiModelProperty(required = false)
     private String stackTrace;
     
@@ -79,12 +82,16 @@ public class LogView extends BasicLogEventEntity  {
             if(wrappedEvent.getMessage() != null){
                 setMessages(wrappedEvent.getMessage().toString());
             }
-            if(wrappedEvent.getLevel() !=null){
+            if(wrappedEvent.getLevel()!=null){
                 setLevels(wrappedEvent.getLevel().toString());
             }
-              //  setstacktrace(Arrays.toString(wrappedEvent.getThrown().getStackTrace()));
-              // setstacktrace(wrappedEvent.getThrown().getStackTrace().toString());
-              setstacktrace(wrappedEvent.getLevel().toString());
+            if(wrappedEvent.getThrown()!=null){
+              
+              setstacktrace(ExceptionUtils.getStackTrace(wrappedEvent.getThrown())); 
+            }
+           //setstacktrace(Arrays.toString(wrappedEvent.getThrown().getStackTrace()));
+           //setstacktrace(wrappedEvent.getThrown().getStackTrace().toString());
+           //setstacktrace(wrappedEvent.getLevel().toString());
         }
         
     }
