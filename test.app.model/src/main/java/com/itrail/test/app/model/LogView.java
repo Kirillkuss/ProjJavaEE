@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -81,18 +82,19 @@ public class LogView extends BasicLogEventEntity  {
             if(wrappedEvent.getLevel() !=null){
                 setLevels(wrappedEvent.getLevel().toString());
             }
-            if(wrappedEvent.getThrown() !=null){
-                setStackTrace(wrappedEvent.getThrown().toString());
-            }
+              //  setstacktrace(Arrays.toString(wrappedEvent.getThrown().getStackTrace()));
+              // setstacktrace(wrappedEvent.getThrown().getStackTrace().toString());
+              setstacktrace(wrappedEvent.getLevel().toString());
         }
         
     }
 
-    public String getStackTrace() {
+    public String getstacktrace() {
         return stackTrace;
     }
 
-    public void setStackTrace(String stackTrace) {
+    public void setstacktrace(String stackTrace) {
+       
         this.stackTrace = stackTrace;
     }
     

@@ -56,11 +56,11 @@
             <AppenderRef ref="dbZooStore" />
         </AsyncLogger>
                 
-        <AsyncLogger name="JpaAppender " level="DEBUG" >
+        <!--AsyncLogger name="JpaAppender " level="DEBUG" >
             <AppenderRef ref="JpaAppender" />
-        </AsyncLogger>
+        </AsyncLogger!-->
          
-        <AsyncRoot  level = "DEBUG">   
+        <AsyncRoot  level = "ALL">   
             <AppenderRef ref="Console" />
             <AppenderRef ref="LogToRollingFile" />
             <AppenderRef ref="ABC" />
