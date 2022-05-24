@@ -29,11 +29,8 @@ public class LogAPI implements LogResource{
     }
 
     @Override
-    public LogResponse getListFilterLog(FilterLog filterLog)throws SQLException,ItException {
+    public LogResponse getListFilterLog(FilterLog filterLog) throws Exception {
         BaseResponse <List<LogView>> bs = service.getFoundLog(filterLog);
-//       if (bs.getCode() != 0) {
-//            throw new ItException(bs.getCode(), bs.getMessage());
-//        }
         return new LogResponse(service.getFoundLog(filterLog).getData());
     } 
 

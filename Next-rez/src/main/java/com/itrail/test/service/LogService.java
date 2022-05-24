@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author barysevich_k
  */
+
 @Stateless
 public class LogService {
     
@@ -52,8 +53,8 @@ public class LogService {
         entityManager.merge(logi);
     }
 
-    @Transactional
-    public BaseResponse<List<LogView>> getFoundLog(FilterLog filterLog) throws SQLException, ItException {
+
+    public BaseResponse<List<LogView>> getFoundLog(FilterLog filterLog) throws Exception {
         BaseResponse<List<LogView>> f = new BaseResponse(0, "success"); 
 //        f.setData(entityManager.createQuery("SELECT e FROM LogView e WHERE e.date BETWEEN :dateFromFilter AND :dateToFilter AND e.levels = :infoFilter")
 //                //.setParameter("idFilter", filterLog.getId())
@@ -62,9 +63,7 @@ public class LogService {
 //                .setParameter("infoFilter", filterLog.getInfo())
 //                .setMaxResults(filterLog.getLimit())
 //                .setFirstResult(filterLog.getOffset())
-//                .getResultList());
-
-//       
+//                .getResultList());     
         try{
         f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLEs a where a.levels = ? AND a.date between ? and ?;")
                                             .setParameter(2, filterLog.getDateFrom())
@@ -74,10 +73,7 @@ public class LogService {
         }catch(Exception e){
             LOGGER.error(e.getMessage());
             LOGGER.trace(Arrays.toString(e.getStackTrace()));
-            SQLException se = new SQLException(e.getMessage());
-            if (se.getErrorCode() != 0);{
-                throw new ItException(404, "Invalid SQL request");
-            }  
+            throw new SQLException();  
         }
         return f;
     }   
