@@ -4,14 +4,11 @@ import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogResponse;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
-import com.itrail.test.exception.mapper.ItException;
 import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
-import java.sql.SQLException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
-//
 /**
  *
  * @author barysevich_k
@@ -24,7 +21,6 @@ public class LogAPI implements LogResource{
     public BaseResponse getLog() {
         BaseResponse bs = new BaseResponse(200, "success");
         bs.setData(service.getAllLog());
-        System.out.println(service.getAllLog());
        return bs;
     }
 

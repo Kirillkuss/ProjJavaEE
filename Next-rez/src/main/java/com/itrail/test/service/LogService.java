@@ -3,8 +3,6 @@ package com.itrail.test.service;
 import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
-import com.itrail.test.exception.mapper.ItException;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -12,15 +10,12 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 /**
- *
  * @author barysevich_k
  */
-
 @Stateless
 public class LogService {
     
@@ -65,16 +60,17 @@ public class LogService {
 //                .setMaxResults(filterLog.getLimit())
 //                .setFirstResult(filterLog.getOffset())
 //                .getResultList());     
-//        try{
-        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLEs a where a.levels = ? AND a.date between ? and ?;")
+        try{
+        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a where a.levels = ? AND a.date between ? and 1;")
                                             .setParameter(2, filterLog.getDateFrom())
                                             .setParameter(3, filterLog.getDateTo())
                                             .setParameter(1, filterLog.getInfo())
                                             .getResultList()); //через SQL 
-//        }catch(Exception e){
-//            LOGGER.error(e.getMessage());
-//            LOGGER.trace(Arrays.toString(e.getStackTrace())); 
-//        }
+        }catch(Exception e){ 
+            LOGGER.error(e.getMessage());
+            LOGGER.trace(Arrays.toString(e.getStackTrace()));
+            e.printStackTrace();
+        }
         return f;
     }   
 }
