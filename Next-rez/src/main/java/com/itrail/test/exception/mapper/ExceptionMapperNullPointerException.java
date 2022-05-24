@@ -2,7 +2,6 @@
 package com.itrail.test.exception.mapper;
 
 import com.itrail.test.domain.BaseResponse;
-import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -12,17 +11,15 @@ import javax.ws.rs.ext.Provider;
  * @author barysevich_k
  */
 @Provider
-public class ExceptionMapperPUT implements ExceptionMapper<ConstraintViolationException> {
+public class ExceptionMapperNullPointerException implements ExceptionMapper<NullPointerException> {
 
     @Override
-    public Response toResponse(ConstraintViolationException e) {
- 
+    public Response toResponse(NullPointerException e) {
         BaseResponse bs = new BaseResponse();
-        bs.setCode(602);
-        bs.setMessage(null == e.getMessage() ? "System malfunction" : e.getMessage());
+        bs.setCode(440);
+        bs.setMessage(null == e.getMessage() ? "NullPointerException" : e.getMessage());
         return Response.ok().entity(bs).build();
     }
-    
     
     
 }

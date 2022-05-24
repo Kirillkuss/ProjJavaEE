@@ -11,7 +11,7 @@ import javax.ws.rs.ext.Provider;
  * @author barysevich_k
  */
 @Provider
-public class ExceptionMapperDELETE implements ExceptionMapper<IllegalArgumentException>{
+public class ExceptionMapperIllegalArgumentException implements ExceptionMapper<IllegalArgumentException>{
 
     @Override
     public Response toResponse(IllegalArgumentException e) {
