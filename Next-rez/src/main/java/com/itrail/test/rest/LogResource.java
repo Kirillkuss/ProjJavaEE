@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.sql.SQLException;
+import javax.persistence.PersistenceException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -36,7 +38,7 @@ public interface LogResource {
     @ApiOperation(value = "Поиск логгов")
     @ApiResponses(value ={
         @ApiResponse(code = 200, message ="Поиск логгов",response = LogView.class)})
-    public LogResponse getListFilterLog(@ApiParam(required = false)FilterLog filterLog) throws ItException ;
+    public LogResponse getListFilterLog(@ApiParam(required = false)FilterLog filterLog) throws SQLException,ItException;
     
    
 }

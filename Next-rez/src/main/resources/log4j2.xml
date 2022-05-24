@@ -60,7 +60,7 @@
             <AppenderRef ref="JpaAppender" />
         </AsyncLogger!-->
          
-        <AsyncRoot  level = "ALL">   
+        <AsyncRoot  level = "TRACE">   
             <AppenderRef ref="Console" />
             <AppenderRef ref="LogToRollingFile" />
             <AppenderRef ref="ABC" />

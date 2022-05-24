@@ -3,6 +3,8 @@ package com.itrail.test.service;
 import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
+import com.itrail.test.exception.mapper.ItException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -13,8 +15,6 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-
 /**
  *
  * @author barysevich_k
@@ -52,10 +52,9 @@ public class LogService {
         entityManager.merge(logi);
     }
 
-    
-    public BaseResponse<List<LogView>> getFoundLog(FilterLog filterLog) {
+    @Transactional
+    public BaseResponse<List<LogView>> getFoundLog(FilterLog filterLog) throws SQLException, ItException {
         BaseResponse<List<LogView>> f = new BaseResponse(0, "success"); 
-//        try{
 //        f.setData(entityManager.createQuery("SELECT e FROM LogView e WHERE e.date BETWEEN :dateFromFilter AND :dateToFilter AND e.levels = :infoFilter")
 //                //.setParameter("idFilter", filterLog.getId())
 //                .setParameter("dateFromFilter", filterLog.getDateFrom())
@@ -64,25 +63,21 @@ public class LogService {
 //                .setMaxResults(filterLog.getLimit())
 //                .setFirstResult(filterLog.getOffset())
 //                .getResultList());
-//        }catch(Exception e){
-//           // f.setMessage(e.getMessage());
-//            LOGGER.error(e.getMessage()); 
-//           // LOGGER.warn(Arrays.toString(e.getStackTrace())); 
-//        }
 
+//       
         try{
-//        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a where a.levels = ? AND a.date between ? and ?;")
-//                                            .setParameter(2, filterLog.getDateFrom())
-//                                            .setParameter(3, filterLog.getDateTo())
-//                                            .setParameter(1, filterLog.getInfo())
-//                                            .getResultList()); //через SQL 
-        f.setData(entityManager.createNativeQuery("SELECT *s from LOGGERSTABLE a;").getResultList());
-        
+        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLEs a where a.levels = ? AND a.date between ? and ?;")
+                                            .setParameter(2, filterLog.getDateFrom())
+                                            .setParameter(3, filterLog.getDateTo())
+                                            .setParameter(1, filterLog.getInfo())
+                                            .getResultList()); //через SQL 
         }catch(Exception e){
             LOGGER.error(e.getMessage());
-            //LOGGER.error(Arrays.toString(e.getStackTrace()).length()); //13618
-           // LOGGER.error(Arrays.toString(e.getStackTrace()));
-            System.out.println("getStackTrace>>>>" + Arrays.toString(e.getStackTrace()));
+            LOGGER.trace(Arrays.toString(e.getStackTrace()));
+            SQLException se = new SQLException(e.getMessage());
+            if (se.getErrorCode() != 0);{
+                throw new ItException(404, "Invalid SQL request");
+            }  
         }
         return f;
     }   

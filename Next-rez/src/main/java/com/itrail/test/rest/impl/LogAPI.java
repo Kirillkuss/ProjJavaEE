@@ -1,4 +1,3 @@
-
 package com.itrail.test.rest.impl;
 
 import com.itrail.test.app.model.FilterLog;
@@ -8,6 +7,7 @@ import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.exception.mapper.ItException;
 import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
+import java.sql.SQLException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
@@ -29,12 +29,11 @@ public class LogAPI implements LogResource{
     }
 
     @Override
-    public LogResponse getListFilterLog(FilterLog filterLog) throws ItException {
+    public LogResponse getListFilterLog(FilterLog filterLog)throws SQLException,ItException {
         BaseResponse <List<LogView>> bs = service.getFoundLog(filterLog);
-       if (bs.getCode() != 0) {
-            throw new ItException(bs.getCode(), bs.getMessage());
-        }
-       
+//       if (bs.getCode() != 0) {
+//            throw new ItException(bs.getCode(), bs.getMessage());
+//        }
         return new LogResponse(service.getFoundLog(filterLog).getData());
     } 
 

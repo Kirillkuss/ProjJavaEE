@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -19,15 +20,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.hibernate.annotations.Type;
-
 /**
  *
  * @author barysevich_k
  */
-
-
 @Entity
 @Table(name = "LOGGERSTABLE")
 @ApiModel(description = "Таблица логов")
@@ -60,19 +56,18 @@ public class LogView extends BasicLogEventEntity  {
                       required = false)
     private String levels;
     
-    @Column(name = "Messages", length = 14000)
+    @Column(name = "Messages", length = 20000)
     @ApiModelProperty(value    = "сообщение", 
                       name     = "messages", 
                       dataType = "String", 
                       example  = "message", 
                       required = false)
     private String messages;
-    @Column(name = "StackTrace")
-    @Type(type = "text")
+    
+    @Column(name = "StackTrace", length = 20000)
     @ApiModelProperty(required = false)
     private String stackTrace;
     
- 
     public LogView() {
     }
     public LogView(LogEvent wrappedEvent) {
@@ -85,27 +80,30 @@ public class LogView extends BasicLogEventEntity  {
             if(wrappedEvent.getLevel()!=null){
                 setLevels(wrappedEvent.getLevel().toString());
             }
-            if(wrappedEvent.getThrown()!=null){
-              
-              setstacktrace(ExceptionUtils.getStackTrace(wrappedEvent.getThrown())); 
+            if(wrappedEvent.getContextStack()!=null){
+                //setstacktrace(getCurrentStackTraceString()); // work     
+                //setstacktrace(wrappedEvent.getContextStack().toArray().toString()); //one element 
+                //setstacktrace(wrappedEvent.getContextStack().toArray().toString());
+                //setstacktrace("Example");
             }
-           //setstacktrace(Arrays.toString(wrappedEvent.getThrown().getStackTrace()));
-           //setstacktrace(wrappedEvent.getThrown().getStackTrace().toString());
-           //setstacktrace(wrappedEvent.getLevel().toString());
         }
         
     }
-
-    public String getstacktrace() {
+    private String getCurrentStackTraceString() {
+        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+         return Arrays.stream(stack).map(StackTraceElement::toString)
+         .collect(Collectors.joining("\n"));
+        }
+    
+    public  String getstacktrace() {
         return stackTrace;
     }
 
-    public void setstacktrace(String stackTrace) {
+    public void setstacktrace( String stackTrace) {
        
         this.stackTrace = stackTrace;
     }
     
-
     public Long getId() {
         return id;
     }
