@@ -64,7 +64,7 @@ public class LogService {
         f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a where a.levels = ? AND a.date between ? and ?")
                                             .setParameter(2, filterLog.getDateFrom())
                                             .setParameter(3, filterLog.getDateTo())
-                                            .setParameter(1, filterLog.getInfo().toString())
+                                            .setParameter(1, filterLog.getlevel().toString())
                                             .getResultList()); //через SQL 
 //        }catch(Exception e){
 //            LOGGER.error(e.getMessage());

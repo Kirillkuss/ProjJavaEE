@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Marker;
 /**
  *
  * @author barysevich_k
@@ -63,24 +64,23 @@ public class FilterLog implements Serializable {
                       example  = "12")
     private Integer offset;
     
-    @Column(name="info")
+    @Column(name="level")
     @ApiModelProperty(value    = "Статус",
-                      name     = "info",
+                      name     = "level",
                       dataType = "String",
                       example  = "INFO")
-    private Level info;
-    
+    private Level level;
     
     public FilterLog() {
     }
 
-    public FilterLog(Long id, LocalDateTime dateFrom, LocalDateTime dateTo, Integer limit, Integer offset, Level info) {
+    public FilterLog(Long id, LocalDateTime dateFrom, LocalDateTime dateTo, Integer limit, Integer offset, Level level) {
         this.id = id;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.limit = limit;
         this.offset = offset;
-        this.info = info;
+        this.level = level;
     }
 
     public Long getId() {
@@ -123,12 +123,12 @@ public class FilterLog implements Serializable {
         this.offset = offset;
     }
 
-    public Level getInfo() {
-        return info;
+    public Level getlevel() {
+        return level;
     }
 
-    public void setInfo(Level info) {
-        this.info = info;
+    public void setlevel(Level level) {
+        this.level = level;
     }
 
     @Override
@@ -139,7 +139,7 @@ public class FilterLog implements Serializable {
         hash = 13 * hash + Objects.hashCode(this.dateTo);
         hash = 13 * hash + Objects.hashCode(this.limit);
         hash = 13 * hash + Objects.hashCode(this.offset);
-        hash = 13 * hash + Objects.hashCode(this.info);
+        hash = 13 * hash + Objects.hashCode(this.level);
         return hash;
     }
 
@@ -170,12 +170,12 @@ public class FilterLog implements Serializable {
         if (!Objects.equals(this.offset, other.offset)) {
             return false;
         }
-        return Objects.equals(this.info, other.info);
+        return Objects.equals(this.level, other.level);
     }
 
     @Override
     public String toString() {
-        return "FilterLog{" + "id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", limit=" + limit + ", offset=" + offset + ", info=" + info + '}';
+        return "FilterLog{" + "id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", limit=" + limit + ", offset=" + offset + ", level=" + level + '}';
     }
       
 
