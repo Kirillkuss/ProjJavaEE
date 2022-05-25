@@ -14,7 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+import org.apache.logging.log4j.Level;
 /**
  *
  * @author barysevich_k
@@ -67,14 +67,14 @@ public class FilterLog implements Serializable {
     @ApiModelProperty(value    = "Статус",
                       name     = "info",
                       dataType = "String",
-                      example  = "ERROR")
-    private String info;
-
+                      example  = "INFO")
+    private Level info;
+    
+    
     public FilterLog() {
-        
     }
 
-    public FilterLog(Long id, LocalDateTime dateFrom, LocalDateTime dateTo, Integer limit, Integer offset, String info) {
+    public FilterLog(Long id, LocalDateTime dateFrom, LocalDateTime dateTo, Integer limit, Integer offset, Level info) {
         this.id = id;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
@@ -108,8 +108,6 @@ public class FilterLog implements Serializable {
     }
 
     public Integer getLimit() {
-        if(limit == null){limit = 1000;}
-        if(limit < 0){limit = 1000;}
         return limit;
     }
 
@@ -118,8 +116,6 @@ public class FilterLog implements Serializable {
     }
 
     public Integer getOffset() {
-        if(offset == null) {offset = 0;}
-        if(offset < 0) {offset = 0;}
         return offset;
     }
 
@@ -127,23 +123,23 @@ public class FilterLog implements Serializable {
         this.offset = offset;
     }
 
-    public String getInfo() {
+    public Level getInfo() {
         return info;
     }
 
-    public void setInfo(String info) {
+    public void setInfo(Level info) {
         this.info = info;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        hash = 97 * hash + Objects.hashCode(this.dateFrom);
-        hash = 97 * hash + Objects.hashCode(this.dateTo);
-        hash = 97 * hash + Objects.hashCode(this.limit);
-        hash = 97 * hash + Objects.hashCode(this.offset);
-        hash = 97 * hash + Objects.hashCode(this.info);
+        int hash = 3;
+        hash = 13 * hash + Objects.hashCode(this.id);
+        hash = 13 * hash + Objects.hashCode(this.dateFrom);
+        hash = 13 * hash + Objects.hashCode(this.dateTo);
+        hash = 13 * hash + Objects.hashCode(this.limit);
+        hash = 13 * hash + Objects.hashCode(this.offset);
+        hash = 13 * hash + Objects.hashCode(this.info);
         return hash;
     }
 
@@ -159,9 +155,6 @@ public class FilterLog implements Serializable {
             return false;
         }
         final FilterLog other = (FilterLog) obj;
-        if (!Objects.equals(this.info, other.info)) {
-            return false;
-        }
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -174,12 +167,17 @@ public class FilterLog implements Serializable {
         if (!Objects.equals(this.limit, other.limit)) {
             return false;
         }
-        return Objects.equals(this.offset, other.offset);
+        if (!Objects.equals(this.offset, other.offset)) {
+            return false;
+        }
+        return Objects.equals(this.info, other.info);
     }
 
     @Override
     public String toString() {
         return "FilterLog{" + "id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", limit=" + limit + ", offset=" + offset + ", info=" + info + '}';
     }
+      
+
     
 }

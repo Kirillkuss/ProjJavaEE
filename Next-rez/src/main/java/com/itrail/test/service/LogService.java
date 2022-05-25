@@ -56,21 +56,22 @@ public class LogService {
 //                //.setParameter("idFilter", filterLog.getId())
 //                .setParameter("dateFromFilter", filterLog.getDateFrom())
 //                .setParameter("dateToFilter", filterLog.getDateTo())
-//                .setParameter("infoFilter", filterLog.getInfo())
+//                .setParameter("infoFilter", filterLog.getInfo().toString())
 //                .setMaxResults(filterLog.getLimit())
 //                .setFirstResult(filterLog.getOffset())
-//                .getResultList());     
-        try{
-        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a where a.levels = ? AND a.date between ? and 1;")
+//                .getResultList()); 
+//        try{
+        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a where a.levels = ? AND a.date between ? and ?")
                                             .setParameter(2, filterLog.getDateFrom())
                                             .setParameter(3, filterLog.getDateTo())
-                                            .setParameter(1, filterLog.getInfo())
+                                            .setParameter(1, filterLog.getInfo().toString())
                                             .getResultList()); //через SQL 
-        }catch(Exception e){ 
-            LOGGER.error(e.getMessage());
-            LOGGER.trace(Arrays.toString(e.getStackTrace()));
-            e.printStackTrace();
-        }
+//        }catch(Exception e){
+//            LOGGER.error(e.getMessage());
+//            LOGGER.trace(Arrays.toString(e.getStackTrace()));
+//            throw new PersistenceException();
+//           // e.printStackTrace();
+//        }
         return f;
     }   
 }

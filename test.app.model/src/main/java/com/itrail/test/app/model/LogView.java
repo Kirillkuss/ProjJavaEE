@@ -80,20 +80,16 @@ public class LogView extends BasicLogEventEntity  {
             if(wrappedEvent.getLevel()!=null){
                 setLevels(wrappedEvent.getLevel().toString());
             }
-            if(wrappedEvent.getContextStack()!=null){
-                //setstacktrace(getCurrentStackTraceString()); // work     
+            if(wrappedEvent.getMarker()!=null){
+                 setstacktrace(wrappedEvent.getMarker().toString());
                 //setstacktrace(wrappedEvent.getContextStack().toArray().toString()); //one element 
-                //setstacktrace(wrappedEvent.getContextStack().toArray().toString());
-                //setstacktrace("Example");
+//                StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+//                setstacktrace( Arrays.stream(stack).map(StackTraceElement::toString).collect(Collectors.joining("\n")));
             }
+           
         }
         
     }
-    private String getCurrentStackTraceString() {
-        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-         return Arrays.stream(stack).map(StackTraceElement::toString)
-         .collect(Collectors.joining("\n"));
-        }
     
     public  String getstacktrace() {
         return stackTrace;

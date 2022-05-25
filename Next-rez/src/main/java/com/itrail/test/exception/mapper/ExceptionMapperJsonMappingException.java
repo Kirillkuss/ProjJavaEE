@@ -1,23 +1,25 @@
-
 package com.itrail.test.exception.mapper;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.itrail.test.domain.BaseResponse;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+
 /**
  *
  * @author barysevich_k
  */
 @Provider
-public class ExceptionMapperIllegalArgumentException implements ExceptionMapper<IllegalArgumentException>{
+public class ExceptionMapperJsonMappingException implements ExceptionMapper<JsonMappingException> {
 
     @Override
-    public Response toResponse(IllegalArgumentException e) {
+    public Response toResponse(JsonMappingException e) {
         BaseResponse bs = new BaseResponse();
-        bs.setCode(430);
-        bs.setMessage(null == e.getMessage() ? "System malfunction" : e.getMessage());
+        bs.setCode(456);
+        bs.setMessage(null == e.getMessage() ? "JsonMappingException" : e.getMessage());
         return Response.ok().entity(bs).build();
     }
+    
     
 }
