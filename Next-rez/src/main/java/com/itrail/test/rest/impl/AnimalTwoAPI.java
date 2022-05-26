@@ -10,6 +10,8 @@ import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 /**
  *
  * @author barysevich_k
@@ -18,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 public class AnimalTwoAPI implements AnimalResourceTwo{
     
     private static final Logger LOGGER = LogManager.getLogger(AnimalTwoAPI.class);
+    private static final Marker ANIMALS= MarkerManager.getMarker("ANI");
     
     @EJB private AnimalServiceTwo service;
 
@@ -29,7 +32,7 @@ public class AnimalTwoAPI implements AnimalResourceTwo{
             l.add( service.getAnimalByList() );
         });
         bs.setData(l);
-        LOGGER.info("method getAnimalByList" );
+        LOGGER.info(ANIMALS,"method getAnimalByList" );
         return bs;
     }
 
@@ -37,7 +40,7 @@ public class AnimalTwoAPI implements AnimalResourceTwo{
     public BaseResponse getAnimalById(Integer idAnimal) {
         BaseResponse bs = new BaseResponse(200, "success");
         bs.setData(service.getAnimalById(idAnimal));
-                LOGGER.error("method getAnimalById");
+                LOGGER.error(ANIMALS,"method getAnimalById");
         return bs;
     }
 
@@ -45,7 +48,7 @@ public class AnimalTwoAPI implements AnimalResourceTwo{
     public BaseResponse getWithoutOwner() {
         BaseResponse bs = new BaseResponse(200, "success");
         bs.setData(service.withoutOwner());
-                LOGGER.info("method getWithoutOwner");
+                LOGGER.info(ANIMALS,"method getWithoutOwner");
         return bs;
     }   
 }

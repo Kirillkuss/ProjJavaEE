@@ -23,7 +23,7 @@ public class LogService {
     private static final Logger LOGGER = LogManager.getLogger(LogService.class);
     private static final Marker SQL_MARKER = MarkerManager.getMarker("SQL");
     private static final Marker QUERY_MARKER = MarkerManager.getMarker("SQL_SELECT");
-    private static final Marker EXCEMPLE = MarkerManager.getMarker("EXC");
+    private static final Marker EXCEMPLE = MarkerManager.getMarker("EXC").setParents(QUERY_MARKER);
     
     @PersistenceContext
     private EntityManager entityManager;
@@ -65,15 +65,15 @@ public class LogService {
 //                .setFirstResult(filterLog.getOffset())
 //                .getResultList()); 
         try{
-        f.setData(entityManager.createNativeQuery("SELECT *w from LOGGERSTABLE a where a.levels = ? AND a.date between ? and ?")
+        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a where a.levels = ? AND ((a.date is null or a.date >= ?) and (a.date is null or a.date <= ?))")
                                             .setParameter(2, filterLog.getDateFrom())
                                             .setParameter(3, filterLog.getDateTo())
                                             .setParameter(1, filterLog.getlevel().toString())
                                             .getResultList()); //через SQL 
         }catch(Exception e){
             LOGGER.error(QUERY_MARKER, e.getMessage());
-            LOGGER.info(SQL_MARKER, "SqlMarker");
-            LOGGER.trace(EXCEMPLE, "MarkerEXC");
+            LOGGER.info(SQL_MARKER, e.getMessage());
+            LOGGER.trace(EXCEMPLE, Arrays.toString(e.getStackTrace()));
             
             //LOGGER.trace(SQL_MARKER,Arrays.toString(e.getStackTrace()));
            // e.printStackTrace();

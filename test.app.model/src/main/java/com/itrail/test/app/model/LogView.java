@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
 /**
@@ -70,7 +69,9 @@ public class LogView extends BasicLogEventEntity  {
     
     @Column(name = "marker")
     @ApiModelProperty(required = false)
-    private Marker marker;
+    private String marker;
+    
+
     
     public LogView() {
     }
@@ -85,8 +86,8 @@ public class LogView extends BasicLogEventEntity  {
                 setLevels(wrappedEvent.getLevel().toString());
             }
             
-            if(wrappedEvent.getMarker()!= null){
-                setMarker(wrappedEvent.getMarker());
+            if(wrappedEvent.getMarker() != null){             
+                setMarker(wrappedEvent.getMarker().getName());      
             }
                 //setstacktrace(wrappedEvent.getContextStack().toArray().toString()); //one element 
 //                StackTraceElement[] stack = Thread.currentThread().getStackTrace();
@@ -94,7 +95,7 @@ public class LogView extends BasicLogEventEntity  {
         }
     }
 
-    public LogView(LogEvent wrappedEvent, Long id, LocalDateTime date, String levels, String messages, String stackTrace, Marker marker) {
+    public LogView(LogEvent wrappedEvent, Long id, LocalDateTime date, String levels, String messages, String stackTrace, String marker) {
         this.wrappedEvent = wrappedEvent;
         this.id = id;
         this.date = date;
@@ -144,24 +145,25 @@ public class LogView extends BasicLogEventEntity  {
         this.stackTrace = stackTrace;
     }
 
-    public Marker getMarker() {
+    public String getmarker() {
         return marker;
     }
 
-    public void setMarker(Marker marker) {
+    public void setMarker(String marker) {
         this.marker = marker;
     }
+
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.wrappedEvent);
-        hash = 47 * hash + Objects.hashCode(this.id);
-        hash = 47 * hash + Objects.hashCode(this.date);
-        hash = 47 * hash + Objects.hashCode(this.levels);
-        hash = 47 * hash + Objects.hashCode(this.messages);
-        hash = 47 * hash + Objects.hashCode(this.stackTrace);
-        hash = 47 * hash + Objects.hashCode(this.marker);
+        hash = 43 * hash + Objects.hashCode(this.wrappedEvent);
+        hash = 43 * hash + Objects.hashCode(this.id);
+        hash = 43 * hash + Objects.hashCode(this.date);
+        hash = 43 * hash + Objects.hashCode(this.levels);
+        hash = 43 * hash + Objects.hashCode(this.messages);
+        hash = 43 * hash + Objects.hashCode(this.stackTrace);
+        hash = 43 * hash + Objects.hashCode(this.marker);
         return hash;
     }
 
@@ -202,10 +204,7 @@ public class LogView extends BasicLogEventEntity  {
     public String toString() {
         return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", levels=" + levels + ", messages=" + messages + ", stackTrace=" + stackTrace + ", marker=" + marker + '}';
     }
-    
 
-
-  
     
 
 }

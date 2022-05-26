@@ -47,7 +47,7 @@
         </MyAppender> 
         
         <JPA name="JpaAppender" persistenceUnitName="default" entityClassName="com.itrail.test.app.model.LogView" ignoreExceptions="false">
-            <MarkerFilter marker ="SQL_SELECT" onMatch="ACCEPT" onMismatch="DENY" />
+            <MarkerFilter marker ="SQL" onMatch="ACCEPT" onMismatch="ACCEPT" />
         </JPA> 
         
     </Appenders>
