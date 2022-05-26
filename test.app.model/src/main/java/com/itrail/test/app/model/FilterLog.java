@@ -108,6 +108,8 @@ public class FilterLog implements Serializable {
     }
 
     public Integer getLimit() {
+        if(limit == null){limit = 1000;}
+        if(limit < 0){limit = 1000;}
         return limit;
     }
 
@@ -116,6 +118,8 @@ public class FilterLog implements Serializable {
     }
 
     public Integer getOffset() {
+        if(offset == null) {offset = 0;}
+        if(offset < 0) {offset = 0;}
         return offset;
     }
 
@@ -124,6 +128,7 @@ public class FilterLog implements Serializable {
     }
 
     public Level getlevel() {
+        
         return level;
     }
 
