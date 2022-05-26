@@ -5,8 +5,9 @@
     
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>
+            
         </Console>
-    
+        
         
         <RollingFile name="LogToRollingFile" fileName="${sys:jboss.server.log.dir}/epd/rest.web.log" filePattern="${sys:jboss.server.log.dir}/epd/arch/$${date:MM-dd}/rest.web-%d{dd.MM.yyyy}-%i.log.gz">
             <PatternLayout>
@@ -45,7 +46,10 @@
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>
         </MyAppender> 
         
-        <JPA name="JpaAppender" persistenceUnitName="default" entityClassName="com.itrail.test.app.model.LogView" ignoreExceptions="false" />
+        <JPA name="JpaAppender" persistenceUnitName="default" entityClassName="com.itrail.test.app.model.LogView" ignoreExceptions="false">
+            <MarkerFilter marker ="SQL_SELECT" onMatch="ACCEPT" onMismatch="DENY" />
+        </JPA> 
+        
     </Appenders>
         
     <Loggers>

@@ -13,14 +13,18 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 /**
  * @author barysevich_k
  */
 @Stateless
 public class LogService {
-    
     private static final Logger LOGGER = LogManager.getLogger(LogService.class);
-
+    private static final Marker SQL_MARKER = MarkerManager.getMarker("SQL");
+    private static final Marker QUERY_MARKER = MarkerManager.getMarker("SQL_SELECT");
+    private static final Marker EXCEMPLE = MarkerManager.getMarker("EXC");
+    
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -60,18 +64,20 @@ public class LogService {
 //                .setMaxResults(filterLog.getLimit())
 //                .setFirstResult(filterLog.getOffset())
 //                .getResultList()); 
-//        try{
-        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a where a.levels = ? AND a.date between ? and ?")
+        try{
+        f.setData(entityManager.createNativeQuery("SELECT *w from LOGGERSTABLE a where a.levels = ? AND a.date between ? and ?")
                                             .setParameter(2, filterLog.getDateFrom())
                                             .setParameter(3, filterLog.getDateTo())
                                             .setParameter(1, filterLog.getlevel().toString())
                                             .getResultList()); //через SQL 
-//        }catch(Exception e){
-//            LOGGER.error(e.getMessage());
-//            LOGGER.trace(Arrays.toString(e.getStackTrace()));
-//            throw new PersistenceException();
-//           // e.printStackTrace();
-//        }
+        }catch(Exception e){
+            LOGGER.error(QUERY_MARKER, e.getMessage());
+            LOGGER.info(SQL_MARKER, "SqlMarker");
+            LOGGER.trace(EXCEMPLE, "MarkerEXC");
+            
+            //LOGGER.trace(SQL_MARKER,Arrays.toString(e.getStackTrace()));
+           // e.printStackTrace();
+        }
         return f;
     }   
 }
