@@ -33,12 +33,25 @@ public interface LogResource {
     public BaseResponse getLog();
     
     @POST
-    @Path("/request")
-    @ApiOperation(value = "Поиск логгов")
+    @Path("/requestJPQL")
+    @ApiOperation(value = "Поиск логгов JPQL")
     @ApiResponses(value ={
-        @ApiResponse(code = 200, message ="Поиск логгов",response = LogView.class)})
-    public LogResponse getListFilterLog(@ApiParam(required = false)FilterLog filterLog) throws Exception;
+        @ApiResponse(code = 200, message ="Поиск логгов JPQL",response = LogView.class)})
+    public LogResponse getListFilterLogJPQL(@ApiParam(required = false)FilterLog filterLog) throws Exception;
     
-   
+    @POST
+    @Path("/requestSQL")
+    @ApiOperation(value = "Поиск логгов SQL")
+    @ApiResponses(value ={
+        @ApiResponse(code = 200, message ="Поиск логгов SQL",response = LogView.class)})
+    public LogResponse getListFilterLogSQL(@ApiParam(required = false)FilterLog filterLog) throws Exception;
+    
+    @POST
+    @Path("/requestJPA")
+    @ApiOperation(value = "Поиск логгов JPA")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Поиск логгов JPA", response = LogView.class)})
+    public BaseResponse getListLogJPA(@ApiParam(required = false) FilterLog filteLog) throws Exception;
+  
 }
 

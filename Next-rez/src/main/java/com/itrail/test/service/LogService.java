@@ -10,6 +10,9 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,34 +57,54 @@ public class LogService {
     }
 
 
-    public BaseResponse<List<LogView>> getFoundLog(FilterLog filterLog) throws Exception {
-        BaseResponse<List<LogView>> f = new BaseResponse(0, "success"); 
-        f.setData(entityManager.createQuery("SELECT e FROM LogView e WHERE :idFilter is null or e.id =:idFilter "
-                                            + " AND e.levels = :infoFilter"
+    public BaseResponse<List<LogView>> getFoundLogJPQL(FilterLog filterLog) throws Exception {
+        BaseResponse<List<LogView>> f = new BaseResponse(0, "success");
+        f.setData(entityManager.createQuery("SELECT e FROM LogView e WHERE e.levels = :infoFilter"
                                             + " AND ((:dateFromFilter is null or e.date >= :dateFromFilter)"
                                             + " AND (:dateToFilter is null or e.date <= :dateToFilter))")
-                .setParameter("idFilter", filterLog.getId())
+                //.setParameter("idFilter", filterLog.getId())
                 .setParameter("dateFromFilter", filterLog.getDateFrom())
                 .setParameter("dateToFilter", filterLog.getDateTo())
                 .setParameter("infoFilter", filterLog.getlevel().toString())
                 .setMaxResults(filterLog.getLimit())
                 .setFirstResult(filterLog.getOffset())
                 .getResultList()); 
-//        try{
-//        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a where a.levels = ?1 AND ((?2 is null or a.date >= ?2) AND (?3 is null or a.date <= ?3))")
-//                                            .setParameter(2, filterLog.getDateFrom())
-//                                            .setParameter(3, filterLog.getDateTo())
-//                                            .setParameter(1, filterLog.getlevel().toString())
-//                                            .setMaxResults(filterLog.getLimit())
-//                                            .setFirstResult(filterLog.getOffset())
-//                                            .getResultList()); //через SQL 
-//        }catch(Exception e){
-//            LOGGER.error(QUERY_MARKER, e.getMessage());
-//            LOGGER.info(SQL_MARKER, e.getMessage());
-//            LOGGER.trace(EXCEMPLE, Arrays.toString(e.getStackTrace()));  
-            //LOGGER.trace(SQL_MARKER,Arrays.toString(e.getStackTrace()));
-           // e.printStackTrace();
-//        }
         return f;
-    }   
+    }
+    
+    public BaseResponse<List<LogView>> getFoundLogSQL(FilterLog filterLog) throws Exception{
+        BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
+        try{
+        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a where a.levels = ?1 AND ((?2 is null or a.date >= ?2) AND (?3 is null or a.date <= ?3))")
+                                            .setParameter(2, filterLog.getDateFrom())
+                                            .setParameter(3, filterLog.getDateTo())
+                                            .setParameter(1, filterLog.getlevel().toString())
+                                            .setMaxResults(filterLog.getLimit())
+                                            .setFirstResult(filterLog.getOffset())
+                                            .getResultList()); //через SQL 
+        }catch(Exception e){
+            LOGGER.error(QUERY_MARKER, e.getMessage());
+            LOGGER.info(SQL_MARKER, e.getMessage());
+            LOGGER.trace(EXCEMPLE, Arrays.toString(e.getStackTrace()));  
+            LOGGER.trace(SQL_MARKER,Arrays.toString(e.getStackTrace()));
+            e.printStackTrace();
+        }
+        return f;
+    }
+    
+    public BaseResponse<List<LogView>> getFoundlogJPA(FilterLog filterLog) throws Exception{
+        BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<LogView> logViewCriteria = cb.createQuery(LogView.class);
+        Root<LogView> logViewRoot = logViewCriteria.from(LogView.class);
+        logViewCriteria.select(logViewRoot);
+        f.setData(entityManager.createQuery(logViewCriteria)
+                               // .setParameter("levelFiler", filterLog.getlevel().toString())                        
+                               .setFirstResult(filterLog.getOffset())
+                               .setMaxResults(filterLog.getLimit())
+                               .getResultList());
+        return f;
+         
+    }
+    
 }

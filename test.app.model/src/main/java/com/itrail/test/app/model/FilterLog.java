@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.Marker;
 /**
  *
  * @author barysevich_k

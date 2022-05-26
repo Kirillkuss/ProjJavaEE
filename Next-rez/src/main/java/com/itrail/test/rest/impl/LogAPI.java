@@ -24,11 +24,27 @@ public class LogAPI implements LogResource{
         //System.out.println(service.getAllLog());
        return bs;
     }
+    
+    @Override
+    public LogResponse getListFilterLogJPQL(FilterLog filterLog) throws Exception {
+        //BaseResponse <List<LogView>> bs = service.getFoundLog(filterLog);
+        return new LogResponse(service.getFoundLogJPQL(filterLog).getData());
+    }
 
     @Override
-    public LogResponse getListFilterLog(FilterLog filterLog) throws Exception {
-        BaseResponse <List<LogView>> bs = service.getFoundLog(filterLog);
-        return new LogResponse(service.getFoundLog(filterLog).getData());
-    } 
+    public LogResponse getListFilterLogSQL(FilterLog filterLog) throws Exception {
+        //BaseResponse <List<LogView>> bs = service.getFoundLog(filterLog);
+        return new LogResponse(service.getFoundLogSQL(filterLog).getData());
+    }
+
+    @Override
+    public BaseResponse getListLogJPA(FilterLog filterLog) throws Exception {
+        BaseResponse bs = new BaseResponse(200, "success");
+        bs.setData(service.getFoundlogJPA(filterLog).getData());
+        return bs;
+    }
+    
+    
+    
 
 }
