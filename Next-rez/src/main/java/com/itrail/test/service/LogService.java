@@ -3,6 +3,9 @@ package com.itrail.test.service;
 import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -12,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -97,9 +101,21 @@ public class LogService {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<LogView> logViewCriteria = cb.createQuery(LogView.class);
         Root<LogView> logViewRoot = logViewCriteria.from(LogView.class);
-        logViewCriteria.select(logViewRoot);
-        f.setData(entityManager.createQuery(logViewCriteria)
-                               // .setParameter("levelFiler", filterLog.getlevel().toString())                        
+        
+        CriteriaQuery<FilterLog> filterLogCriteria = cb.createQuery(FilterLog.class);
+        Root<FilterLog> filterLogRoot = filterLogCriteria.from(FilterLog.class);
+        
+        Predicate predOne = logViewRoot.get("levels").in(filterLog.getlevel().toString());
+        Predicate predTwo = cb.between(logViewRoot.get("date"), filterLog.getDateFrom(), filterLog.getDateTo());
+        
+        Predicate p1 = cb.ge(logViewRoot.get("date"), filterLogRoot.get("dateFrom"));
+        Predicate p2 = cb.le(logViewRoot.get("date"), filterLogRoot.get("dateTo")); 
+        Predicate p3 = cb.isNull(filterLogRoot.get("dateFrom"));
+        Predicate p4 = cb.isNull(filterLogRoot.get("dateTo"));
+        
+        logViewCriteria.select(logViewRoot).where(cb.and(predOne, cb.or(p3,p1),cb.or(p4,p2)));
+        
+        f.setData(entityManager.createQuery(logViewCriteria)                     
                                .setFirstResult(filterLog.getOffset())
                                .setMaxResults(filterLog.getLimit())
                                .getResultList());

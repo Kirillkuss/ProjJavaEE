@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -91,6 +92,9 @@ public class FilterLog implements Serializable {
     }
 
     public LocalDateTime getDateFrom() {
+//        if (dateFrom == null){
+//            dateFrom = LocalDateTime.of(2000, Month.APRIL, 11, 13, 10, 22);
+//        }
         return dateFrom;
     }
 
@@ -99,6 +103,9 @@ public class FilterLog implements Serializable {
     }
 
     public LocalDateTime getDateTo() {
+//        if (dateTo == null){
+//            dateTo = LocalDateTime.of(3000, Month.APRIL, 11, 13, 10, 22);
+//        }
         return dateTo;
     }
 
@@ -127,7 +134,7 @@ public class FilterLog implements Serializable {
     }
 
     public Level getlevel() {
-        
+     //   if(level == null){level = Level.INFO;}
         return level;
     }
 
