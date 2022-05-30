@@ -3,8 +3,6 @@ package com.itrail.test.service;
 import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -102,25 +100,17 @@ public class LogService {
         CriteriaQuery<LogView> logViewCriteria = cb.createQuery(LogView.class);
         Root<LogView> logViewRoot = logViewCriteria.from(LogView.class);
         
-        CriteriaQuery<FilterLog> filterLogCriteria = cb.createQuery(FilterLog.class);
-        Root<FilterLog> filterLogRoot = filterLogCriteria.from(FilterLog.class);
-        
-        Predicate predOne = logViewRoot.get("levels").in(filterLog.getlevel().toString());
-        Predicate predTwo = cb.between(logViewRoot.get("date"), filterLog.getDateFrom(), filterLog.getDateTo());
-        
-        Predicate p1 = cb.ge(logViewRoot.get("date"), filterLogRoot.get("dateFrom"));
-        Predicate p2 = cb.le(logViewRoot.get("date"), filterLogRoot.get("dateTo")); 
-        Predicate p3 = cb.isNull(filterLogRoot.get("dateFrom"));
-        Predicate p4 = cb.isNull(filterLogRoot.get("dateTo"));
-        
-        logViewCriteria.select(logViewRoot).where(cb.and(predOne, cb.or(p3,p1),cb.or(p4,p2)));
-        
+        List<Predicate> predicates = new ArrayList<>();
+        if ( null != filterLog.getDateFrom() ) predicates.add( cb.greaterThanOrEqualTo(logViewRoot.get("date"), filterLog.getDateFrom()));
+        if ( null != filterLog.getDateTo() ) predicates.add( cb.lessThanOrEqualTo(logViewRoot.get("date"), filterLog.getDateTo()));
+        if( null!= filterLog.getlevel() ) predicates.add(logViewRoot.get("levels").in(filterLog.getlevel().toString()));
+        if(!predicates.isEmpty()){
+            logViewCriteria.select(logViewRoot).where(predicates.toArray(new Predicate[]{}));
+        }
         f.setData(entityManager.createQuery(logViewCriteria)                     
                                .setFirstResult(filterLog.getOffset())
                                .setMaxResults(filterLog.getLimit())
                                .getResultList());
-        return f;
-         
-    }
-    
+        return f; 
+    }  
 }

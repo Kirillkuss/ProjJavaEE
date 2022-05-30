@@ -134,7 +134,6 @@ public class FilterLog implements Serializable {
     }
 
     public Level getlevel() {
-     //   if(level == null){level = Level.INFO;}
         return level;
     }
 
