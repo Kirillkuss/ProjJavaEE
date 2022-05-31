@@ -7,6 +7,7 @@ import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
+import org.apache.logging.log4j.Level;
 /**
  *
  * @author barysevich_k
@@ -48,5 +49,13 @@ public class LogAPI implements LogResource{
         bs.setData(service.getFoundLogSubQuery(filterLog).getData());
         return bs;
     }
+
+    @Override
+    public BaseResponse getExemple(Long id, Level level) {
+        BaseResponse bs = new BaseResponse(200, "success");
+        bs.setData(service.getExemple(id,level).getData());
+        return bs;
+    }
+    
     
 }

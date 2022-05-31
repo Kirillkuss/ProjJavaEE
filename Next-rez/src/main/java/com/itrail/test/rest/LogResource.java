@@ -13,8 +13,10 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.apache.logging.log4j.Level;
 /**
  *
  * @author barysevich_k
@@ -57,6 +59,13 @@ public interface LogResource {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Поиск логгов Subquery", response = LogView.class)})
     public BaseResponse getListLogSubQuery(@ApiParam(required = false) FilterLog filterLog);
+    
+    @POST
+    @Path("/exemple/{id}/{level}")
+    @ApiOperation(value = "Exemple")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Success")})
+    public BaseResponse getExemple(@ApiParam(required = false,example = "1") @PathParam("id") Long id,@ApiParam(required = false,example ="INFO") @PathParam("level") Level level);
   
 }
 
