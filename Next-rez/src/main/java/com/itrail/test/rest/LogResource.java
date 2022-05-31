@@ -4,13 +4,11 @@ import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogResponse;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
-import com.itrail.test.exception.mapper.ItException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.sql.SQLException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -52,6 +50,13 @@ public interface LogResource {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Поиск логгов JPA", response = LogView.class)})
     public BaseResponse getListLogJPA(@ApiParam(required = false) FilterLog filteLog) throws Exception;
+    
+    @POST
+    @Path("/Subquery")
+    @ApiOperation(value = "Поиск логгов Subquery")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Поиск логгов Subquery", response = LogView.class)})
+    public BaseResponse getListLogSubQuery(@ApiParam(required = false) FilterLog filterLog);
   
 }
 

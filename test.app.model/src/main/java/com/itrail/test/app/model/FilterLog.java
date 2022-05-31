@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +35,7 @@ public class FilterLog implements Serializable {
     
     @Column(name="dateFrom")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @ApiModelProperty(value    = "Время",
+    @ApiModelProperty(value    = "Время c ",
                       name     = "dateFrom",
                       dataType = "String",
                       example  = "2022.05.15 11:02:42")
@@ -44,7 +43,7 @@ public class FilterLog implements Serializable {
     
     @Column(name="dateTo")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @ApiModelProperty(value    = "Время",
+    @ApiModelProperty(value    = "Время до",
                       name     = "dateTo",
                       dataType = "String",
                       example  = "2022.06.18 11:02:42")
