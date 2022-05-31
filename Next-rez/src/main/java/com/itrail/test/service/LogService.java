@@ -125,18 +125,13 @@ public class LogService {
         Subquery<LogView> subQuery = logViewCriteria.subquery(LogView.class);
         Root <LogView> subRoot = subQuery.from(LogView.class);
         subQuery.select(subRoot.get("levels")).where(cb.equal(subRoot.get("levels"),filterLog.getlevel().toString()));
-        logViewCriteria.select(logViewRoot).where(cb.equal(logViewRoot.get("levels"),subQuery));
+        logViewCriteria.select(logViewRoot).where(logViewRoot.get("levels").in(subQuery));
         
         f.setData(entityManager.createQuery(logViewCriteria).getResultList()); 
         return f;
         
     }
     
-    
-    
-    
-    
-
     public BaseResponse<List<LogView>> getExemple(Long id,Level level){
         BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -150,7 +145,7 @@ public class LogService {
         
         subQuery.select(subRoot.get("levels")).where(cb.equal(subRoot.get("levels"),level.toString()));
         subQueryTwo.select(subRootTwo).where(cb.equal(subRootTwo.get("id"),id));
-        logViewCriteria.select(logViewRoot).where(cb.or(cb.equal(logViewRoot.get("levels"),subQuery),cb.equal(logViewRoot.get("id"),subQueryTwo)));  
+        logViewCriteria.select(logViewRoot).where(cb.or(logViewRoot.get("levels").in(subQuery),logViewRoot.get("id").in(subQueryTwo)));  
         f.setData(entityManager.createQuery(logViewCriteria).getResultList());
         return f;   
     }

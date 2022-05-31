@@ -91,9 +91,6 @@ public class FilterLog implements Serializable {
     }
 
     public LocalDateTime getDateFrom() {
-//        if (dateFrom == null){
-//            dateFrom = LocalDateTime.of(2000, Month.APRIL, 11, 13, 10, 22);
-//        }
         return dateFrom;
     }
 
@@ -102,9 +99,6 @@ public class FilterLog implements Serializable {
     }
 
     public LocalDateTime getDateTo() {
-//        if (dateTo == null){
-//            dateTo = LocalDateTime.of(3000, Month.APRIL, 11, 13, 10, 22);
-//        }
         return dateTo;
     }
 
