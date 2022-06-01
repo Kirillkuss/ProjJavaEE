@@ -34,7 +34,7 @@ public class LogService {
     private static final Marker QUERY_MARKER = MarkerManager.getMarker("SQL_SELECT");
     private static final Marker EXCEMPLE = MarkerManager.getMarker("EXC").setParents(QUERY_MARKER);
     
-    private static final Marker DATATIME_MARKER = MarkerManager.getMarker("DATETIME");
+    private static final Marker PARAMS_MARKER = MarkerManager.getMarker("PARAMS");
     
     @PersistenceContext
     private EntityManager entityManager;
@@ -154,17 +154,15 @@ public class LogService {
         return f;   
     }
     
-    public BaseResponse<List<LogView>> getLog(String date){
+    public BaseResponse<List<LogView>> setLog(){
         BaseResponse<List<LogView>> f = new BaseResponse(0, "success");
-        
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
-        LocalDateTime datetime = LocalDateTime.parse(date,format); 
-        LOGGER.info(DATATIME_MARKER, "message",1,2,3, Arrays.asList(5,6,7),Arrays.asList(new Object(),new Object())); 
-        
-        f.setData(entityManager.createQuery("SELECT s from LogView s where :dateTimeFilter is null or s.date >= :dateTimeFilter")
-                               .setParameter("dateTimeFilter", datetime)
-                               .getResultList());  
-        return f; 
-    }
-    
+         // LOGGER.log(Level.TRACE, PARAMS_MARKER, String.format("Level>>>>> %s Number= %d", new Object[]{Level.TRACE, 500}));
+          LOGGER.log(Level.INFO,PARAMS_MARKER,"logging: {} {}",  "123", new Object(), "Example");
+        return f;  
+    }  
 }
+//        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+//        LocalDateTime datetime = LocalDateTime.parse(date,format);     
+//        f.setData(entityManager.createQuery("SELECT s from LogView s where :dateTimeFilter is null or s.date >= :dateTimeFilter")
+//                               .setParameter("dateTimeFilter", datetime)
+//                               .getResultList());  
