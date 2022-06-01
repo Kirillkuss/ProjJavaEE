@@ -83,7 +83,7 @@ public class LogView extends BasicLogEventEntity  {
                 setMessages(wrappedEvent.getMessage().toString());
             }
             if(wrappedEvent.getLevel()!=null){
-                setLevels(wrappedEvent.getLevel().toString());
+                setLevel(wrappedEvent.getLevel().toString());
             }
             
             if(wrappedEvent.getMarker() != null){             
@@ -121,11 +121,11 @@ public class LogView extends BasicLogEventEntity  {
         this.date = date;
     }
 
-    public String getLevels() {
+    public String getlevel() {
         return levels;
     }
 
-    public void setLevels(String levels) {
+    public void setLevel(String levels) {
         this.levels = levels;
     }
 

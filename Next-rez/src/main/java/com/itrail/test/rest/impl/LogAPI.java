@@ -5,6 +5,7 @@ import com.itrail.test.app.model.LogResponse;
 import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
+import java.time.LocalDateTime;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import org.apache.logging.log4j.Level;
@@ -51,11 +52,20 @@ public class LogAPI implements LogResource{
     }
 
     @Override
-    public BaseResponse getExemple(Long id, Level level) {
+    public BaseResponse getExample(Long id, Level level) {
         BaseResponse bs = new BaseResponse(200, "success");
-        bs.setData(service.getExemple(id,level).getData());
+        bs.setData(service.getExample(id,level).getData());
         return bs;
     }
+
+    @Override
+    public BaseResponse getDateTimeLog(String date) {
+        BaseResponse bs = new BaseResponse(200, "success");
+        bs.setData(service.getLog(date).getData());
+        return bs;
+        
+    }
+    
     
     
 }

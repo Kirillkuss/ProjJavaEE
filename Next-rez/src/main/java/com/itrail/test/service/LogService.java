@@ -3,6 +3,8 @@ package com.itrail.test.service;
 import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +33,8 @@ public class LogService {
     private static final Marker SQL_MARKER = MarkerManager.getMarker("SQL");
     private static final Marker QUERY_MARKER = MarkerManager.getMarker("SQL_SELECT");
     private static final Marker EXCEMPLE = MarkerManager.getMarker("EXC").setParents(QUERY_MARKER);
+    
+    private static final Marker DATATIME_MARKER = MarkerManager.getMarker("DATETIME");
     
     @PersistenceContext
     private EntityManager entityManager;
@@ -125,14 +129,14 @@ public class LogService {
         Subquery<LogView> subQuery = logViewCriteria.subquery(LogView.class);
         Root <LogView> subRoot = subQuery.from(LogView.class);
         subQuery.select(subRoot.get("levels")).where(cb.equal(subRoot.get("levels"),filterLog.getlevel().toString()));
-        logViewCriteria.select(logViewRoot).where(logViewRoot.get("levels").in(subQuery));
+        logViewCriteria.select(logViewRoot).where(cb.equal(logViewRoot.get("levels"),subQuery));
         
         f.setData(entityManager.createQuery(logViewCriteria).getResultList()); 
         return f;
         
     }
     
-    public BaseResponse<List<LogView>> getExemple(Long id,Level level){
+    public BaseResponse<List<LogView>> getExample(Long id,Level level){
         BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<LogView> logViewCriteria = cb.createQuery(LogView.class);
@@ -148,6 +152,19 @@ public class LogService {
         logViewCriteria.select(logViewRoot).where(cb.or(logViewRoot.get("levels").in(subQuery),logViewRoot.get("id").in(subQueryTwo)));  
         f.setData(entityManager.createQuery(logViewCriteria).getResultList());
         return f;   
+    }
+    
+    public BaseResponse<List<LogView>> getLog(String date){
+        BaseResponse<List<LogView>> f = new BaseResponse(0, "success");
+        
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        LocalDateTime datetime = LocalDateTime.parse(date,format); 
+        LOGGER.info(DATATIME_MARKER, "message",1,2,3, Arrays.asList(5,6,7),Arrays.asList(new Object(),new Object())); 
+        
+        f.setData(entityManager.createQuery("SELECT s from LogView s where :dateTimeFilter is null or s.date >= :dateTimeFilter")
+                               .setParameter("dateTimeFilter", datetime)
+                               .getResultList());  
+        return f; 
     }
     
 }

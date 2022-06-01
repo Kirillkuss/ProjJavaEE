@@ -1,8 +1,7 @@
-
 package com.itrail.test.exception.mapper;
 
 import com.itrail.test.domain.BaseResponse;
-import java.sql.SQLException;
+import java.time.format.DateTimeParseException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -11,15 +10,13 @@ import javax.ws.rs.ext.Provider;
  * @author barysevich_k
  */
 @Provider
-public class ExceptionMapperSQLException implements ExceptionMapper<SQLException> {
+public class ExceptionMapperDateTimeParseException implements ExceptionMapper<DateTimeParseException>{
 
     @Override
-    public Response toResponse(SQLException e) {
+    public Response toResponse(DateTimeParseException e) {
         BaseResponse bs = new BaseResponse();
-        bs.setCode(571);
-        bs.setMessage(null == e.getMessage() ? "SQLException" : e.getMessage());
+        bs.setCode(577);
+        bs.setMessage(null == e.getMessage() ? "DateTimeParseException" : e.getMessage());
         return Response.ok().entity(bs).build();
-    }
-    
-    
+    }  
 }

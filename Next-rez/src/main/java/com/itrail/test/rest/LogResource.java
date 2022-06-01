@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.time.LocalDateTime;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -61,11 +62,17 @@ public interface LogResource {
     public BaseResponse getListLogSubQuery(@ApiParam(required = false) FilterLog filterLog);
     
     @POST
-    @Path("/exemple/{id}/{level}")
-    @ApiOperation(value = "Exemple")
+    @Path("/example/{id}/{level}")
+    @ApiOperation(value = "Example")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success")})
-    public BaseResponse getExemple(@ApiParam(required = false,example = "1") @PathParam("id") Long id,@ApiParam(required = false,example ="INFO") @PathParam("level") Level level);
+    public BaseResponse getExample(@ApiParam(required = false,example = "1") @PathParam("id") Long id,@ApiParam(required = false,example ="INFO") @PathParam("level") Level level);
+    
+    @POST
+    @Path("/ArrayObj/{date}")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "success")})
+    public BaseResponse getDateTimeLog(@ApiParam(required = false, example = "2022.05.15 11:02:42") @PathParam("date") String date );
   
 }
 
