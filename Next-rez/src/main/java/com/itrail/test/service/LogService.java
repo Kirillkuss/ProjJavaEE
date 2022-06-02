@@ -3,8 +3,7 @@ package com.itrail.test.service;
 import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.itrail.test.domain.LogData;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -156,13 +155,19 @@ public class LogService {
     
     public BaseResponse<List<LogView>> setLog(){
         BaseResponse<List<LogView>> f = new BaseResponse(0, "success");
-         // LOGGER.log(Level.TRACE, PARAMS_MARKER, String.format("Level>>>>> %s Number= %d", new Object[]{Level.TRACE, 500}));
-          LOGGER.log(Level.INFO,PARAMS_MARKER,"logging: {} {}",  "123", new Object(), "Example");
+       // LOGGER.log(Level.TRACE, PARAMS_MARKER, String.format("Level>>>>> %s Number= %d", new Object[]{Level.TRACE, 500}));
+          LOGGER.log(Level.INFO,PARAMS_MARKER,"logging: {} {}", 1 ,"Example");
         return f;  
-    }  
+    }
+    
+    public BaseResponse<List<LogView>> setLogParams(LogData data){
+        BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
+        try {
+            LOGGER.log( Level.INFO,PARAMS_MARKER,data.getMessage(), data.getParams() );
+            return f;
+            
+        } catch ( Exception e ){
+            return BaseResponse.error(999, e );
+        }          
+    }
 }
-//        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
-//        LocalDateTime datetime = LocalDateTime.parse(date,format);     
-//        f.setData(entityManager.createQuery("SELECT s from LogView s where :dateTimeFilter is null or s.date >= :dateTimeFilter")
-//                               .setParameter("dateTimeFilter", datetime)
-//                               .getResultList());  

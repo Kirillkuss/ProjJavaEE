@@ -6,21 +6,16 @@ import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.domain.LogData;
 import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
-import java.time.LocalDateTime;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 /**
  *
  * @author barysevich_k
  */
 @Path("log")
 public class LogAPI implements LogResource{
-    
-    
-    
+
     @EJB LogService service;
     @Override
     public BaseResponse getLog() {
@@ -70,20 +65,12 @@ public class LogAPI implements LogResource{
         return bs;
         
     }
-
-    private static final Logger LOGGER = LogManager.getLogger(LogService.class);
-    
+  
     @Override
     public BaseResponse setLog(LogData data) {
-        try {
-            LOGGER.log( data.getLevel() , data.getMarker(), data.getMessage(), data.getParams() );
-            return BaseResponse.success();
-            
-        } catch ( Exception e ){
-            return BaseResponse.error(999, e );
-        }
+        BaseResponse bs = new BaseResponse(200, "success");
+        service.setLogParams(data);
+        return bs;
     }
-    
-    
-    
+
 }

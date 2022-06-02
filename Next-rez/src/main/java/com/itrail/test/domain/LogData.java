@@ -1,6 +1,10 @@
 
+
 package com.itrail.test.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.itrail.test.app.core.LocalDateTimeDeserializer;
+import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
@@ -13,32 +17,21 @@ import org.apache.logging.log4j.Marker;
  */
 public class LogData {
 
-    private Level level;
-    private Marker marker;
+//    private Level level;
+//    private Marker marker;
     private String message;
     private Object[] params;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @ApiModelProperty(value    = "Время до",
+                      name     = "date",
+                      dataType = "String",
+                      example  = "2022.06.18 11:02:42")
     private LocalDateTime date;
 
     public LogData() {
     }
 
-    public Level getLevel() {
-        return level;
-    }
 
-    public void setLevel(Level level) {
-        this.level = level;
-    }
-
-  
-
-    public Marker getMarker() {
-        return marker;
-    }
-
-    public void setMarker(Marker marker) {
-        this.marker = marker;
-    }
 
     public String getMessage() {
         return message;
@@ -67,8 +60,7 @@ public class LogData {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 41 * hash + Objects.hashCode(this.level);
-        hash = 41 * hash + Objects.hashCode(this.marker);
+
         hash = 41 * hash + Objects.hashCode(this.message);
         hash = 41 * hash + Arrays.deepHashCode(this.params);
         hash = 41 * hash + Objects.hashCode(this.date);
@@ -88,12 +80,6 @@ public class LogData {
         }
         final LogData other = (LogData) obj;
         if (!Objects.equals(this.message, other.message)) {
-            return false;
-        }
-        if (!Objects.equals(this.level, other.level)) {
-            return false;
-        }
-        if (!Objects.equals(this.marker, other.marker)) {
             return false;
         }
         if (!Arrays.deepEquals(this.params, other.params)) {

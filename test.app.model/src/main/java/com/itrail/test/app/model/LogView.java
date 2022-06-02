@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -65,16 +66,13 @@ public class LogView extends BasicLogEventEntity  {
     
     @Column(name = "Params")
     @ApiModelProperty(required = false)
-    private String params;
-    
-    @Column(name = "Param")
-    @ApiModelProperty(required = false)
-    private String param;
+    private Object[] params;
     
     @Column(name = "marker")
     @ApiModelProperty(required = false)
     private String marker;
     
+
 
     
     public LogView() {
@@ -93,12 +91,10 @@ public class LogView extends BasicLogEventEntity  {
             if(wrappedEvent.getMarker() != null){             
                 setMarker(wrappedEvent.getMarker().getName());      
             }
-            if(wrappedEvent.getMessage().getFormattedMessage() !=null){
-                setParams(wrappedEvent.getMessage().getFormattedMessage());
+            if(wrappedEvent.getMessage().getParameters() !=null){
+                setParams(wrappedEvent.getMessage().getParameters());
             }
-            if(wrappedEvent.getMessage().getFormat() !=null){
-                setParam(wrappedEvent.getMessage().getFormat());
-            }
+
             
                 //setstacktrace(wrappedEvent.getContextStack().toArray().toString()); //one element 
 //                StackTraceElement[] stack = Thread.currentThread().getStackTrace();
@@ -106,17 +102,16 @@ public class LogView extends BasicLogEventEntity  {
         }
     }
 
-    public LogView(LogEvent wrappedEvent, Long id, LocalDateTime date, String levels, String messages, String params,String param, String marker) {
+    public LogView(LogEvent wrappedEvent, Long id, LocalDateTime date, String levels, String messages, Object[] params, String marker) {
         this.wrappedEvent = wrappedEvent;
         this.id = id;
         this.date = date;
         this.levels = levels;
         this.messages = messages;
         this.params = params;
-        this.param = param;
         this.marker = marker;
     }
-
+   
     public Long getId() {
         return id;
     }
@@ -149,11 +144,11 @@ public class LogView extends BasicLogEventEntity  {
         this.messages = messages;
     }
 
-    public String getParams() {
+    public Object[] getParams() {
         return params;
     }
 
-    public void setParams(String params) {
+    public void setParams(Object[] params) {
         this.params = params;
     }
 
@@ -165,24 +160,15 @@ public class LogView extends BasicLogEventEntity  {
         this.marker = marker;
     }
 
-    public String getParam() {
-        return param;
-    }
-
-    public void setParam(String param) {
-        this.param = param;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 5;
+        int hash = 3;
         hash = 67 * hash + Objects.hashCode(this.wrappedEvent);
         hash = 67 * hash + Objects.hashCode(this.id);
         hash = 67 * hash + Objects.hashCode(this.date);
         hash = 67 * hash + Objects.hashCode(this.levels);
         hash = 67 * hash + Objects.hashCode(this.messages);
         hash = 67 * hash + Objects.hashCode(this.params);
-        hash = 67 * hash + Objects.hashCode(this.param);
         hash = 67 * hash + Objects.hashCode(this.marker);
         return hash;
     }
@@ -205,12 +191,6 @@ public class LogView extends BasicLogEventEntity  {
         if (!Objects.equals(this.messages, other.messages)) {
             return false;
         }
-        if (!Objects.equals(this.params, other.params)) {
-            return false;
-        }
-        if (!Objects.equals(this.param, other.param)) {
-            return false;
-        }
         if (!Objects.equals(this.marker, other.marker)) {
             return false;
         }
@@ -220,17 +200,15 @@ public class LogView extends BasicLogEventEntity  {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        return Objects.equals(this.date, other.date);
+        if (!Objects.equals(this.date, other.date)) {
+            return false;
+        }
+        return Arrays.deepEquals(this.params, other.params);
     }
 
     @Override
     public String toString() {
-        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", levels=" + levels + ", messages=" + messages + ", params=" + params + ", param=" + param + ", marker=" + marker + '}';
+        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", levels=" + levels + ", messages=" + messages + ", params=" + params + ", marker=" + marker + '}';
     }
     
-
-
-   
-    
-
 }
