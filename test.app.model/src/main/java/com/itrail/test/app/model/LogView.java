@@ -3,6 +3,7 @@ package com.itrail.test.app.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.itrail.test.app.core.InstantSerializer;
 import com.itrail.test.app.core.LocalDateTimeSerializerLOGGER;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -40,13 +41,13 @@ public class LogView extends BasicLogEventEntity  {
     private Long id;
     
     @Column(name = "date")
-    @JsonSerialize(using = LocalDateTimeSerializerLOGGER.class)
+    @JsonSerialize(using = InstantSerializer.class)
     @ApiModelProperty(value    = "дата", 
                       name     = "date", 
                       dataType = "String", 
-                      example  = "2022-06-03T11:36:37.932", 
+                      example  = "2022-06-03T11:36:37.932Z", 
                       required = false)
-    private LocalDateTime date;
+    private Instant date;
     
     @Column(name = "Levels")
     @ApiModelProperty(value = "Уровень лога",
@@ -78,7 +79,7 @@ public class LogView extends BasicLogEventEntity  {
     public LogView(LogEvent wrappedEvent) {
         super(wrappedEvent);
         if(wrappedEvent != null){
-            setDate(Instant.ofEpochMilli(wrappedEvent.getTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+            setDate(Instant.ofEpochMilli(wrappedEvent.getTimeMillis()).atZone(ZoneId.systemDefault()).toInstant());
             if(wrappedEvent.getMessage() != null){
                 setMessages(wrappedEvent.getMessage().toString());
             }
@@ -98,7 +99,7 @@ public class LogView extends BasicLogEventEntity  {
         }
     }
 
-    public LogView( Long id, LocalDateTime date, String levels, String messages,String marker, Object[] params) {
+    public LogView( Long id, Instant date, String levels, String messages,String marker, Object[] params) {
         this.id = id;
         this.date = date;
         this.levels = levels;
@@ -107,7 +108,7 @@ public class LogView extends BasicLogEventEntity  {
         this.marker = marker;
     }
     
-    public LogView( Long id, LocalDateTime date, String levels, String messages, Object[] params) {
+    public LogView( Long id, Instant date, String levels, String messages, Object[] params) {
         this.id = id;
         this.date = date;
         this.levels = levels;
@@ -123,11 +124,11 @@ public class LogView extends BasicLogEventEntity  {
         this.id = id;
     }
 
-    public LocalDateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 

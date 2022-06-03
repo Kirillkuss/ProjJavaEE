@@ -128,7 +128,7 @@ public class LogService {
         Subquery<LogView> subQuery = logViewCriteria.subquery(LogView.class);
         Root <LogView> subRoot = subQuery.from(LogView.class);
         subQuery.select(subRoot.get("levels")).where(cb.equal(subRoot.get("levels"),filterLog.getlevel().toString()));
-        logViewCriteria.select(logViewRoot).where(cb.equal(logViewRoot.get("levels"),subQuery));
+        logViewCriteria.select(logViewRoot).where(logViewRoot.get("levels").in(subQuery));
         
         f.setData(entityManager.createQuery(logViewCriteria).getResultList()); 
         return f;

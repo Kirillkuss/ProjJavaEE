@@ -2,10 +2,12 @@
 package com.itrail.test.app.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.itrail.test.app.core.InstantDeserializer;
 import com.itrail.test.app.core.LocalDateTimeDeserializerLOGGER;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -34,20 +36,20 @@ public class FilterLog implements Serializable {
     private Long id;
     
     @Column(name="dateFrom")
-    @JsonDeserialize(using = LocalDateTimeDeserializerLOGGER.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
     @ApiModelProperty(value    = "Время c ",
                       name     = "dateFrom",
                       dataType = "String",
-                      example  = "2022-05-03T11:36:37.932")
-    private LocalDateTime dateFrom;
+                      example  = "2022-05-03T11:36:37.932Z")
+    private Instant dateFrom;
     
     @Column(name="dateTo")
-    @JsonDeserialize(using = LocalDateTimeDeserializerLOGGER.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
     @ApiModelProperty(value    = "Время до",
                       name     = "dateTo",
                       dataType = "String",
-                      example  = "2022-08-03T11:36:37.932")
-    private LocalDateTime dateTo;
+                      example  = "2022-08-03T11:36:37.932Z")
+    private Instant dateTo;
     
     @Column(name="limite")
     @ApiModelProperty(value    = "Количество",
@@ -73,7 +75,7 @@ public class FilterLog implements Serializable {
     public FilterLog() {
     }
 
-    public FilterLog(Long id, LocalDateTime dateFrom, LocalDateTime dateTo, Integer limit, Integer offset, Level level) {
+    public FilterLog(Long id, Instant dateFrom, Instant dateTo, Integer limit, Integer offset, Level level) {
         this.id = id;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
@@ -90,19 +92,19 @@ public class FilterLog implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getDateFrom() {
+    public Instant getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(LocalDateTime dateFrom) {
+    public void setDateFrom(Instant dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public LocalDateTime getDateTo() {
+    public Instant getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(LocalDateTime dateTo) {
+    public void setDateTo(Instant dateTo) {
         this.dateTo = dateTo;
     }
 

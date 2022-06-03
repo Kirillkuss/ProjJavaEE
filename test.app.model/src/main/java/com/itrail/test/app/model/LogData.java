@@ -2,9 +2,9 @@
 package com.itrail.test.app.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.itrail.test.app.core.LocalDateTimeDeserializerLOGGER;
+import com.itrail.test.app.core.InstantDeserializer;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Objects;
 import org.apache.logging.log4j.Level;
@@ -35,18 +35,18 @@ public class LogData {
                       name     = "params")
     private Object[] params;
     
-    @JsonDeserialize(using = LocalDateTimeDeserializerLOGGER.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
     @ApiModelProperty(value    = "Время",
                       name     = "date",
                       dataType = "String",
-                      example  = "2022-06-03T11:36:37.932")
-    private LocalDateTime date;
+                      example  = "2022-06-02T11:36:37.932Z")
+    private Instant date;
 
     public LogData() {
         
     }
 
-    public LogData(Level level, String marker, String message, Object[] params, LocalDateTime date) {
+    public LogData(Level level, String marker, String message, Object[] params, Instant date) {
         this.level = level;
         this.marker = marker;
         this.message = message;
@@ -86,11 +86,11 @@ public class LogData {
         this.params = params;
     }
 
-    public LocalDateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 
