@@ -1,10 +1,10 @@
 package com.itrail.test.rest;
 
 import com.itrail.test.app.model.FilterLog;
+import com.itrail.test.app.model.LogData;
 import com.itrail.test.app.model.LogResponse;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
-import com.itrail.test.domain.LogData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -30,7 +30,7 @@ public interface LogResource {
     @GET
     @ApiOperation(value = "LOGGER")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "LOGGER", response = LogView.class)})
+        @ApiResponse(code = 200, message = "LOGGER")})
     public BaseResponse getLog();
     
     @POST
@@ -67,21 +67,10 @@ public interface LogResource {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success")})
     public BaseResponse getExample(@ApiParam(required = false,example = "1") @PathParam("id") Long id,@ApiParam(required = false,example ="INFO") @PathParam("level") Level level);
-    
+      
     @POST
-    @Path("/date.time")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "success")})
-    public BaseResponse getDateTimeLog();
-    
-    
-    @POST
-    @Path("log")
+    @Path("UserLog")
     public BaseResponse setLog( LogData data );
     
-    
-    
-    
-  //@ApiParam(required = false, example = "2022.05.15 11:02:42") @PathParam("date") String date 
 }
 

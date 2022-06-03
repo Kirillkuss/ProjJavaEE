@@ -1,9 +1,10 @@
 package com.itrail.test.rest.impl;
 
 import com.itrail.test.app.model.FilterLog;
+import com.itrail.test.app.model.LogData;
 import com.itrail.test.app.model.LogResponse;
+import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
-import com.itrail.test.domain.LogData;
 import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
 import javax.ejb.EJB;
@@ -59,18 +60,11 @@ public class LogAPI implements LogResource{
     }
 
     @Override
-    public BaseResponse getDateTimeLog() {
-        BaseResponse bs = new BaseResponse(200, "success");
-        service.setLog();
-        return bs;
-        
-    }
-  
-    @Override
     public BaseResponse setLog(LogData data) {
         BaseResponse bs = new BaseResponse(200, "success");
-        service.setLogParams(data);
+        //service.setLogParams(data); 
+        service.createLog(new LogView(null,data.getDate(), data.getLevel().toString(), data.getmessage(),data.getmarker(), data.getParams()));
         return bs;
-    }
+    }  
 
 }

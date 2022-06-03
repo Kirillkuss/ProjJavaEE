@@ -1,9 +1,9 @@
 package com.itrail.test.service;
 
 import com.itrail.test.app.model.FilterLog;
+import com.itrail.test.app.model.LogData;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
-import com.itrail.test.domain.LogData;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -163,9 +163,9 @@ public class LogService {
     public BaseResponse<List<LogView>> setLogParams(LogData data){
         BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
         try {
-            LOGGER.log( Level.INFO,PARAMS_MARKER,data.getMessage(), data.getParams() );
+            LOGGER.log(data.getLevel(),MarkerManager.getMarker(data.getmarker()),data.getmessage(), data.getParams(),data.getmarker());
             return f;
-            
+             
         } catch ( Exception e ){
             return BaseResponse.error(999, e );
         }          

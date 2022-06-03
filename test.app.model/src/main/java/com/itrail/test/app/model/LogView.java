@@ -3,7 +3,7 @@ package com.itrail.test.app.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.itrail.test.app.core.LocalDateTimeSerializer;
+import com.itrail.test.app.core.LocalDateTimeSerializerLOGGER;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.Instant;
@@ -40,11 +40,11 @@ public class LogView extends BasicLogEventEntity  {
     private Long id;
     
     @Column(name = "date")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializerLOGGER.class)
     @ApiModelProperty(value    = "дата", 
                       name     = "date", 
                       dataType = "String", 
-                      example  = "2022.04.12 11:02:42", 
+                      example  = "2022-06-03T11:36:37.932", 
                       required = false)
     private LocalDateTime date;
     
@@ -72,11 +72,9 @@ public class LogView extends BasicLogEventEntity  {
     @ApiModelProperty(required = false)
     private String marker;
     
-
-
-    
     public LogView() {
     }
+    
     public LogView(LogEvent wrappedEvent) {
         super(wrappedEvent);
         if(wrappedEvent != null){
@@ -89,21 +87,18 @@ public class LogView extends BasicLogEventEntity  {
             }
             
             if(wrappedEvent.getMarker() != null){             
-                setMarker(wrappedEvent.getMarker().getName());      
+                setmarker(wrappedEvent.getMarker().getName());      
             }
             if(wrappedEvent.getMessage().getParameters() !=null){
                 setParams(wrappedEvent.getMessage().getParameters());
             }
-
-            
                 //setstacktrace(wrappedEvent.getContextStack().toArray().toString()); //one element 
 //                StackTraceElement[] stack = Thread.currentThread().getStackTrace();
 //                setstacktrace( Arrays.stream(stack).map(StackTraceElement::toString).collect(Collectors.joining("\n")));   
         }
     }
 
-    public LogView(LogEvent wrappedEvent, Long id, LocalDateTime date, String levels, String messages, Object[] params, String marker) {
-        this.wrappedEvent = wrappedEvent;
+    public LogView( Long id, LocalDateTime date, String levels, String messages,String marker, Object[] params) {
         this.id = id;
         this.date = date;
         this.levels = levels;
@@ -111,7 +106,15 @@ public class LogView extends BasicLogEventEntity  {
         this.params = params;
         this.marker = marker;
     }
-   
+    
+    public LogView( Long id, LocalDateTime date, String levels, String messages, Object[] params) {
+        this.id = id;
+        this.date = date;
+        this.levels = levels;
+        this.messages = messages;
+        this.params = params;
+    }
+    
     public Long getId() {
         return id;
     }
@@ -156,7 +159,7 @@ public class LogView extends BasicLogEventEntity  {
         return marker;
     }
 
-    public void setMarker(String marker) {
+    public void setmarker(String marker) {
         this.marker = marker;
     }
 
