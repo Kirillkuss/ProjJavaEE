@@ -7,9 +7,6 @@ import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import org.apache.logging.log4j.Level;
@@ -25,7 +22,6 @@ public class LogAPI implements LogResource{
     public BaseResponse getLog() {
         BaseResponse bs = new BaseResponse(200, "success");
         bs.setData(service.getAllLog());
-        //System.out.println(service.getAllLog());
        return bs;
     }
     
@@ -66,7 +62,6 @@ public class LogAPI implements LogResource{
     public BaseResponse setLog(LogData data) {
         BaseResponse bs = new BaseResponse(200, "success");
         //service.setLogParams(data);
-        System.out.println("Intsnt>>>"+  Instant.now());
         service.createLog(new LogView(null,data.getDate(), data.getLevel().toString(), data.getmessage(),data.getmarker(), data.getParams()));
         return bs;
     }  
