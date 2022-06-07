@@ -61,7 +61,7 @@ public class LogAPI implements LogResource{
     @Override
     public BaseResponse setLog(LogData data) {
         BaseResponse bs = new BaseResponse(200, "success");
-        //service.setLogParams(data);
+        
         service.createLog(new LogView(null,data.getDate(), data.getLevel().toString(), data.getmessage(),data.getmarker(), data.getParams()));
         return bs;
     }  

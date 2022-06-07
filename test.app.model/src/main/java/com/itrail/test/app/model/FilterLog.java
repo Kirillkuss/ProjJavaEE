@@ -3,14 +3,12 @@ package com.itrail.test.app.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.itrail.test.app.core.LocalDateTimeDeserializerLOGGER;
-import com.itrail.test.app.core.LocalDateTimeTimeStampConverter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,7 +35,6 @@ public class FilterLog implements Serializable {
     
     @Column(name="dateFrom")
 
-    @Convert(converter = LocalDateTimeTimeStampConverter.class)
     @JsonDeserialize(using = LocalDateTimeDeserializerLOGGER.class)
     @ApiModelProperty(value    = "Время c ",
                       name     = "dateFrom",
@@ -46,7 +43,6 @@ public class FilterLog implements Serializable {
     private LocalDateTime dateFrom = LocalDateTime.now();
     
     @Column(name="dateTo")
-    @Convert(converter = LocalDateTimeTimeStampConverter.class)
     @JsonDeserialize(using = LocalDateTimeDeserializerLOGGER.class)
     @ApiModelProperty(value    = "Время до",
                       name     = "dateTo",
