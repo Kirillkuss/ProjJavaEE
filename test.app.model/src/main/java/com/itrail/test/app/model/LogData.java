@@ -1,7 +1,9 @@
 package com.itrail.test.app.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.itrail.test.app.core.LocalDateTimeDeserializerLOGGER;
+import com.itrail.test.app.core.LocalDateTimeSerializerLOGGER;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -35,6 +37,7 @@ public class LogData {
     private Object[] params;
     
     @JsonDeserialize(using = LocalDateTimeDeserializerLOGGER.class)
+    @JsonSerialize(using = LocalDateTimeSerializerLOGGER.class)
     @ApiModelProperty(value    = "Время",
                       name     = "date",
                       dataType = "String",
@@ -73,7 +76,7 @@ public class LogData {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setmessage(String message) {
         this.message = message;
     }
 

@@ -56,13 +56,13 @@ public class LogView extends BasicLogEventEntity  {
                       required = false)
     private String levels;
     
-    @Column(name = "Messages", length = 20000)
+    @Column(name = "message", length = 20000)
     @ApiModelProperty(value    = "сообщение", 
-                      name     = "messages", 
+                      name     = "message", 
                       dataType = "String", 
                       example  = "message", 
                       required = false)
-    private String messages;
+    private String message;
     
     @Column(name = "Params")
     @ApiModelProperty(required = false)
@@ -80,7 +80,7 @@ public class LogView extends BasicLogEventEntity  {
         if(wrappedEvent != null){
             setDate(Instant.ofEpochMilli(wrappedEvent.getTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime());
             if(wrappedEvent.getMessage() != null){
-                setMessages(wrappedEvent.getMessage().toString());
+                setmessage(wrappedEvent.getMessage().toString());
             }
             if(wrappedEvent.getLevel()!=null){
                 setLevel(wrappedEvent.getLevel().toString());
@@ -98,20 +98,20 @@ public class LogView extends BasicLogEventEntity  {
         }
     }
 
-    public LogView( Long id, LocalDateTime date, String levels, String messages,String marker, Object[] params) {
+    public LogView( Long id, LocalDateTime date, String levels, String message,String marker, Object[] params) {
         this.id = id;
         this.date = date;
         this.levels = levels;
-        this.messages = messages;
+        this.message = message;
         this.params = params;
         this.marker = marker;
     }
     
-    public LogView( Long id, LocalDateTime date, String levels, String messages, Object[] params) {
+    public LogView( Long id, LocalDateTime date, String levels, String message, Object[] params) {
         this.id = id;
         this.date = date;
         this.levels = levels;
-        this.messages = messages;
+        this.message = message;
         this.params = params;
     }
     
@@ -139,12 +139,12 @@ public class LogView extends BasicLogEventEntity  {
         this.levels = levels;
     }
 
-    public String getMessages() {
-        return messages;
+    public String getmessage() {
+        return message;
     }
 
-    public void setMessages(String messages) {
-        this.messages = messages;
+    public void setmessage(String message) {
+        this.message = message;
     }
 
     public Object[] getParams() {
@@ -170,7 +170,7 @@ public class LogView extends BasicLogEventEntity  {
         hash = 67 * hash + Objects.hashCode(this.id);
         hash = 67 * hash + Objects.hashCode(this.date);
         hash = 67 * hash + Objects.hashCode(this.levels);
-        hash = 67 * hash + Objects.hashCode(this.messages);
+        hash = 67 * hash + Objects.hashCode(this.message);
         hash = 67 * hash + Objects.hashCode(this.params);
         hash = 67 * hash + Objects.hashCode(this.marker);
         return hash;
@@ -191,7 +191,7 @@ public class LogView extends BasicLogEventEntity  {
         if (!Objects.equals(this.levels, other.levels)) {
             return false;
         }
-        if (!Objects.equals(this.messages, other.messages)) {
+        if (!Objects.equals(this.message, other.message)) {
             return false;
         }
         if (!Objects.equals(this.marker, other.marker)) {
@@ -211,7 +211,7 @@ public class LogView extends BasicLogEventEntity  {
 
     @Override
     public String toString() {
-        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", levels=" + levels + ", messages=" + messages + ", params=" + params + ", marker=" + marker + '}';
+        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", levels=" + levels + ", message=" + message + ", params=" + params + ", marker=" + marker + '}';
     }
     
 }

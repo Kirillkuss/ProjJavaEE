@@ -40,7 +40,7 @@ public class FilterLog implements Serializable {
                       name     = "dateFrom",
                       dataType = "String",
                       example  = "2022-05-03T11:36:37.932Z")
-    private LocalDateTime dateFrom = LocalDateTime.now();
+    private LocalDateTime dateFrom;
     
     @Column(name="dateTo")
     @JsonDeserialize(using = LocalDateTimeDeserializerLOGGER.class)

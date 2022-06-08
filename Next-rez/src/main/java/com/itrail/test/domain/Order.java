@@ -59,7 +59,7 @@ public class Order implements Serializable {
     @ApiModelProperty(value    = "Время покупки",
                       name     = "time",
                       dataType = "String",
-                      example  = "12.04.2022 11:02:42",
+                      example  = "2022.03.08 11:08:17",
                       required = false)
     private LocalDateTime time;
 
