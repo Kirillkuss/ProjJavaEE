@@ -19,13 +19,15 @@ public class LogData {
                       dataType = "String",
                       example  = "INFO")
     private Level level;
+    //private String level;
     
     @ApiModelProperty(value    = "marker",
                       name     = "marker",
                       dataType = "String",
                       example  = "MARKER")
-    //private Marker marker;
+    //private MarkerManager markerManager;
     private String marker;
+    //private String marker;
     @ApiModelProperty(value    = "message",
                       name     = "message",
                       dataType = "String",
@@ -56,14 +58,6 @@ public class LogData {
         this.date = date;
     }
 
-    public String getmarker() {
-        return marker;
-    }
-
-    public void setMarker(String marker) {
-        this.marker = marker;
-    }
-    
     public Level getLevel() {
         return level;
     }
@@ -72,11 +66,19 @@ public class LogData {
         this.level = level;
     }
 
-    public String getmessage() {
+    public String getMarker() {
+        return marker;
+    }
+
+    public void setMarker(String marker) {
+        this.marker = marker;
+    }
+
+    public String getMessage() {
         return message;
     }
 
-    public void setmessage(String message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 
@@ -98,12 +100,12 @@ public class LogData {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 89 * hash + Objects.hashCode(this.level);
-        hash = 89 * hash + Objects.hashCode(this.marker);
-        hash = 89 * hash + Objects.hashCode(this.message);
-        hash = 89 * hash + Arrays.deepHashCode(this.params);
-        hash = 89 * hash + Objects.hashCode(this.date);
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.level);
+        hash = 97 * hash + Objects.hashCode(this.marker);
+        hash = 97 * hash + Objects.hashCode(this.message);
+        hash = 97 * hash + Arrays.deepHashCode(this.params);
+        hash = 97 * hash + Objects.hashCode(this.date);
         return hash;
     }
 
@@ -119,13 +121,13 @@ public class LogData {
             return false;
         }
         final LogData other = (LogData) obj;
+        if (!Objects.equals(this.marker, other.marker)) {
+            return false;
+        }
         if (!Objects.equals(this.message, other.message)) {
             return false;
         }
         if (!Objects.equals(this.level, other.level)) {
-            return false;
-        }
-        if (!Objects.equals(this.marker, other.marker)) {
             return false;
         }
         if (!Arrays.deepEquals(this.params, other.params)) {
@@ -133,5 +135,7 @@ public class LogData {
         }
         return Objects.equals(this.date, other.date);
     }
+    
+
     
 }

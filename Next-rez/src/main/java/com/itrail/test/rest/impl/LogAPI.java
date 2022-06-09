@@ -10,6 +10,7 @@ import com.itrail.test.service.LogService;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.MarkerManager;
 /**
  *
  * @author barysevich_k
@@ -61,8 +62,7 @@ public class LogAPI implements LogResource{
     @Override
     public BaseResponse setLog(LogData data) {
         BaseResponse bs = new BaseResponse(200, "success");
-        
-        service.createLog(new LogView(null,data.getDate(), data.getLevel().toString(), data.getmessage(),data.getmarker(), data.getParams()));
+        service.createLog(new LogView(null,data.getDate(), data.getLevel().toString(), data.getMessage(),data.getMarker(), data.getParams()));
         return bs;
     }  
 

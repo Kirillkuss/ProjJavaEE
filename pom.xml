@@ -10,7 +10,7 @@
     <modules>
         <module>Next-rez</module>
         <module>test.log4j.plugins</module>
-        <module>test.app.model</module>
+        <module>test.app.model</module> 
         <module>test.app.core</module>
     </modules>
     <properties>

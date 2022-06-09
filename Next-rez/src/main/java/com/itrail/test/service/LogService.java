@@ -163,7 +163,7 @@ public class LogService {
     public BaseResponse<List<LogView>> setLogParams(LogData data){
         BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
         try {
-            LOGGER.log(data.getLevel(),MarkerManager.getMarker(data.getmarker()),data.getmessage(), data.getParams(),data.getmarker());
+            //LOGGER.log(data.getLevel(),MarkerManager.getMarker(data.getMarker()),data.getMessage(), data.getParams());
             return f;
              
         } catch ( Exception e ){

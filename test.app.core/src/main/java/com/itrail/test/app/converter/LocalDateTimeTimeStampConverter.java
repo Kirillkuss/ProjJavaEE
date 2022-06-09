@@ -1,4 +1,4 @@
-package com.itrail.test.app.core;
+package com.itrail.test.app.converter;
 
 
 import java.sql.Timestamp;
@@ -26,7 +26,8 @@ public class LocalDateTimeTimeStampConverter implements AttributeConverter<Local
     @Override
     public LocalDateTime convertToEntityAttribute(Timestamp timestamp) {
         try{
-        return (timestamp == null ? null : timestamp.toLocalDateTime());
+        //return (timestamp == null ? null : timestamp.toLocalDateTime());
+        return (timestamp == null ? null : LocalDateTime.parse(timestamp.toString()));
         } catch(Exception e ){
             e.printStackTrace();
             return null;
