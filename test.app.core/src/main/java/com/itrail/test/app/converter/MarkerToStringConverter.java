@@ -16,9 +16,9 @@ public class MarkerToStringConverter implements AttributeConverter<Marker, Strin
     @Override
     public String convertToDatabaseColumn(Marker marker) {
         try{
-            return(marker == null ? null : String.valueOf(marker));           
+            return(marker == null ? null : String.valueOf(marker.getName()));           
         }catch(Exception e){
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             return null;
         }
     }
@@ -28,7 +28,7 @@ public class MarkerToStringConverter implements AttributeConverter<Marker, Strin
         try{
             return(string == null ? null : MarkerManager.getMarker(string));           
         }catch(Exception e){
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             return null;
         }
     }

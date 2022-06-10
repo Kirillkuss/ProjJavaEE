@@ -7,10 +7,10 @@ import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.MarkerManager;
 /**
  *
  * @author barysevich_k
@@ -48,21 +48,33 @@ public class LogAPI implements LogResource{
     @Override
     public BaseResponse getListLogSubQuery(FilterLog filterLog) {
         BaseResponse bs = new BaseResponse(200, "success");
-        bs.setData(service.getFoundLogSubQuery(filterLog).getData());
+        try {
+            bs.setData(service.getFoundLogSubQuery(filterLog).getData()); 
+        }catch (Exception ex) {
+            return BaseResponse.error(999, ex);
+        }
         return bs;
     }
 
     @Override
     public BaseResponse getExample(Long id, Level level) {
         BaseResponse bs = new BaseResponse(200, "success");
-        bs.setData(service.getExample(id,level).getData());
+        try {
+            bs.setData(service.getExample(id,level).getData());
+        } catch (Exception ex) {
+            return BaseResponse.error(999, ex);
+        }
         return bs;
     }
 
     @Override
     public BaseResponse setLog(LogData data) {
         BaseResponse bs = new BaseResponse(200, "success");
-        service.createLog(new LogView(null,data.getDate(), data.getLevel().toString(), data.getMessage(),data.getMarker(), data.getParams()));
+        try{
+        service.createLog(new LogView(null,data.getDate(), data.getLevel().toString(), data.getMessage(),data.getMarker().toString(), data.getParams()));
+        }catch(Exception ex){
+           return BaseResponse.error(999, ex);
+        }
         return bs;
     }  
 

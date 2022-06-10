@@ -14,9 +14,9 @@ public class LevelToStringConverter implements AttributeConverter<Level, String>
     @Override
     public String convertToDatabaseColumn(Level level) {
         try{
-            return(level == null ? null : String.valueOf(level));           
+            return(level == null ? null : String.valueOf(level.name()));           
         }catch(Exception e){
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             return null;
         }
     }
@@ -26,7 +26,7 @@ public class LevelToStringConverter implements AttributeConverter<Level, String>
         try{
            return(string == null ? null : Level.valueOf(string)); 
         }catch(Exception e){
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             return null;
         }
     }

@@ -2,32 +2,40 @@ package com.itrail.test.app.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.itrail.test.app.core.LevelSerializer;
 import com.itrail.test.app.core.LocalDateTimeDeserializerLOGGER;
 import com.itrail.test.app.core.LocalDateTimeSerializerLOGGER;
+import com.itrail.test.app.core.MarkerDeserializer;
+import com.itrail.test.app.core.MarkerSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Marker;
+
 /**
  *
  * @author barysevich_k
  */
 public class LogData {
+    @JsonSerialize(using = LevelSerializer.class)
     @ApiModelProperty(value    = "level",
                       name     = "level",
                       dataType = "String",
                       example  = "INFO")
     private Level level;
     //private String level;
-    
+
+    @JsonSerialize(using = MarkerSerializer.class)
+    @JsonDeserialize(using = MarkerDeserializer.class)
     @ApiModelProperty(value    = "marker",
                       name     = "marker",
                       dataType = "String",
                       example  = "MARKER")
-    //private MarkerManager markerManager;
-    private String marker;
+    private Marker marker;
     //private String marker;
+    
     @ApiModelProperty(value    = "message",
                       name     = "message",
                       dataType = "String",
@@ -50,7 +58,7 @@ public class LogData {
         
     }
 
-    public LogData(Level level, String marker, String message, Object[] params, LocalDateTime date) {
+    public LogData(Level level, Marker marker, String message, Object[] params, LocalDateTime date) {
         this.level = level;
         this.marker = marker;
         this.message = message;
@@ -66,11 +74,11 @@ public class LogData {
         this.level = level;
     }
 
-    public String getMarker() {
+    public Marker getMarker() {
         return marker;
     }
 
-    public void setMarker(String marker) {
+    public void setMarker(Marker marker) {
         this.marker = marker;
     }
 
@@ -100,12 +108,12 @@ public class LogData {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.level);
-        hash = 97 * hash + Objects.hashCode(this.marker);
-        hash = 97 * hash + Objects.hashCode(this.message);
-        hash = 97 * hash + Arrays.deepHashCode(this.params);
-        hash = 97 * hash + Objects.hashCode(this.date);
+        int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.level);
+        hash = 17 * hash + Objects.hashCode(this.marker);
+        hash = 17 * hash + Objects.hashCode(this.message);
+        hash = 17 * hash + Arrays.deepHashCode(this.params);
+        hash = 17 * hash + Objects.hashCode(this.date);
         return hash;
     }
 
@@ -121,13 +129,13 @@ public class LogData {
             return false;
         }
         final LogData other = (LogData) obj;
-        if (!Objects.equals(this.marker, other.marker)) {
-            return false;
-        }
         if (!Objects.equals(this.message, other.message)) {
             return false;
         }
         if (!Objects.equals(this.level, other.level)) {
+            return false;
+        }
+        if (!Objects.equals(this.marker, other.marker)) {
             return false;
         }
         if (!Arrays.deepEquals(this.params, other.params)) {
@@ -135,7 +143,4 @@ public class LogData {
         }
         return Objects.equals(this.date, other.date);
     }
-    
-
-    
 }

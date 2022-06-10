@@ -64,9 +64,10 @@ public class LogService {
     }
 
 
-    public BaseResponse<List<LogView>> getFoundLogJPQL(FilterLog filterLog) throws Exception {
+    public BaseResponse<List<LogView>> getFoundLogJPQL(FilterLog filterLog)throws Exception {
         BaseResponse<List<LogView>> f = new BaseResponse(0, "success");
-        f.setData(entityManager.createQuery("SELECT e FROM LogView e WHERE e.levels = :infoFilter"
+        try{
+            f.setData(entityManager.createQuery("SELECT e FROM LogView e WHERE e.levels = :infoFilter"
                                             + " AND ((:dateFromFilter is null or e.date >= :dateFromFilter)"
                                             + " AND (:dateToFilter is null or e.date <= :dateToFilter))")
                 //.setParameter("idFilter", filterLog.getId())
@@ -76,13 +77,16 @@ public class LogService {
                 .setMaxResults(filterLog.getLimit())
                 .setFirstResult(filterLog.getOffset())
                 .getResultList()); 
-        return f;
+            return f;
+        }catch(Exception ex){
+            return BaseResponse.error(999, ex);  
+        }
     }
     
-    public BaseResponse<List<LogView>> getFoundLogSQL(FilterLog filterLog) throws Exception{
+    public BaseResponse<List<LogView>> getFoundLogSQL(FilterLog filterLog)throws Exception{
         BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
         try{
-        f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a where a.levels = ?1 AND ((?2 is null or a.date >= ?2) AND (?3 is null or a.date <= ?3))")
+            f.setData(entityManager.createNativeQuery("SELECT * from LOGGERSTABLE a where a.levels = ?1 AND ((?2 is null or a.date >= ?2) AND (?3 is null or a.date <= ?3))")
                                             .setParameter(2, filterLog.getDateFrom())
                                             .setParameter(3, filterLog.getDateTo())
                                             .setParameter(1, filterLog.getlevel().toString())
@@ -94,78 +98,91 @@ public class LogService {
             LOGGER.info(SQL_MARKER, e.getMessage());
             LOGGER.trace(EXCEMPLE, Arrays.toString(e.getStackTrace()));  
             LOGGER.trace(SQL_MARKER,Arrays.toString(e.getStackTrace()));
-            e.printStackTrace();
+            e.printStackTrace(System.err);
+            return BaseResponse.error(999, e);
         }
         return f;
     }
     
     public BaseResponse<List<LogView>> getFoundlogJPA(FilterLog filterLog) throws Exception{
         BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<LogView> logViewCriteria = cb.createQuery(LogView.class);
-        Root<LogView> logViewRoot = logViewCriteria.from(LogView.class);
+        try{
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<LogView> logViewCriteria = cb.createQuery(LogView.class);
+            Root<LogView> logViewRoot = logViewCriteria.from(LogView.class);
         
-        List<Predicate> predicates = new ArrayList<>();
-        if ( null != filterLog.getDateFrom() ) predicates.add( cb.greaterThanOrEqualTo(logViewRoot.get("date"), filterLog.getDateFrom()));
-        if ( null != filterLog.getDateTo() ) predicates.add( cb.lessThanOrEqualTo(logViewRoot.get("date"), filterLog.getDateTo()));
-        if ( null != filterLog.getlevel() ) predicates.add(logViewRoot.get("levels").in(filterLog.getlevel().toString()));
-        if(!predicates.isEmpty()){
-            logViewCriteria.select(logViewRoot).where(predicates.toArray(new Predicate[]{}));
+            List<Predicate> predicates = new ArrayList<>();
+            if ( null != filterLog.getDateFrom() ) predicates.add( cb.greaterThanOrEqualTo(logViewRoot.get("date"), filterLog.getDateFrom()) );
+            if ( null != filterLog.getDateTo() ) predicates.add( cb.lessThanOrEqualTo(logViewRoot.get("date"), filterLog.getDateTo()) );
+            if ( null != filterLog.getlevel() ) predicates.add( logViewRoot.get("levels").in(filterLog.getlevel().toString()) );
+            if(!predicates.isEmpty()) logViewCriteria.select(logViewRoot).where(predicates.toArray(new Predicate[]{}));
+            f.setData(entityManager.createQuery(logViewCriteria)                     
+                                   .setFirstResult(filterLog.getOffset())
+                                   .setMaxResults(filterLog.getLimit())
+                                   .getResultList());
+            return f;
+        }catch(Exception ex){
+            return BaseResponse.error(999, ex);
         }
-        f.setData(entityManager.createQuery(logViewCriteria)                     
-                               .setFirstResult(filterLog.getOffset())
-                               .setMaxResults(filterLog.getLimit())
-                               .getResultList());
-        return f; 
     }
     
-    public BaseResponse<List<LogView>> getFoundLogSubQuery(FilterLog filterLog){
+    public BaseResponse<List<LogView>> getFoundLogSubQuery(FilterLog filterLog)throws Exception{
         BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<LogView> logViewCriteria = cb.createQuery(LogView.class);
-        Root<LogView> logViewRoot = logViewCriteria.from(LogView.class);
+        try{
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<LogView> logViewCriteria = cb.createQuery(LogView.class);
+            Root<LogView> logViewRoot = logViewCriteria.from(LogView.class);
         
-        Subquery<LogView> subQuery = logViewCriteria.subquery(LogView.class);
-        Root <LogView> subRoot = subQuery.from(LogView.class);
-        subQuery.select(subRoot.get("levels")).where(cb.equal(subRoot.get("levels"),filterLog.getlevel().toString()));
-        logViewCriteria.select(logViewRoot).where(logViewRoot.get("levels").in(subQuery));
+            Subquery<LogView> subQuery = logViewCriteria.subquery(LogView.class);
+            Root <LogView> subRoot = subQuery.from(LogView.class);
+            subQuery.select(subRoot.get("levels")).where(cb.equal(subRoot.get("levels"),filterLog.getlevel().toString()));
+            logViewCriteria.select(logViewRoot).where(logViewRoot.get("levels").in(subQuery));
         
-        f.setData(entityManager.createQuery(logViewCriteria).getResultList()); 
-        return f;
-        
+            f.setData(entityManager.createQuery(logViewCriteria).getResultList()); 
+            return f;
+        }catch(Exception ex){
+            return BaseResponse.error(999, ex);
+        }        
     }
     
-    public BaseResponse<List<LogView>> getExample(Long id,Level level){
+    public BaseResponse<List<LogView>> getExample(Long id,Level level)throws Exception{
         BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<LogView> logViewCriteria = cb.createQuery(LogView.class);
-        Root<LogView> logViewRoot = logViewCriteria.from(LogView.class);
+        try{
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<LogView> logViewCriteria = cb.createQuery(LogView.class);
+            Root<LogView> logViewRoot = logViewCriteria.from(LogView.class);
         
-        Subquery<LogView> subQuery = logViewCriteria.subquery(LogView.class);
-        Root <LogView> subRoot = subQuery.from(LogView.class);
-        Subquery<LogView> subQueryTwo = logViewCriteria.subquery(LogView.class);
-        Root <LogView> subRootTwo = subQueryTwo.from(LogView.class);
+            Subquery<LogView> subQuery = logViewCriteria.subquery(LogView.class);
+            Root <LogView> subRoot = subQuery.from(LogView.class);
+            Subquery<LogView> subQueryTwo = logViewCriteria.subquery(LogView.class);
+            Root <LogView> subRootTwo = subQueryTwo.from(LogView.class);
         
-        subQuery.select(subRoot.get("levels")).where(cb.equal(subRoot.get("levels"),level.toString()));
-        subQueryTwo.select(subRootTwo).where(cb.equal(subRootTwo.get("id"),id));
-        logViewCriteria.select(logViewRoot).where(cb.or(logViewRoot.get("levels").in(subQuery),logViewRoot.get("id").in(subQueryTwo)));  
-        f.setData(entityManager.createQuery(logViewCriteria).getResultList());
-        return f;   
+            subQuery.select(subRoot.get("levels")).where(cb.equal(subRoot.get("levels"),level.toString()));
+            subQueryTwo.select(subRootTwo).where(cb.equal(subRootTwo.get("id"),id));
+            logViewCriteria.select(logViewRoot).where(cb.or(logViewRoot.get("levels").in(subQuery),logViewRoot.get("id").in(subQueryTwo)));  
+            f.setData(entityManager.createQuery(logViewCriteria).getResultList());
+            return f;
+        }catch(Exception ex){
+            return BaseResponse.error(999, ex); 
+        }
     }
     
-    public BaseResponse<List<LogView>> setLog(){
+    public BaseResponse<List<LogView>> setLog()throws Exception{
         BaseResponse<List<LogView>> f = new BaseResponse(0, "success");
-       // LOGGER.log(Level.TRACE, PARAMS_MARKER, String.format("Level>>>>> %s Number= %d", new Object[]{Level.TRACE, 500}));
-          LOGGER.log(Level.INFO,PARAMS_MARKER,"logging: {} {}", 1 ,"Example");
-        return f;  
+        try{ 
+//            LOGGER.log(Level.TRACE, PARAMS_MARKER, String.format("Level>>>>> %s Number= %d", new Object[]{Level.TRACE, 500}));
+            LOGGER.log(Level.INFO,PARAMS_MARKER,"logging: {} {}", 1 ,"Example");
+            return f; 
+        }catch(Exception ex){
+            return BaseResponse.error(999, ex);
+        }
     }
     
-    public BaseResponse<List<LogView>> setLogParams(LogData data){
+    public BaseResponse<List<LogView>> setLogParams(LogData data)throws Exception{
         BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
         try {
             //LOGGER.log(data.getLevel(),MarkerManager.getMarker(data.getMarker()),data.getMessage(), data.getParams());
-            return f;
-             
+            return f;   
         } catch ( Exception e ){
             return BaseResponse.error(999, e );
         }          

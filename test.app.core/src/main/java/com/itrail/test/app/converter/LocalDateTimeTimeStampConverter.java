@@ -18,7 +18,7 @@ public class LocalDateTimeTimeStampConverter implements AttributeConverter<Local
         try{
          return (localDateTime == null ? null : Timestamp.valueOf(localDateTime));
         }catch(Exception e){
-             e.printStackTrace();
+             e.printStackTrace(System.err);
             return null;
         }
     }
@@ -29,7 +29,7 @@ public class LocalDateTimeTimeStampConverter implements AttributeConverter<Local
         //return (timestamp == null ? null : timestamp.toLocalDateTime());
         return (timestamp == null ? null : LocalDateTime.parse(timestamp.toString()));
         } catch(Exception e ){
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             return null;
         }
     }

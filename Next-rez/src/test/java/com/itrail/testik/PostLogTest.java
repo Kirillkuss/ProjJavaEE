@@ -16,6 +16,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -28,6 +30,7 @@ import static org.junit.Assert.*;
  * @author barysevich_k
  */
 public class PostLogTest {
+     private static final Marker PARAMS_MARKER = MarkerManager.getMarker("PARAMS");
     
     public PostLogTest() {
     }
@@ -48,32 +51,31 @@ public class PostLogTest {
     public void tearDown() {
     }
 
-
-//    @Test
-//    public void getLogTest() throws IOException {
-//         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-//         HttpGet httpGet = new HttpGet("http://127.0.0.1:8080/rest/api/log");
-//         CloseableHttpResponse response = null;
-//         try{
-//            response = httpClient.execute(httpGet);
-//            HttpEntity responseEntity = response.getEntity();
-//            System.out.println("Status:" + response.getStatusLine());
-//            if (responseEntity != null){
-//                    System.out.println("GET:" + EntityUtils.toString(responseEntity));
-//                }                  
-//        }catch(ClientProtocolException e){
-//            e.printStackTrace();
-//        }catch(IOException e){
-//            e.printStackTrace();
-//        }finally{
-//            try {
-//		if (httpClient != null) httpClient.close();	
-//		if (response != null) response.close();	
-//            }catch(Exception e) {
-//            e.printStackTrace();
-//            }
-//        }
-//    }
+    @Test
+    public void getLogTest() throws IOException {
+         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+         HttpGet httpGet = new HttpGet("http://127.0.0.1:8080/rest/api/log");
+         CloseableHttpResponse response = null;
+         try{
+            response = httpClient.execute(httpGet);
+            HttpEntity responseEntity = response.getEntity();
+            System.out.println("Status:" + response.getStatusLine());
+            if (responseEntity != null){
+                    System.out.println("GET:" + EntityUtils.toString(responseEntity));
+                }                  
+        }catch(ClientProtocolException e){
+            e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }finally{
+            try {
+		if (httpClient != null) httpClient.close();	
+		if (response != null) response.close();	
+            }catch(Exception e) {
+            e.printStackTrace();
+            }
+        }
+    }
     
     @Test
     public void postLogTestUserLog() throws IOException{
@@ -94,7 +96,7 @@ public class PostLogTest {
             
         LogData data = new LogData();
         data.setLevel(Level.INFO);
-        data.setMarker("MMMM");
+        data.setMarker(PARAMS_MARKER);
         data.setMessage("Test Post Logger");
         data.setParams(new Object[] {2});
         data.setDate(LocalDateTime.now());
