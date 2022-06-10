@@ -2,7 +2,10 @@
 package com.itrail.test.app.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.itrail.test.app.core.LevelSerializer;
 import com.itrail.test.app.core.LocalDateTimeDeserializerLOGGER;
+import com.itrail.test.app.core.LocalDateTimeSerializerLOGGER;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -34,7 +37,7 @@ public class FilterLog implements Serializable {
     private Long id;
     
     @Column(name="dateFrom")
-
+    @JsonSerialize(using = LocalDateTimeSerializerLOGGER.class)
     @JsonDeserialize(using = LocalDateTimeDeserializerLOGGER.class)
     @ApiModelProperty(value    = "Время c ",
                       name     = "dateFrom",
@@ -43,6 +46,7 @@ public class FilterLog implements Serializable {
     private LocalDateTime dateFrom;
     
     @Column(name="dateTo")
+    @JsonSerialize(using = LocalDateTimeSerializerLOGGER.class)
     @JsonDeserialize(using = LocalDateTimeDeserializerLOGGER.class)
     @ApiModelProperty(value    = "Время до",
                       name     = "dateTo",
@@ -65,6 +69,7 @@ public class FilterLog implements Serializable {
     private Integer offset;
     
     @Column(name="level")
+    @JsonSerialize(using = LevelSerializer.class)
     @ApiModelProperty(value    = "Статус",
                       name     = "level",
                       dataType = "String",
