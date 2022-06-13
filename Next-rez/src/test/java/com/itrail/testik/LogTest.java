@@ -3,15 +3,17 @@ package com.itrail.testik;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogData;
+import com.itrail.test.service.LogService;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import javax.ejb.EJB;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -23,10 +25,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ *Этот класс предназначен для тестирования GET and POST
+ * запросов к логгам
  * @author barysevich_k
  */
 public class LogTest {
+    @EJB LogService service;
     private static final Marker PARAMS_MARKER = MarkerManager.getMarker("PARAMS");
     
     public LogTest() {
@@ -47,52 +51,93 @@ public class LogTest {
     @After
     public void tearDown() {
     }
-    
+    /**
+     * Этот метод предназначен для тестирования GET запроса
+     * @throws Exception 
+     */
     @Test
-    public void getLog() throws IOException {
+    public void getLog() throws Exception {
         try{
             URL url = new URL("http://127.0.0.1:8080/rest/api/log");
             HttpURLConnection huc = (HttpURLConnection) url.openConnection();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(huc.getInputStream()))) {
-                System.out.println( "GET>>>" + reader.readLine() );
+            assertEquals( huc.getResponseCode(), 200 );
+            if( 200 == huc.getResponseCode() ){
+                try ( BufferedReader reader = new BufferedReader( new InputStreamReader( huc.getInputStream() ))) {
+                    assertNotEquals( reader.readLine(), null);
+                }
+            }else {
+                try ( BufferedReader reader = new BufferedReader( new InputStreamReader( huc.getErrorStream() ))){
+                    assertEquals( reader.readLine(), "RESTEASY003210: Could not find resource for full path: " + url.toString() );
+                } 
             }
+        }catch(IllegalArgumentException | MalformedURLException ex){
+            ex.printStackTrace( System.err );
+        }catch(ConnectException ex){  
+             ex.getMessage();
         }catch(IOException e){
-            e.printStackTrace(System.err);
+            e.printStackTrace( System.err );
         }
     }
+    
+    public URL createURLPost() throws MalformedURLException{
+        URL url = new URL("http://127.0.0.1:8080/rest/api/log/UserLog");
+        return url;
+    }
 
-    @Test
-    public void postLogUser() throws  FileNotFoundException,IOException{
+    public LogData createLogData(){
         LogData data = new LogData();
         data.setLevel(Level.INFO);
         data.setMarker(PARAMS_MARKER);
         data.setMessage("Test Post Logger");
         data.setParams(new Object[] {2});
         data.setDate(LocalDateTime.now());
+        return data;
+    }
+     /**
+     * Этот метод предназначен для тестирования POST запроса с параметрами объекта,
+     * при котором пользователь создает свой лог.
+     * @see com.itrail.test.app.model.LogData
+     * @throws Exception 
+     */
+    @Test
+    public void postLogUser() throws Exception{
+        LogData data = createLogData();
+        assertNotNull(data);
         ObjectMapper objectMapper = new ObjectMapper();
+        URL url = createURLPost();
+        assertEquals(createURLPost().toString() ,"http://127.0.0.1:8080/rest/api/log/UserLog" ); 
         try{
-            URL url = new URL("http://127.0.0.1:8080/rest/api/log/UserLog1");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setDoOutput( true );
             con.setRequestProperty("Content-Type", "application/json;charset=utf8");
             OutputStream out = con.getOutputStream();
-                         out.write( objectMapper.writeValueAsBytes(data) );            
-            if ( 200 == con.getResponseCode() ) {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader( con.getInputStream() ))) {
-                    System.out.println( "POST_UserLog>>>" + reader.readLine() );
-                }
+                         out.write( objectMapper.writeValueAsBytes( data ));
+            assertEquals( con.getResponseCode(), 200 );             
+            if ( 200 == con.getResponseCode() ) {    
+                try ( BufferedReader reader = new BufferedReader(new InputStreamReader( con.getInputStream() ))) {
+                    assertEquals( reader.readLine(),"{\"code\":200,\"message\":\"success\",\"data\":" + objectMapper.writeValueAsString(data) + "}"); 
+                }       
             } else {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader( con.getErrorStream() ))) {
-                    System.out.println( "Error>>>" + reader.readLine() );
-                }
-            }          
+                try ( BufferedReader reader = new BufferedReader(new InputStreamReader( con.getErrorStream() ))) {
+                    //while (reader.readLine() != null ){
+                    assertEquals( reader.readLine(), "RESTEASY003210: Could not find resource for full path: " + url.toString() ); }
+            }
+        }catch(IllegalArgumentException | MalformedURLException ex){
+            ex.printStackTrace( System.err );
+        }catch(ConnectException ex){
+            ex.getMessage();
         }catch(IOException ex){
-            ex.printStackTrace(System.err);
-        }
+            ex.printStackTrace( System.err );
+        }  
     }
-    
+    /**
+     * Этот метод предназначен для тестирования POST запроса с параметрами объекта,
+     * при котором получаем список логгов по заданным параметрам.
+     * @see com.itrail.test.app.model.FilterLog
+     * @throws Exception 
+     */
     @Test
-    public void postLogJPQL() throws IOException{
+    public void postLogJPQL() throws Exception{
         FilterLog filterlog = new FilterLog();
         filterlog.setId(Long.MIN_VALUE);
         filterlog.setlevel(Level.INFO);
@@ -108,12 +153,20 @@ public class LogTest {
             con.setRequestProperty("Content-Type", "application/json;charster=utf8");
             OutputStream out = con.getOutputStream();
             out.write( objectMapper.writeValueAsBytes(filterlog) );
-            try(BufferedReader reader = new BufferedReader(new InputStreamReader( con.getInputStream() ))){
-                System.out.println( "POST_JPQL: " + reader.readLine() );
+            assertEquals( con.getResponseCode(), 200 );
+            if ( 200 == con.getResponseCode() ){
+                try ( BufferedReader reader = new BufferedReader(new InputStreamReader( con.getInputStream() ))){
+                    assertNotEquals( reader, null); }
+            }else {
+                try ( BufferedReader reader = new BufferedReader(new InputStreamReader( con.getErrorStream() ))){
+                    assertEquals(reader.readLine(), "RESTEASY003210: Could not find resource for full path: " + url.toString()); }
             }
+        }catch(IllegalArgumentException | MalformedURLException ex){
+            ex.printStackTrace( System.err );
+        }catch(ConnectException ex){
+            ex.getMessage();
         }catch(IOException ex){
-            ex.printStackTrace(System.err);
+            ex.printStackTrace( System.err );
         }
-    }
-   
+    } 
 }

@@ -7,7 +7,6 @@ import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import org.apache.logging.log4j.Level;
@@ -72,6 +71,7 @@ public class LogAPI implements LogResource{
         BaseResponse bs = new BaseResponse(200, "success");
         try{
         service.createLog(new LogView(null,data.getDate(), data.getLevel().toString(), data.getMessage(),data.getMarker().toString(), data.getParams()));
+        bs.setData(data);
         }catch(Exception ex){
            return BaseResponse.error(999, ex);
         }
