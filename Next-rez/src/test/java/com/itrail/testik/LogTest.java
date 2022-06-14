@@ -5,6 +5,7 @@ import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogData;
 import com.itrail.test.service.LogService;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -99,7 +100,7 @@ public class LogTest {
     }
      /**
      * Этот метод предназначен для тестирования POST запроса с параметрами объекта,
-     * при котором пользователь создает свой лог.
+     * при котором пользователь создает свой лог. 
      * @see com.itrail.test.app.model.LogData
      * @throws Exception 
      */
@@ -115,25 +116,29 @@ public class LogTest {
             con.setDoOutput( true );
             con.setRequestProperty("Content-Type", "application/json;charset=utf8");
             OutputStream out = con.getOutputStream();
-                         out.write( objectMapper.writeValueAsBytes( data ));
-            assertEquals( con.getResponseCode(), 200 );          
+            out.write( objectMapper.writeValueAsBytes( data ));
+            assertEquals( con.getResponseCode(), 200 ); 
             if ( 200 == con.getResponseCode() ) {    
-                try ( BufferedReader reader = new BufferedReader(new InputStreamReader( con.getInputStream() ))) {
-                   Stream<String> stream = reader.lines();
-                    Iterator iterator = stream.iterator();
-                    while ( iterator.hasNext() ){
-                     assertEquals( iterator.next(),"{\"code\":200,\"message\":\"success\",\"data\":" + objectMapper.writeValueAsString(data) + "}" ); 
-                    }  
+                try ( ByteArrayOutputStream os = new ByteArrayOutputStream() ) {           
+                    byte[] buffer = new byte[1024];
+                    Integer len;
+                    while (( len = con.getInputStream().read(buffer)) != -1){
+                        os.write(buffer, 0, len);
+                        String response = new String(os.toByteArray());
+                        assertEquals( response,"{\"code\":200,\"message\":\"success\",\"data\":" + objectMapper.writeValueAsString(data) + "}" );
+                    }
                 }catch( NoSuchElementException ex ){
                     ex.printStackTrace( System.err );
                 }
             } else {
-                try ( BufferedReader reader = new BufferedReader(new InputStreamReader( con.getErrorStream() ))) {
-                    Stream<String> stream = reader.lines();
-                    Iterator iterator = stream.iterator();
-                    while ( iterator.hasNext() ){
-                       assertEquals( iterator.next(), "RESTEASY003210: Could not find resource for full path: " + url.toString() );  
-                    } 
+                try ( ByteArrayOutputStream os = new ByteArrayOutputStream() ) {
+                    byte[] buffer = new byte[1024];
+                    Integer len;
+                    while (( len = con.getErrorStream().read(buffer) ) != -1){
+                        os.write(buffer, 0, len);
+                        String response = new String(os.toByteArray());
+                        assertEquals( response, "RESTEASY003210: Could not find resource for full path: " + url.toString() );
+                    }       
                 }catch( NoSuchElementException ex ){
                     ex.printStackTrace( System.err );
                 }
@@ -149,7 +154,7 @@ public class LogTest {
     /**
      * Этот метод предназначен для тестирования POST запроса с параметрами объекта,
      * при котором получаем список логгов по заданным параметрам.
-     * @see com.itrail.test.app.model.FilterLog
+     * @see com.itrail.test.app.model.FilterLog 
      * @throws Exception 
      */
     @Test
