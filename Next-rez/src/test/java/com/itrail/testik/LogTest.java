@@ -13,6 +13,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 import javax.ejb.EJB;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
@@ -105,22 +109,34 @@ public class LogTest {
         assertNotNull(data);
         ObjectMapper objectMapper = new ObjectMapper();
         URL url = createURLPost();
-        assertEquals(createURLPost().toString() ,"http://127.0.0.1:8080/rest/api/log/UserLog" ); 
+        assertEquals(url.toString() ,"http://127.0.0.1:8080/rest/api/log/UserLog" ); 
         try{
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setDoOutput( true );
             con.setRequestProperty("Content-Type", "application/json;charset=utf8");
             OutputStream out = con.getOutputStream();
                          out.write( objectMapper.writeValueAsBytes( data ));
-            assertEquals( con.getResponseCode(), 200 );             
+            assertEquals( con.getResponseCode(), 200 );          
             if ( 200 == con.getResponseCode() ) {    
                 try ( BufferedReader reader = new BufferedReader(new InputStreamReader( con.getInputStream() ))) {
-                    assertEquals( reader.readLine(),"{\"code\":200,\"message\":\"success\",\"data\":" + objectMapper.writeValueAsString(data) + "}"); 
-                }       
+                   Stream<String> stream = reader.lines();
+                    Iterator iterator = stream.iterator();
+                    while ( iterator.hasNext() ){
+                     assertEquals( iterator.next(),"{\"code\":200,\"message\":\"success\",\"data\":" + objectMapper.writeValueAsString(data) + "}" ); 
+                    }  
+                }catch( NoSuchElementException ex ){
+                    ex.printStackTrace( System.err );
+                }
             } else {
                 try ( BufferedReader reader = new BufferedReader(new InputStreamReader( con.getErrorStream() ))) {
-                    //while (reader.readLine() != null ){
-                    assertEquals( reader.readLine(), "RESTEASY003210: Could not find resource for full path: " + url.toString() ); }
+                    Stream<String> stream = reader.lines();
+                    Iterator iterator = stream.iterator();
+                    while ( iterator.hasNext() ){
+                       assertEquals( iterator.next(), "RESTEASY003210: Could not find resource for full path: " + url.toString() );  
+                    } 
+                }catch( NoSuchElementException ex ){
+                    ex.printStackTrace( System.err );
+                }
             }
         }catch(IllegalArgumentException | MalformedURLException ex){
             ex.printStackTrace( System.err );
@@ -156,7 +172,14 @@ public class LogTest {
             assertEquals( con.getResponseCode(), 200 );
             if ( 200 == con.getResponseCode() ){
                 try ( BufferedReader reader = new BufferedReader(new InputStreamReader( con.getInputStream() ))){
-                    assertNotEquals( reader, null); }
+                    Stream<String> s = reader.lines();
+                    Iterator<String> it = s.iterator();
+                    while(it.hasNext()){
+                       System.out.println("Response>>> " + it.next());
+                    }   
+                }catch(NoSuchElementException ex){
+                    System.out.println("Error>> " + ex.getMessage());
+                }
             }else {
                 try ( BufferedReader reader = new BufferedReader(new InputStreamReader( con.getErrorStream() ))){
                     assertEquals(reader.readLine(), "RESTEASY003210: Could not find resource for full path: " + url.toString()); }
@@ -168,5 +191,5 @@ public class LogTest {
         }catch(IOException ex){
             ex.printStackTrace( System.err );
         }
-    } 
+    }
 }
