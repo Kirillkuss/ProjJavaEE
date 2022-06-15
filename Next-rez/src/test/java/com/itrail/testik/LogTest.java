@@ -106,12 +106,12 @@ public class LogTest {
     private String getString( InputStream is ) throws IOException {
         String result = null;
         byte[] buffer = new byte[4096];     
-        try ( ByteArrayOutputStream os = new ByteArrayOutputStream(); ){
+        try ( ByteArrayOutputStream os = new ByteArrayOutputStream() ){
             Integer len;
             while (( len = is.read(buffer) ) != -1) os.write(buffer, 0, len); 
             result = new String(os.toByteArray());
         }    
-            return result;
+        return result;
     }
 
     @Test
