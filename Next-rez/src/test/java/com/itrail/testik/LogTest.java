@@ -38,9 +38,6 @@ import static org.junit.Assert.*;
 public class LogTest {
     private static final Marker PARAMS_MARKER = MarkerManager.getMarker("PARAMS");
     
-    @PersistenceContext
-    private EntityManager entityManager;
-    
     public LogTest() {
     }
     
