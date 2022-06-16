@@ -2,7 +2,9 @@ package com.itrail.testik;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itrail.test.app.model.LogData;
+import com.itrail.test.domain.BaseResponse;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.time.LocalDateTime;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -49,93 +51,103 @@ public class PostLogTest {
     public void tearDown() {
     }
 
-//    @Test
-//    public void getLogTest() throws IOException {
-//         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-//         HttpGet httpGet = new HttpGet("http://127.0.0.1:8080/rest/api/log");
-//         CloseableHttpResponse response = null;
-//         try{
-//            response = httpClient.execute(httpGet);
-//            HttpEntity responseEntity = response.getEntity();
-//            if (responseEntity != null) System.out.println("GET:" + EntityUtils.toString(responseEntity));                      
-//        }catch(ClientProtocolException e){
-//            e.printStackTrace(System.err);
-//        }catch(IOException e){
-//            e.printStackTrace(System.err);
-//        }finally{
-//            try {
-//		if (httpClient != null) httpClient.close();	
-//		if (response != null) response.close();	
-//            }catch(IOException e) {
-//            e.printStackTrace(System.err);
-//            }
-//        }
-//    }
-//    
-//    @Test
-//    public void postLogTestUserLog() throws IOException{
-//        LogData data = new LogData();
-//        data.setLevel(Level.INFO);
-//        data.setMarker(PARAMS_MARKER);
-//        data.setMessage("Test Post Logger");
-//        data.setParams(new Object[] {2});
-//        data.setDate(LocalDateTime.now());
-//        ObjectMapper objectMapper = new ObjectMapper();
-//            String requestBody = objectMapper
-//                .writerWithDefaultPrettyPrinter()
-//                .writeValueAsString(data);   
-//        StringEntity ent = new StringEntity(requestBody, "UTF-8");
-//                System.out.println("Object>>>" + requestBody);
-//        
-//        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-//        HttpPost httpPost = new HttpPost("http://127.0.0.1:8080/rest/api/log/UserLog");
-//        httpPost.setEntity(ent);
-//        httpPost.setHeader("Content-Type", "application/json;charset=utf8");
-//        CloseableHttpResponse response = null;
-//        try{
-//            response = httpClient.execute(httpPost);
-//            HttpEntity responseEntity = response.getEntity();
-//            if(responseEntity != null) System.out.println("POSTUserLog: " + EntityUtils.toString(responseEntity));
-//        }catch(IOException e){
-//            e.printStackTrace(System.err);
-//        }finally{
-//            try{
-//                if(httpClient != null) httpClient.close();
-//                if(response != null) response.close();
-//            }catch(IOException e){
-//                e.printStackTrace(System.err);
-//            }
-//        }
-//    }
-//    
-//    @Test
-//    public void getLogTestJPQL() throws IOException{
-//        String m = "{\"id\":\"1\","
-//         + "\"dateFrom\":\"2022-03-02T11:36:37.932Z\","
-//         + "\"dateTo\":\"2022-09-02T11:36:37.932Z\","
-//         + "\"limit\":\"100\","
-//         + "\"offset\":\"0\","
-//         + "\"level\":\"INFO\"}";
-//        StringEntity entity = new StringEntity(m, "UTF-8");
-//        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-//        HttpPost httpPost = new HttpPost("http://127.0.0.1:8080/rest/api/log/requestJPQL");
-//        httpPost.setEntity(entity);
-//        httpPost.setHeader("Content-Type", "application/json;charset=utf8");
-//        CloseableHttpResponse response = null;
-//        try{
-//            response = httpClient.execute(httpPost);
-//            HttpEntity responseEntity = response.getEntity();
-//            if(responseEntity != null) System.out.println("POSTJPQL: " + EntityUtils.toString(responseEntity));
-//        }catch(IOException e ){
-//            e.printStackTrace(System.err);
-//        }finally{
-//            try{
-//                if(httpClient != null) httpClient.close();
-//                if(response != null) response.close();
-//            }catch(IOException e){
-//                e.printStackTrace(System.err);
-//            }
-//        }
-//        
-//    }   
+    @Test
+    public void getLogTest() throws IOException {
+         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+         HttpGet httpGet = new HttpGet("http://127.0.0.1:8080/rest/api/log");
+         CloseableHttpResponse response = null;
+         try{
+            response = httpClient.execute(httpGet);
+            HttpEntity responseEntity = response.getEntity();
+            assertNotNull(responseEntity);                   
+        }catch(ClientProtocolException e){
+            e.printStackTrace(System.err);
+        }catch(ConnectException e){
+            e.getMessage();
+        }catch(IOException e){
+            e.printStackTrace(System.err);
+        }finally{
+            try {
+		if (httpClient != null) httpClient.close();	
+		if (response != null) response.close();	
+            }catch(IOException e) {
+            e.printStackTrace(System.err);
+            }
+        }
+    }
+    
+    @Test
+    public void postLogTestUserLog() throws IOException{
+        LogData data = new LogData();
+        data.setLevel(Level.INFO);
+        data.setMarker(PARAMS_MARKER);
+        data.setMessage("Test Post Logger");
+        data.setParams(new Object[] {2});
+        data.setDate(LocalDateTime.now());
+        
+        BaseResponse bs = new BaseResponse();
+        bs.setCode(200);
+        bs.setMessage("success");
+        bs.setData(data);
+        
+        ObjectMapper objectMapper = new ObjectMapper();
+            String requestBody = objectMapper
+                .writeValueAsString(data);   
+        StringEntity ent = new StringEntity(requestBody, "UTF-8");
+        
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost("http://127.0.0.1:8080/rest/api/log/UserLog");
+        httpPost.setEntity(ent);
+        httpPost.setHeader("Content-Type", "application/json;charset=utf8");
+        CloseableHttpResponse response = null;
+        try{
+            response = httpClient.execute(httpPost);
+            HttpEntity responseEntity = response.getEntity();
+            assertEquals(objectMapper.writeValueAsString(bs), EntityUtils.toString(responseEntity));
+        }catch(ConnectException e){
+            e.getMessage();
+        }catch(IOException e){
+            e.printStackTrace(System.err);
+        }finally{
+            try{
+                if(httpClient != null) httpClient.close();
+                if(response != null) response.close();
+            }catch(IOException e){
+                e.printStackTrace(System.err);
+            }
+        }
+    }
+    
+    @Test
+    public void getLogTestJPQL() throws IOException{
+        String m = "{\"id\":\"1\","
+         + "\"dateFrom\":\"2022-03-02T11:36:37.932Z\","
+         + "\"dateTo\":\"2022-09-02T11:36:37.932Z\","
+         + "\"limit\":\"100\","
+         + "\"offset\":\"0\","
+         + "\"level\":\"INFO\"}";
+        StringEntity entity = new StringEntity(m, "UTF-8");
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost("http://127.0.0.1:8080/rest/api/log/requestJPQL");
+        httpPost.setEntity(entity);
+        httpPost.setHeader("Content-Type", "application/json;charset=utf8");
+        CloseableHttpResponse response = null;
+        try{
+            response = httpClient.execute(httpPost);
+            HttpEntity responseEntity = response.getEntity();
+            assertNotNull(EntityUtils.toString(responseEntity));
+        }catch(ConnectException e){
+            e.getMessage();
+        }catch(IOException e ){
+            e.printStackTrace(System.err);
+        }finally{
+            try{
+                if(httpClient != null) httpClient.close();
+                if(response != null) response.close();
+            }catch(IOException e){
+                e.printStackTrace(System.err);
+            }
+        }
+        
+    }   
 }

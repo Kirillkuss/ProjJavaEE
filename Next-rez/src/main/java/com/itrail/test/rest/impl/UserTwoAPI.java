@@ -34,7 +34,7 @@ public class UserTwoAPI implements UserResourceTwo {
     @Override
     public BaseResponse createUser(User user) {
         BaseResponse bs = new BaseResponse(200, "success");
-        bs.setData("Create User:" + user);
+        bs.setData(user);
         service.createUser(user);
         return bs;
     }

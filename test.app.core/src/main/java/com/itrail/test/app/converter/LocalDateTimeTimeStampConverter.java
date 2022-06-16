@@ -1,11 +1,9 @@
 package com.itrail.test.app.converter;
 
-
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
 /**
  *
  * @author barysevich_k
@@ -26,14 +24,10 @@ public class LocalDateTimeTimeStampConverter implements AttributeConverter<Local
     @Override
     public LocalDateTime convertToEntityAttribute(Timestamp timestamp) {
         try{
-        //return (timestamp == null ? null : timestamp.toLocalDateTime());
-        return (timestamp == null ? null : LocalDateTime.parse(timestamp.toString()));
+        return (timestamp == null ? null : timestamp.toLocalDateTime());
         } catch(Exception e ){
             e.printStackTrace(System.err);
             return null;
         }
     }
-    
-
- 
 }
