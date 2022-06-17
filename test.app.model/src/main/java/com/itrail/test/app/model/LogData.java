@@ -8,6 +8,7 @@ import com.itrail.test.app.core.LocalDateTimeSerializerLOGGER;
 import com.itrail.test.app.core.MarkerDeserializer;
 import com.itrail.test.app.core.MarkerSerializer;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
@@ -18,7 +19,7 @@ import org.apache.logging.log4j.Marker;
  *
  * @author barysevich_k
  */
-public class LogData {
+public class LogData implements Serializable{
     @JsonSerialize(using = LevelSerializer.class)
     @ApiModelProperty(value    = "level",
                       name     = "level",
@@ -143,4 +144,11 @@ public class LogData {
         }
         return Objects.equals(this.date, other.date);
     }
+
+    @Override
+    public String toString() {
+        return "{" + "level=" + level + ", marker=" + marker + ", message=" + message + ", params=" + Arrays.toString(params) + ", date=" + date + '}';
+    }
+    
+
 }

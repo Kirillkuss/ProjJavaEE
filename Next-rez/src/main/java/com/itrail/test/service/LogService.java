@@ -167,21 +167,10 @@ public class LogService {
         }
     }
     
-    public BaseResponse<List<LogView>> setLog()throws Exception{
-        BaseResponse<List<LogView>> f = new BaseResponse(0, "success");
-        try{ 
-//            LOGGER.log(Level.TRACE, PARAMS_MARKER, String.format("Level>>>>> %s Number= %d", new Object[]{Level.TRACE, 500}));
-            LOGGER.log(Level.INFO,PARAMS_MARKER,"logging: {} {}", 1 ,"Example");
-            return f; 
-        }catch(Exception ex){
-            return BaseResponse.error(999, ex);
-        }
-    }
-    
     public BaseResponse<List<LogView>> setLogParams(LogData data)throws Exception{
         BaseResponse<List<LogView>> f = new BaseResponse(0,"success");
         try {
-            //LOGGER.log(data.getLevel(),MarkerManager.getMarker(data.getMarker()),data.getMessage(), data.getParams());
+            LOGGER.log(data.getLevel(),MarkerManager.getMarker(data.getMarker().toString()),data.getMessage(), data.getParams());
             return f;   
         } catch ( Exception e ){
             return BaseResponse.error(999, e );

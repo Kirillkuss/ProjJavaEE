@@ -71,55 +71,55 @@ public class UserTest {
     
 
 
-    @Test
-    public void getUser() throws IOException {
-        try{
-            URL url = new URL("http://127.0.0.1:8080/rest/api/entitymanager");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            assertEquals(con.getResponseCode(), 200);
-            if( 200 == con.getResponseCode() ){
-               String response = getResponse(con.getInputStream());
-               assertNotNull(response);
-            }else{
-                String response = getResponse(con.getErrorStream());
-                assertNotNull(response);
-            }
-        }catch (ConnectException er){
-            er.getMessage();
-        }catch(IOException er){
-           er.printStackTrace(System.err);
-        } 
-    }
-    
-    @Test
-    public void putUser() throws IOException{
-        User user = createUser();
-        BaseResponse bs = new BaseResponse();
-        bs.setCode(200);
-        bs.setMessage("success");
-        bs.setData(user);
-        ObjectMapper objectMapper = new ObjectMapper();
-        try{
-            URL url = new URL("http://127.0.0.1:8080/rest/api/entitymanager/create");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setDoOutput( true );
-            con.setRequestMethod("PUT");
-            con.setRequestProperty("Content-Type", "application/json;charset=utf8");
-            OutputStream out = con.getOutputStream();
-            out.write( objectMapper.writeValueAsBytes(user) );
-            assertEquals(con.getResponseCode(), 200);
-            if ( 200 == con.getResponseCode() ){
-                String response = getResponse(con.getInputStream());
-                assertEquals(response, objectMapper.writeValueAsString(bs));
-            }else{
-                String response = getResponse(con.getErrorStream());
-                assertNotNull(response);
-            }
-        }catch(ConnectException ex){
-            ex.getMessage();
-        }catch(IOException ex){
-            ex.printStackTrace(System.err);
-        }
- 
-    }
+//    @Test
+//    public void getUser() throws IOException {
+//        try{
+//            URL url = new URL("http://127.0.0.1:8080/rest/api/entitymanager");
+//            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//            assertEquals(con.getResponseCode(), 200);
+//            if( 200 == con.getResponseCode() ){
+//               String response = getResponse(con.getInputStream());
+//               assertNotNull(response);
+//            }else{
+//                String response = getResponse(con.getErrorStream());
+//                assertNotNull(response);
+//            }
+//        }catch (ConnectException er){
+//            er.getMessage();
+//        }catch(IOException er){
+//           er.printStackTrace(System.err);
+//        } 
+//    }
+//    
+//    @Test
+//    public void putUser() throws IOException{
+//        User user = createUser();
+//        BaseResponse bs = new BaseResponse();
+//        bs.setCode(200);
+//        bs.setMessage("success");
+//        bs.setData(user);
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        try{
+//            URL url = new URL("http://127.0.0.1:8080/rest/api/entitymanager/create");
+//            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//            con.setDoOutput( true );
+//            con.setRequestMethod("PUT");
+//            con.setRequestProperty("Content-Type", "application/json;charset=utf8");
+//            OutputStream out = con.getOutputStream();
+//            out.write( objectMapper.writeValueAsBytes(user) );
+//            assertEquals(con.getResponseCode(), 200);
+//            if ( 200 == con.getResponseCode() ){
+//                String response = getResponse(con.getInputStream());
+//                assertEquals(response, objectMapper.writeValueAsString(bs));
+//            }else{
+//                String response = getResponse(con.getErrorStream());
+//                assertNotNull(response);
+//            }
+//        }catch(ConnectException ex){
+//            ex.getMessage();
+//        }catch(IOException ex){
+//            ex.printStackTrace(System.err);
+//        }
+// 
+//    }
 }
