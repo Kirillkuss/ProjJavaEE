@@ -20,6 +20,22 @@ import org.apache.logging.log4j.Marker;
  * @author barysevich_k
  */
 public class LogData implements Serializable{
+    
+//    private final String uuid = /*прочитать о генерации UUID */ ;
+//    
+//    
+    /**
+     * почитать аннотацию Json RofUn
+     */
+    /**
+     *@ трансиелнт филт  
+     */
+    /**
+     * key - serialzerObject generatedObjectvalueId
+     */
+//    
+//    private Long id;
+    
     @JsonSerialize(using = LevelSerializer.class)
     @ApiModelProperty(value    = "level",
                       name     = "level",
@@ -59,7 +75,13 @@ public class LogData implements Serializable{
         
     }
 
+//    public LogData(Long id) {
+//        this.id = id;
+//    }
+    
+
     public LogData(Level level, Marker marker, String message, Object[] params, LocalDateTime date) {
+       // this.id = null == id ? /*сгенерировать уникальную id */ : id;
         this.level = level;
         this.marker = marker;
         this.message = message;
@@ -147,8 +169,7 @@ public class LogData implements Serializable{
 
     @Override
     public String toString() {
-        return "{" + "level=" + level + ", marker=" + marker + ", message=" + message + ", params=" + Arrays.toString(params) + ", date=" + date + '}';
+        return "{" + "level=" + level + ", marker=" + marker + ", message=" + message + ", params=" + Arrays.toString(params) + ", date=" + date +'}';
     }
-    
 
 }

@@ -1,6 +1,7 @@
 package com.itrail.testik;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogData;
 import com.itrail.test.domain.BaseResponse;
 import java.io.ByteArrayOutputStream;
@@ -9,9 +10,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.NoSuchElementException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -71,43 +74,58 @@ public class TestObjectLog {
     public <T> T getString(InputStream is, Class<T> cls) throws IOException{
         return new ObjectMapper().readValue(is, cls);
     }
-    
-        private String getString( InputStream is ) throws IOException {
-        String result = null;
-        byte[] buffer = new byte[4096];
-        try ( ByteArrayOutputStream os = new ByteArrayOutputStream() ){
-            Integer len;
-            while (( len = is.read(buffer) ) != -1) os.write(buffer, 0, len);
-            result = new String(os.toByteArray());
-        }
-        return result;
-    }
-     
-    
-    @Test
-    public void testPostObject() throws IOException, ClassNotFoundException, Exception{
+ 
+   public BaseResponse getBS()  throws Exception{
         try{
-
-            LogData data = createLogData();
+            LogData logData = createLogData();
             URL url = createURL();
-            ObjectMapper objectMapper = new ObjectMapper(); 
-            BaseResponse bs2 = new BaseResponse(200,"success");
-            
-            bs2.setData(objectMapper.readValue(objectMapper.writeValueAsString(data), LogData.class));
-
-            HttpURLConnection con = ( HttpURLConnection ) url.openConnection();
+            ObjectMapper objectMapper = new ObjectMapper();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setDoOutput(true);
             con.setRequestProperty("Content-Type", "application/json;charset=utf8");
-            con.setRequestMethod(getRequset());
+            con.setRequestMethod( getRequset() );
+            OutputStream out =con.getOutputStream();
+            out.write( objectMapper.writeValueAsBytes( logData ));
+            BaseResponse bs = objectMapper.readValue(con.getInputStream(), BaseResponse.class);
+            return bs;
+        }catch(ConnectException ex){
+            return BaseResponse.error(999, ex);
+        }catch(IOException ex){
+            return BaseResponse.error(999, ex);
+        }
+    } 
+
+     public FilterLog getFilterLog(){
+        FilterLog f = new FilterLog();
+        f.setlevel(Level.INFO);
+        f.setLimit(1);
+        f.setOffset(0);
+        f.setDateFrom(LocalDateTime.of(2022, Month.FEBRUARY, 1, 12, 40, 10, 99935345).minusDays(1));
+        f.setDateTo(LocalDateTime.of(2022, Month.APRIL, 1, 12, 40, 10, 99935345).plusDays(1));
+    return f;
+    }   
+     
+    @Test
+    public void postLogJPA() throws Exception{
+        FilterLog filterlog = getFilterLog();
+        BaseResponse ObjectTwo = getBS();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            URL url = new URL("http://127.0.0.1:8080/rest/api/log/requestJPA");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setDoOutput(true);
+            con.setRequestProperty("Content-Type", "application/json;charster=utf8");
             OutputStream out = con.getOutputStream();
-            out.write(objectMapper.writeValueAsBytes(data));
-               //BaseResponse bs = getString(con.getInputStream(),BaseResponse.class);
-               BaseResponse bs = objectMapper.readValue(con.getInputStream(), BaseResponse.class);
-        }catch( ConnectException ex ){
+            out.write( objectMapper.writeValueAsBytes(filterlog) );
+            BaseResponse objectOne = objectMapper.readValue(con.getInputStream(), BaseResponse.class);
+            assertEquals( objectOne, ObjectTwo );
+        }catch(IllegalArgumentException | MalformedURLException ex){
             ex.getMessage();
-        }catch( IOException ex ){
+        }catch(ConnectException ex){
+            ex.getMessage();
+        } catch(NoSuchElementException | IOException ex){
             ex.getMessage();
         }
-        }
-    
+    }
+      
 }

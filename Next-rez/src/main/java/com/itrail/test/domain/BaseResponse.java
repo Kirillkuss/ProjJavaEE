@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.Objects;
 
 
 /**
@@ -61,9 +62,41 @@ public class BaseResponse<T> {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 67 * hash + this.code;
+        hash = 67 * hash + Objects.hashCode(this.message);
+        hash = 67 * hash + Objects.hashCode(this.data);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BaseResponse<?> other = (BaseResponse<?>) obj;
+        if (this.code != other.code) {
+            return false;
+        }
+        if (!Objects.equals(this.message, other.message)) {
+            return false;
+        }
+//        if (!Objects.equals(this.data, other.data)) {
+//            return false;
+//        }
+        return Objects.equals(this.data, other.data);
+    }
+
+    @Override
     public String toString() {
         return "BaseResponce{" + "code=" + code + ", message=" + message + ", data=" + data + '}';
     }
-
 
 }

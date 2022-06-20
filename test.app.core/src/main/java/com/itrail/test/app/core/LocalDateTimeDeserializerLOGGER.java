@@ -17,9 +17,6 @@ public class LocalDateTimeDeserializerLOGGER extends JsonDeserializer<LocalDateT
     @Override
     public LocalDateTime deserialize(JsonParser jp, DeserializationContext dc) throws IOException, JsonProcessingException {
         return LocalDateTime.parse(jp.getText(),DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX"));
-       // return LocalDateTime.parse( jp.getText(),DateTimeFormatter.ISO_ZONED_DATE_TIME);
-        
-        
-    }
-    
+       // return LocalDateTime.parse( jp.getText(),DateTimeFormatter.ISO_ZONED_DATE_TIME); 
+    }  
 }

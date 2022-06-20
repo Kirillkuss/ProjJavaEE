@@ -70,6 +70,13 @@ public class LogAPI implements LogResource{
         try{
         service.createLog(new LogView(null,data.getDate(), data.getLevel().toString(), data.getMessage(),data.getMarker().toString(), data.getParams()));
         bs.setData(data);
+        FilterLog filterLog = new FilterLog();
+        filterLog.setDateFrom(data.getDate());
+        filterLog.setDateTo(data.getDate());
+        filterLog.setOffset(0);
+        filterLog.setlevel(Level.INFO);
+        filterLog.setLimit(1);
+        bs.setData(service.getFoundlogJPA(filterLog).getData());
         }catch(Exception ex){
            return BaseResponse.error(999, ex);
         }
