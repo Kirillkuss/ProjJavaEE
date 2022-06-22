@@ -20,8 +20,8 @@ public class LogAPI implements LogResource{
     @EJB LogService service;
     @Override
     public BaseResponse getLog() {
-        BaseResponse bs = new BaseResponse(200, "success");
-        bs.setData(service.getAllLog());
+        BaseResponse bs = new BaseResponse( 200, "success" );
+        bs.setData( service.getAllLog() );
        return bs;
     }
     
@@ -31,54 +31,54 @@ public class LogAPI implements LogResource{
     }
 
     @Override
-    public LogResponse getListFilterLogSQL(FilterLog filterLog) throws Exception {
-        return new LogResponse(service.getFoundLogSQL(filterLog).getData());
+    public LogResponse getListFilterLogSQL( FilterLog filterLog ) throws Exception {
+        return new LogResponse( service.getFoundLogSQL( filterLog ).getData() );
     }
 
     @Override
-    public BaseResponse getListLogJPA(FilterLog filterLog) throws Exception {
-        BaseResponse bs = new BaseResponse(200, "success");
-        bs.setData(service.getFoundlogJPA(filterLog).getData());
+    public BaseResponse getListLogJPA( FilterLog filterLog ) throws Exception {
+        BaseResponse bs = new BaseResponse( 200, "success" );
+        bs.setData( service.getFoundlogJPA( filterLog ).getData() );
         return bs;
     }
 
     @Override
     public BaseResponse getListLogSubQuery(FilterLog filterLog) {
-        BaseResponse bs = new BaseResponse(200, "success");
+        BaseResponse bs = new BaseResponse( 200, "success" );
         try {
-            bs.setData(service.getFoundLogSubQuery(filterLog).getData()); 
-        }catch (Exception ex) {
-            return BaseResponse.error(999, ex);
+            bs.setData( service.getFoundLogSubQuery( filterLog ).getData() ); 
+        }catch ( Exception ex ) {
+            return BaseResponse.error( 999, ex );
         }
         return bs;
     }
 
     @Override
     public BaseResponse getExample(Long id, Level level) {
-        BaseResponse bs = new BaseResponse(200, "success");
+        BaseResponse bs = new BaseResponse( 200, "success" );
         try {
-            bs.setData(service.getExample(id,level).getData());
-        } catch (Exception ex) {
-            return BaseResponse.error(999, ex);
+            bs.setData( service.getExample( id, level ).getData() );
+        } catch ( Exception ex ) {
+            return BaseResponse.error( 999, ex );
         }
         return bs;
     }
 
     @Override
     public BaseResponse setLog(LogData data) {
-        BaseResponse bs = new BaseResponse(200, "success");
+        BaseResponse bs = new BaseResponse( 200, "success" );
         try{
-        service.createLog(new LogView(null,data.getDate(), data.getLevel().toString(), data.getMessage(),data.getMarker().toString(), data.getParams()));
-        bs.setData(data);
-        FilterLog filterLog = new FilterLog();
-        filterLog.setDateFrom(data.getDate());
-        filterLog.setDateTo(data.getDate());
-        filterLog.setOffset(0);
-        filterLog.setlevel(Level.INFO);
-        filterLog.setLimit(1);
-        bs.setData(service.getFoundlogJPA(filterLog).getData());
-        }catch(Exception ex){
-           return BaseResponse.error(999, ex);
+            service.createLog( new LogView( data.getId(), data.getDate(), data.getLevel().toString(), data.getMessage(),data.getMarker().toString(), data.getParams() ));
+            bs.setData( data );
+            FilterLog filterLog = new FilterLog();
+            filterLog.setDateFrom( data.getDate() );
+            filterLog.setDateTo( data.getDate() );
+            filterLog.setOffset( 0);
+            filterLog.setlevel( Level.INFO );
+            filterLog.setLimit(1);
+            bs.setData( service.getFoundlogJPA( filterLog ).getData() );
+        }catch( Exception ex ){
+           return BaseResponse.error( 999, ex );
         }
         return bs;
     }  

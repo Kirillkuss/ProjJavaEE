@@ -53,6 +53,7 @@ public class TestObjectLog {
     
     public LogData createLogData(){
        LogData data = new LogData();
+       data.setId(Long.MAX_VALUE);
        data.setLevel(Level.INFO);
        data.setMarker(MAR);
        data.setParams(new Object[] {3434});
@@ -74,6 +75,16 @@ public class TestObjectLog {
     public <T> T getString(InputStream is, Class<T> cls) throws IOException{
         return new ObjectMapper().readValue(is, cls);
     }
+    
+    public FilterLog getFilterLog(){
+        FilterLog f = new FilterLog();
+        f.setlevel(Level.INFO);
+        f.setLimit(1);
+        f.setOffset(0);
+        f.setDateFrom( LocalDateTime.of( 2022, Month.FEBRUARY, 1, 12, 40, 10, 99935345 ).minusDays(1) );
+        f.setDateTo( LocalDateTime.of( 2022, Month.APRIL, 1, 12, 40, 10, 99935345 ).plusDays(1) );
+    return f;
+    }  
  
    public BaseResponse getBS()  throws Exception{
         try{
@@ -82,48 +93,39 @@ public class TestObjectLog {
             ObjectMapper objectMapper = new ObjectMapper();
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setDoOutput(true);
-            con.setRequestProperty("Content-Type", "application/json;charset=utf8");
+            con.setRequestProperty( "Content-Type", "application/json;charset=utf8" );
             con.setRequestMethod( getRequset() );
             OutputStream out =con.getOutputStream();
             out.write( objectMapper.writeValueAsBytes( logData ));
-            BaseResponse bs = objectMapper.readValue(con.getInputStream(), BaseResponse.class);
+            BaseResponse bs = objectMapper.readValue( con.getInputStream(), BaseResponse.class );
             return bs;
-        }catch(ConnectException ex){
-            return BaseResponse.error(999, ex);
-        }catch(IOException ex){
-            return BaseResponse.error(999, ex);
+        }catch( ConnectException ex ){
+            return BaseResponse.error( 999, ex );
+        }catch( IOException ex ){
+            return BaseResponse.error( 999, ex );
         }
     } 
 
-     public FilterLog getFilterLog(){
-        FilterLog f = new FilterLog();
-        f.setlevel(Level.INFO);
-        f.setLimit(1);
-        f.setOffset(0);
-        f.setDateFrom(LocalDateTime.of(2022, Month.FEBRUARY, 1, 12, 40, 10, 99935345).minusDays(1));
-        f.setDateTo(LocalDateTime.of(2022, Month.APRIL, 1, 12, 40, 10, 99935345).plusDays(1));
-    return f;
-    }   
-     
     @Test
     public void postLogJPA() throws Exception{
         FilterLog filterlog = getFilterLog();
         BaseResponse ObjectTwo = getBS();
         ObjectMapper objectMapper = new ObjectMapper();
         try{
-            URL url = new URL("http://127.0.0.1:8080/rest/api/log/requestJPA");
+            URL url = new URL( "http://127.0.0.1:8080/rest/api/log/requestJPA" );
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setDoOutput(true);
-            con.setRequestProperty("Content-Type", "application/json;charster=utf8");
+            con.setDoOutput( true );
+            con.setRequestProperty( "Content-Type", "application/json;charster=utf8" );
+            con.setRequestMethod( getRequset() );
             OutputStream out = con.getOutputStream();
             out.write( objectMapper.writeValueAsBytes(filterlog) );
-            BaseResponse objectOne = objectMapper.readValue(con.getInputStream(), BaseResponse.class);
+            BaseResponse objectOne = objectMapper.readValue(con.getInputStream(), BaseResponse.class );
             assertEquals( objectOne, ObjectTwo );
-        }catch(IllegalArgumentException | MalformedURLException ex){
+        }catch( IllegalArgumentException | MalformedURLException ex ){
             ex.getMessage();
-        }catch(ConnectException ex){
+        }catch( ConnectException ex ){
             ex.getMessage();
-        } catch(NoSuchElementException | IOException ex){
+        } catch( NoSuchElementException | IOException ex ){
             ex.getMessage();
         }
     }

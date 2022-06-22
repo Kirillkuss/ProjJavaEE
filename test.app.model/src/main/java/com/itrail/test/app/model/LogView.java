@@ -29,15 +29,24 @@ import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
 @JsonInclude(Include.NON_DEFAULT)
 public class LogView extends BasicLogEventEntity  {
     private LogEvent wrappedEvent;
+    
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @ApiModelProperty(value    = "Ид лога", 
                       name     = "id", 
                       dataType = "Long", 
                       example  = "1", 
                       required = true)
     private Long id;
+
+//    @Id
+//    @GeneratedValue(generator = "UUID")
+//    @GenericGenerator(
+//        name = "UUID",
+//        strategy = "org.hibernate.id.UUIDGenerator")
+//    @Column(name = "id", updatable = false, nullable = false)
+//    private UUID id;
     
     @Column(name = "date")
     @JsonSerialize(using = LocalDateTimeSerializerLOGGER.class)

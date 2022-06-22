@@ -12,18 +12,17 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.SequenceGenerator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
-
 /**
  *
  * @author barysevich_k
  */
 public class LogData implements Serializable{
-    
-//    private final String uuid = /*прочитать о генерации UUID */ ;
-//    
-//    
+    //private final String uuid = /*прочитать о генерации UUID */ ; 
     /**
      * почитать аннотацию Json RofUn
      */
@@ -33,8 +32,11 @@ public class LogData implements Serializable{
     /**
      * key - serialzerObject generatedObjectvalueId
      */
-//    
-//    private Long id;
+    @ApiModelProperty(value    = "id",
+                      name     = "id",
+                      dataType = "Long",
+                      example  = "1000")  
+    private Long id;
     
     @JsonSerialize(using = LevelSerializer.class)
     @ApiModelProperty(value    = "level",
@@ -42,7 +44,6 @@ public class LogData implements Serializable{
                       dataType = "String",
                       example  = "INFO")
     private Level level;
-    //private String level;
 
     @JsonSerialize(using = MarkerSerializer.class)
     @JsonDeserialize(using = MarkerDeserializer.class)
@@ -51,7 +52,6 @@ public class LogData implements Serializable{
                       dataType = "String",
                       example  = "MARKER")
     private Marker marker;
-    //private String marker;
     
     @ApiModelProperty(value    = "message",
                       name     = "message",
@@ -75,13 +75,14 @@ public class LogData implements Serializable{
         
     }
 
-//    public LogData(Long id) {
-//        this.id = id;
-//    }
+    public LogData(Long id) {
+        this.id = id;
+    }
     
 
-    public LogData(Level level, Marker marker, String message, Object[] params, LocalDateTime date) {
-       // this.id = null == id ? /*сгенерировать уникальную id */ : id;
+    public LogData(Long id, Level level, Marker marker, String message, Object[] params, LocalDateTime date) {
+       //this.id = null == id ? /*сгенерировать уникальную id */ : id;
+        this.id = id;
         this.level = level;
         this.marker = marker;
         this.message = message;
@@ -129,9 +130,19 @@ public class LogData implements Serializable{
         this.date = date;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+
     @Override
     public int hashCode() {
         int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.id);
         hash = 17 * hash + Objects.hashCode(this.level);
         hash = 17 * hash + Objects.hashCode(this.marker);
         hash = 17 * hash + Objects.hashCode(this.message);
@@ -155,6 +166,9 @@ public class LogData implements Serializable{
         if (!Objects.equals(this.message, other.message)) {
             return false;
         }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
         if (!Objects.equals(this.level, other.level)) {
             return false;
         }
@@ -169,7 +183,6 @@ public class LogData implements Serializable{
 
     @Override
     public String toString() {
-        return "{" + "level=" + level + ", marker=" + marker + ", message=" + message + ", params=" + Arrays.toString(params) + ", date=" + date +'}';
+        return "LogData{" + "id=" + id + ", level=" + level + ", marker=" + marker + ", message=" + message + ", params=" + Arrays.toString(params) + ", date=" + date + '}';
     }
-
 }

@@ -57,8 +57,10 @@ public class CalcService {
         }
         return new BaseResponse (0, "Success");
     }
+    
     @PersistenceContext
     private EntityManager em;
+    
     public BaseResponse getBuyAnimal(Integer idAnimal, Integer idUser) throws ItException{
         Animal ani = em.find(Animal.class, idAnimal);
         User us = em.find(User.class, idUser);
