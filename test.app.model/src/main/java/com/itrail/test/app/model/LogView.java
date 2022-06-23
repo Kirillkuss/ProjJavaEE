@@ -76,9 +76,11 @@ public class LogView extends BasicLogEventEntity  {
     @ApiModelProperty(required = false)
     private String marker;
     
+    Random rd = new Random(); 
+    
     public LogView() {
     }
-    Random rd = new Random(); 
+    
     
     public LogView(LogEvent wrappedEvent) { 
         super(wrappedEvent);
