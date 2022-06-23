@@ -76,8 +76,8 @@ public class LogAPI implements LogResource{
             filterLog.setDateTo( data.getDate() );
             filterLog.setOffset( 0);
             filterLog.setlevel( Level.INFO );
-            filterLog.setLimit(10);
-            bs.setData( service.getFoundlogJPA( filterLog ).getData() );
+            filterLog.setLimit(1);
+            bs.setData( service.getFoundlogJPA(filterLog).getData() );
         }catch( Exception ex ){
            return BaseResponse.error( 999, ex );
         }
