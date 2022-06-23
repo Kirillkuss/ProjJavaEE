@@ -11,17 +11,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.TableGenerator;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
-import org.hibernate.annotations.GenericGenerator;
 /**
  *
  * @author barysevich_k
@@ -33,23 +30,18 @@ import org.hibernate.annotations.GenericGenerator;
 public class LogView extends BasicLogEventEntity  {
     private LogEvent wrappedEvent;
     
-//    @Id
-//    @Column(name = "id")
-//    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
-//    @ApiModelProperty(value    = "Ид лога", 
-//                      name     = "id", 
-//                      dataType = "Long", 
-//                      example  = "1", 
-//                      required = false)
-//    private Long id;
-
     @Id
-//    @GeneratedValue(generator = "UUID")
-//    @GenericGenerator(
-//        name = "UUID",
-//        strategy = "org.hibernate.id.UUIDGenerator")
-//    @Column(name = "id", updatable = false, nullable = false)
-    private UUID  id;
+    @Column(name = "id")
+//    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @ApiModelProperty(value    = "Ид лога", 
+                      name     = "id", 
+                      dataType = "Long", 
+                      example  = "1", 
+                      required = false)
+    private Long id;
+
+//    @Id
+//    private UUID  id;
     
     @Column(name = "date")
     @JsonSerialize(using = LocalDateTimeSerializerLOGGER.class)
@@ -86,13 +78,12 @@ public class LogView extends BasicLogEventEntity  {
     
     public LogView() {
     }
-    
-
-
+    Random rd = new Random(); 
     
     public LogView(LogEvent wrappedEvent) { 
         super(wrappedEvent);
-        this.id = null == id ? UUID.randomUUID() : id;
+        
+        this.id = null == id ? rd.nextLong() : id;
         if(wrappedEvent != null){
             setDate(Instant.ofEpochMilli(wrappedEvent.getTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime());
             if(wrappedEvent.getMessage() != null){
@@ -114,8 +105,8 @@ public class LogView extends BasicLogEventEntity  {
         }
     }
 
-    public LogView( UUID id, LocalDateTime date, String levels, String message,String marker, Object[] params) { 
-        this.id = null == id ? UUID.randomUUID() : id;
+    public LogView( Long id, LocalDateTime date, String levels, String message,String marker, Object[] params) { 
+        this.id = null == id ? rd.nextLong() : id;
         //this.id = UUID.randomUUID();
         this.date = date;
         this.levels = levels;
@@ -124,19 +115,19 @@ public class LogView extends BasicLogEventEntity  {
         this.marker = marker;
     }
     
-    public LogView( UUID id, LocalDateTime date, String levels, String message, Object[] params) {
-        this.id = null == id ? UUID.randomUUID() : id;
+    public LogView( Long id, LocalDateTime date, String levels, String message, Object[] params) {
+        this.id = null == id ? rd.nextLong() : id;
         this.date = date;
         this.levels = levels;
         this.message = message;
         this.params = params;
     }
     
-    public UUID getId() {   
+    public Long getId() {   
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

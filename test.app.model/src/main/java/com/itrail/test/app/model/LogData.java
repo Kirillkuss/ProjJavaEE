@@ -30,11 +30,11 @@ public class LogData implements Serializable{
     /**
      * key - serialzerObject generatedObjectvalueId
      */
-//    @ApiModelProperty(value    = "id",
-//                      name     = "id",
-//                      dataType = "Long",
-//                      example  = "1000")  
-    private UUID id;
+    @ApiModelProperty(value    = "id",
+                      name     = "id",
+                      dataType = "Long",
+                      example  = "1000")  
+    private Long id;
     
     @JsonSerialize(using = LevelSerializer.class)
     @ApiModelProperty(value    = "level",
@@ -78,7 +78,7 @@ public class LogData implements Serializable{
 //    }
     
 
-    public LogData(UUID id, Level level, Marker marker, String message, Object[] params, LocalDateTime date) {
+    public LogData(Long id, Level level, Marker marker, String message, Object[] params, LocalDateTime date) {
        //this.id = null == id ? /*сгенерировать уникальную id */ : id;
         this.id = id;
         this.level = level;
@@ -128,11 +128,11 @@ public class LogData implements Serializable{
         this.date = date;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
     

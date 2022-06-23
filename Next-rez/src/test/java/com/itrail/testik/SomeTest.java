@@ -47,7 +47,7 @@ public class SomeTest {
         if ( date.getDayOfMonth() == 3 & date.getDayOfMonth() == 4 ) {
            // return unloadStatus;
         }
-        if ( date.getDayOfMonth() == 1 & date.getDayOfMonth() == 2 ){//!2
+        if ( date.getDayOfMonth() == 1 ){//!2
             if(date.getMonthValue() == 12){
                 monthYear = date.minusYears(1).format(DateTimeFormatter.ofPattern( "MM.yyyy" ));   
             } else{ 
@@ -57,14 +57,14 @@ public class SomeTest {
             monthYear = date.format(DateTimeFormatter.ofPattern( "MM.yyyy" ));
         }
         if( date.getDayOfMonth() == 2 ){
-           if ( date.getMonthValue() == 1 ){
+           if ( date.getMonthValue() == 12 ){
                dateFrom = "05.12" + date.minusYears(1).format( DateTimeFormatter.ofPattern( "yyyy" ));
                monthName = "12";
                strFileName = "VED " + date.format( DateTimeFormatter.ofPattern( "dd." )) + monthName; 
            } else{
             dateFrom = "05."+ date.format( DateTimeFormatter.ofPattern( "MM.yyyy" ));
             monthName = date.format( DateTimeFormatter.ofPattern( "MM" ));
-            strFileName="VED "+ date.format(DateTimeFormatter.ofPattern( "dd.MM" ));   
+            strFileName="VED "+ date.format( DateTimeFormatter.ofPattern( "dd.MM" ));   
             } 
         }else {
            dateFrom = dateTo; 
