@@ -12,9 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.SequenceGenerator;
+import java.util.UUID;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
 /**
@@ -32,11 +30,11 @@ public class LogData implements Serializable{
     /**
      * key - serialzerObject generatedObjectvalueId
      */
-    @ApiModelProperty(value    = "id",
-                      name     = "id",
-                      dataType = "Long",
-                      example  = "1000")  
-    private Long id;
+//    @ApiModelProperty(value    = "id",
+//                      name     = "id",
+//                      dataType = "Long",
+//                      example  = "1000")  
+    private UUID id;
     
     @JsonSerialize(using = LevelSerializer.class)
     @ApiModelProperty(value    = "level",
@@ -74,13 +72,13 @@ public class LogData implements Serializable{
     public LogData() {
         
     }
-
-    public LogData(Long id) {
-        this.id = id;
-    }
+//
+//    public LogData(Long id) {
+//        this.id = id;
+//    }
     
 
-    public LogData(Long id, Level level, Marker marker, String message, Object[] params, LocalDateTime date) {
+    public LogData(UUID id, Level level, Marker marker, String message, Object[] params, LocalDateTime date) {
        //this.id = null == id ? /*сгенерировать уникальную id */ : id;
         this.id = id;
         this.level = level;
@@ -130,11 +128,11 @@ public class LogData implements Serializable{
         this.date = date;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
     

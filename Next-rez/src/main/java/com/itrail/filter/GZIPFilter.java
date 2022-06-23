@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
 public class GZIPFilter implements javax.servlet.Filter {
     
     private static final Logger LOGGER = LogManager.getLogger(GZIPFilter.class);
- @Override
+    @Override
     public void destroy() { 
         LOGGER.log(Level.INFO,"Destroying GZIPFilter");
     }

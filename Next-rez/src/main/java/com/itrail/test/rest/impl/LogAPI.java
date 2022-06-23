@@ -7,6 +7,7 @@ import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
+import java.util.UUID;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import org.apache.logging.log4j.Level;
@@ -75,12 +76,11 @@ public class LogAPI implements LogResource{
             filterLog.setDateTo( data.getDate() );
             filterLog.setOffset( 0);
             filterLog.setlevel( Level.INFO );
-            filterLog.setLimit(1);
+            filterLog.setLimit(10);
             bs.setData( service.getFoundlogJPA( filterLog ).getData() );
         }catch( Exception ex ){
            return BaseResponse.error( 999, ex );
         }
         return bs;
-    }  
-
+    }
 }

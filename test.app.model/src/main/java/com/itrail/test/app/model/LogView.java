@@ -11,14 +11,17 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.TableGenerator;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
+import org.hibernate.annotations.GenericGenerator;
 /**
  *
  * @author barysevich_k
@@ -30,23 +33,23 @@ import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
 public class LogView extends BasicLogEventEntity  {
     private LogEvent wrappedEvent;
     
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @ApiModelProperty(value    = "Ид лога", 
-                      name     = "id", 
-                      dataType = "Long", 
-                      example  = "1", 
-                      required = true)
-    private Long id;
-
 //    @Id
+//    @Column(name = "id")
+//    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
+//    @ApiModelProperty(value    = "Ид лога", 
+//                      name     = "id", 
+//                      dataType = "Long", 
+//                      example  = "1", 
+//                      required = false)
+//    private Long id;
+
+    @Id
 //    @GeneratedValue(generator = "UUID")
 //    @GenericGenerator(
 //        name = "UUID",
 //        strategy = "org.hibernate.id.UUIDGenerator")
 //    @Column(name = "id", updatable = false, nullable = false)
-//    private UUID id;
+    private UUID  id;
     
     @Column(name = "date")
     @JsonSerialize(using = LocalDateTimeSerializerLOGGER.class)
@@ -84,8 +87,12 @@ public class LogView extends BasicLogEventEntity  {
     public LogView() {
     }
     
-    public LogView(LogEvent wrappedEvent) {
+
+
+    
+    public LogView(LogEvent wrappedEvent) { 
         super(wrappedEvent);
+        this.id = null == id ? UUID.randomUUID() : id;
         if(wrappedEvent != null){
             setDate(Instant.ofEpochMilli(wrappedEvent.getTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime());
             if(wrappedEvent.getMessage() != null){
@@ -107,8 +114,9 @@ public class LogView extends BasicLogEventEntity  {
         }
     }
 
-    public LogView( Long id, LocalDateTime date, String levels, String message,String marker, Object[] params) {
-        this.id = id;
+    public LogView( UUID id, LocalDateTime date, String levels, String message,String marker, Object[] params) { 
+        this.id = null == id ? UUID.randomUUID() : id;
+        //this.id = UUID.randomUUID();
         this.date = date;
         this.levels = levels;
         this.message = message;
@@ -116,19 +124,19 @@ public class LogView extends BasicLogEventEntity  {
         this.marker = marker;
     }
     
-    public LogView( Long id, LocalDateTime date, String levels, String message, Object[] params) {
-        this.id = id;
+    public LogView( UUID id, LocalDateTime date, String levels, String message, Object[] params) {
+        this.id = null == id ? UUID.randomUUID() : id;
         this.date = date;
         this.levels = levels;
         this.message = message;
         this.params = params;
     }
     
-    public Long getId() {
+    public UUID getId() {   
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -172,16 +180,17 @@ public class LogView extends BasicLogEventEntity  {
         this.marker = marker;
     }
 
+
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.wrappedEvent);
-        hash = 67 * hash + Objects.hashCode(this.id);
-        hash = 67 * hash + Objects.hashCode(this.date);
-        hash = 67 * hash + Objects.hashCode(this.levels);
-        hash = 67 * hash + Objects.hashCode(this.message);
-        hash = 67 * hash + Objects.hashCode(this.params);
-        hash = 67 * hash + Objects.hashCode(this.marker);
+        hash = 17 * hash + Objects.hashCode(this.wrappedEvent);
+        hash = 17 * hash + Objects.hashCode(this.id);
+        hash = 17 * hash + Objects.hashCode(this.date);
+        hash = 17 * hash + Objects.hashCode(this.levels);
+        hash = 17 * hash + Objects.hashCode(this.message);
+        hash = 17 * hash + Arrays.deepHashCode(this.params);
+        hash = 17 * hash + Objects.hashCode(this.marker);
         return hash;
     }
 
@@ -218,9 +227,13 @@ public class LogView extends BasicLogEventEntity  {
         return Arrays.deepEquals(this.params, other.params);
     }
 
+
+    
     @Override
     public String toString() {
-        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", levels=" + levels + ", message=" + message + ", params=" + params + ", marker=" + marker + '}';
+        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", levels=" + levels + ", message=" + message + ", params=" + Arrays.toString(params) + ", marker=" + marker + '}';
     }
     
+    
+  
 }

@@ -58,9 +58,13 @@ public class LogService {
     public void createLog(List<LogView> logi) {
         logi.stream().forEach(s -> entityManager.merge(s));
     }
-
+    
     public void createLog(LogView logi) {
         entityManager.merge(logi);
+    }
+    
+    public void saveLog(LogView logi){
+        entityManager.persist(logi);
     }
 
 
@@ -159,7 +163,7 @@ public class LogService {
         
             subQuery.select( subRoot.get( "levels" )).where( cb.equal( subRoot.get( "levels" ),level.toString() ));
             subQueryTwo.select( subRootTwo ).where( cb.equal( subRootTwo.get( "id" ),id ));
-            logViewCriteria.select( logViewRoot ).where( cb.and(logViewRoot.get( "levels" ).in( subQuery ),logViewRoot.get( "id" ).in( subQueryTwo )));  
+            logViewCriteria.select( logViewRoot ).where( cb.and( logViewRoot.get( "levels" ).in( subQuery ),logViewRoot.get( "id" ).in( subQueryTwo )));  
             f.setData(entityManager.createQuery( logViewCriteria ).getResultList() );
             return f;
         }catch( Exception ex ){
