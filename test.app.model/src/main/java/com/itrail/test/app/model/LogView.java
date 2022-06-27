@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.itrail.test.app.core.LocalDateTimeSerializerLOGGER;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -17,6 +18,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import javax.persistence.PostPersist;
+import javax.persistence.PrePersist;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
 /**
@@ -28,17 +33,18 @@ import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
 @ApiModel(description = "Таблица логов")
 @JsonInclude(Include.NON_DEFAULT)
 public class LogView extends BasicLogEventEntity  {
+    private static final Logger LOGGER = LogManager.getLogger(LogView.class);
     private LogEvent wrappedEvent;
     
     @Id
     @Column(name = "id")
-//    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
+////    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
     @ApiModelProperty(value    = "Ид лога", 
                       name     = "id", 
                       dataType = "Long", 
                       example  = "1", 
                       required = false)
-    private Long id;
+     private Long id;
 
 //    @Id
 //    private UUID  id;
@@ -76,16 +82,14 @@ public class LogView extends BasicLogEventEntity  {
     @ApiModelProperty(required = false)
     private String marker;
     
-    Random rd = new Random(); 
-    
+    Random rd = new Random();
     public LogView() {
     }
-    
     
     public LogView(LogEvent wrappedEvent) { 
         super(wrappedEvent);
         
-        this.id = null == id ? rd.nextLong() : id;
+        //this.id = null == id ? rd.nextLong() : id;
         if(wrappedEvent != null){
             setDate(Instant.ofEpochMilli(wrappedEvent.getTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime());
             if(wrappedEvent.getMessage() != null){
@@ -108,8 +112,9 @@ public class LogView extends BasicLogEventEntity  {
     }
 
     public LogView( Long id, LocalDateTime date, String levels, String message,String marker, Object[] params) { 
-        this.id = null == id ? rd.nextLong() : id;
+       //this.id = null == id ? rd.nextLong() : id;
         //this.id = UUID.randomUUID();
+        this.id = id;
         this.date = date;
         this.levels = levels;
         this.message = message;
@@ -118,7 +123,8 @@ public class LogView extends BasicLogEventEntity  {
     }
     
     public LogView( Long id, LocalDateTime date, String levels, String message, Object[] params) {
-        this.id = null == id ? rd.nextLong() : id;
+       // this.id = null == id ? rd.nextLong() : id;
+        this.id = id;
         this.date = date;
         this.levels = levels;
         this.message = message;
@@ -128,7 +134,7 @@ public class LogView extends BasicLogEventEntity  {
     public Long getId() {   
         return id;
     }
-
+    
     public void setId(Long id) {
         this.id = id;
     }
@@ -173,7 +179,12 @@ public class LogView extends BasicLogEventEntity  {
         this.marker = marker;
     }
 
-
+    @PrePersist
+    public void generatedID(){
+        if (id == null)
+        setId(rd.nextLong());
+    }
+    
     @Override
     public int hashCode() {
         int hash = 3;
