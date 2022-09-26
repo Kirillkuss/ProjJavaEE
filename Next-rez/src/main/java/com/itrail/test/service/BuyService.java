@@ -113,7 +113,8 @@ public class BuyService {
                                                 + " AND :olderid is null or o.idOrder = :olderid")
                                    .setParameter("userid", rq.getIdUser())
                                    .setParameter("timeOrder", rq.getTime())
-                                   .setParameter("olderid", rq.getIdOrderRq()).getResultList(); 
+                                   .setParameter("olderid", rq.getIdOrderRq()).getResultList();
+             //   return em.createQuery("select o FROM Order o").getResultList(); 
     }
     /**
      *Формирование неограниченого количество заказов
@@ -152,7 +153,6 @@ public class BuyService {
         Animal ani = em.find(Animal.class, idAnimal);
         User us = em.find(User.class, idUser);
         Integer a = ani.getCoat().compareTo(us.getWallet());
-     
         if (a > -1) throw new ItException(50," Not enough money to buy an animal ");    
         if( ani.getCount() <= 0) throw new ItException(51,"No animals in the store");
         

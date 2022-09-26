@@ -1,18 +1,29 @@
 package com.itrail.test.app.model;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.itrail.test.app.core.LocalDateTimeSerializer;
+import com.itrail.test.app.core.LocalDateTimeSerializerLOGGER;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.security.SecureRandom;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Objects;
 import javax.persistence.Column;
-
+import javax.persistence.PostPersist;
+import javax.persistence.PrePersist;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity;
 /**
  *
  * @author barysevich_k
@@ -20,73 +31,170 @@ import javax.persistence.Column;
 @Entity
 @Table(name = "LOGGERSTABLE")
 @ApiModel(description = "Таблица логов")
-public class LogView implements Serializable  {
+@JsonInclude(Include.NON_DEFAULT)
+public class LogView extends BasicLogEventEntity  {
+    private static final Logger LOGGER = LogManager.getLogger(LogView.class);
+    private LogEvent wrappedEvent;
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "LOG_ID")
+    @Column(name = "id")
+////    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
     @ApiModelProperty(value    = "Ид лога", 
-                      name     = "IdLogger", 
-                      dataType = "Integer", 
+                      name     = "id", 
+                      dataType = "Long", 
                       example  = "1", 
-                      required = true)
-    private Integer id;
+                      required = false)
+     private Long id;
+
+//    @Id
+//    private UUID  id;
     
     @Column(name = "date")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializerLOGGER.class)
     @ApiModelProperty(value    = "дата", 
                       name     = "date", 
                       dataType = "String", 
-                      example  = "12.04.2022 11:02:42", 
-                      required = true)
+                      example  = "2022-06-03T11:36:37.932Z", 
+                      required = false)
     private LocalDateTime date;
     
-    @Column(name = "text")
+    @Column(name = "Levels")
+    @ApiModelProperty(value = "Уровень лога",
+                      name  = "levels",
+                      dataType = "String",
+                      example = "error",
+                      required = false)
+    private String levels;
+    
+    @Column(name = "message", length = 20000)
     @ApiModelProperty(value    = "сообщение", 
-                      name     = "text", 
+                      name     = "message", 
                       dataType = "String", 
                       example  = "message", 
-                      required = true)
-    private String text;
-
+                      required = false)
+    private String message;
+    
+    @Column(name = "Params")
+    @ApiModelProperty(required = false)
+    private Object[] params;
+    
+    @Column(name = "marker")
+    @ApiModelProperty(required = false)
+    private String marker;
+    
+    Random rd = new Random();
     public LogView() {
     }
-
-    public LogView(Integer id, LocalDateTime date, String text) {
-        this.id = id;
-        this.date = date;
-        this.text = text;
+    
+    public LogView(LogEvent wrappedEvent) { 
+        super(wrappedEvent);
+        
+        //this.id = null == id ? rd.nextLong() : id;
+        if(wrappedEvent != null){
+            setDate(Instant.ofEpochMilli(wrappedEvent.getTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+            if(wrappedEvent.getMessage() != null){
+                setmessage(wrappedEvent.getMessage().toString());
+            }
+            if(wrappedEvent.getLevel()!=null){
+                setLevel(wrappedEvent.getLevel().toString());
+            }
+            
+            if(wrappedEvent.getMarker() != null){             
+                setmarker(wrappedEvent.getMarker().getName());      
+            }
+            if(wrappedEvent.getMessage().getParameters() !=null){
+                setParams(wrappedEvent.getMessage().getParameters());
+            }
+                //setstacktrace(wrappedEvent.getContextStack().toArray().toString()); //one element 
+//                StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+//                setstacktrace( Arrays.stream(stack).map(StackTraceElement::toString).collect(Collectors.joining("\n")));   
+        }
     }
 
-    public Integer getId() {
+    public LogView( Long id, LocalDateTime date, String levels, String message,String marker, Object[] params) { 
+       //this.id = null == id ? rd.nextLong() : id;
+        //this.id = UUID.randomUUID();
+        this.id = id;
+        this.date = date;
+        this.levels = levels;
+        this.message = message;
+        this.params = params;
+        this.marker = marker;
+    }
+    
+    public LogView( Long id, LocalDateTime date, String levels, String message, Object[] params) {
+       // this.id = null == id ? rd.nextLong() : id;
+        this.id = id;
+        this.date = date;
+        this.levels = levels;
+        this.message = message;
+        this.params = params;
+    }
+    
+    public Long getId() {   
         return id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDateTime getDate() {
         return date;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public String getlevel() {
+        return levels;
     }
 
+    public void setLevel(String levels) {
+        this.levels = levels;
+    }
+
+    public String getmessage() {
+        return message;
+    }
+
+    public void setmessage(String message) {
+        this.message = message;
+    }
+
+    public Object[] getParams() {
+        return params;
+    }
+
+    public void setParams(Object[] params) {
+        this.params = params;
+    }
+
+    public String getmarker() {
+        return marker;
+    }
+
+    public void setmarker(String marker) {
+        this.marker = marker;
+    }
+
+    @PrePersist
+    public void generatedID(){
+        if (id == null)
+        setId(rd.nextLong());
+    }
+    
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 13 * hash + Objects.hashCode(this.id);
-        hash = 13 * hash + Objects.hashCode(this.date);
-        hash = 13 * hash + Objects.hashCode(this.text);
+        int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.wrappedEvent);
+        hash = 17 * hash + Objects.hashCode(this.id);
+        hash = 17 * hash + Objects.hashCode(this.date);
+        hash = 17 * hash + Objects.hashCode(this.levels);
+        hash = 17 * hash + Objects.hashCode(this.message);
+        hash = 17 * hash + Arrays.deepHashCode(this.params);
+        hash = 17 * hash + Objects.hashCode(this.marker);
         return hash;
     }
 
@@ -102,20 +210,34 @@ public class LogView implements Serializable  {
             return false;
         }
         final LogView other = (LogView) obj;
-        if (!Objects.equals(this.text, other.text)) {
+        if (!Objects.equals(this.levels, other.levels)) {
+            return false;
+        }
+        if (!Objects.equals(this.message, other.message)) {
+            return false;
+        }
+        if (!Objects.equals(this.marker, other.marker)) {
+            return false;
+        }
+        if (!Objects.equals(this.wrappedEvent, other.wrappedEvent)) {
             return false;
         }
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        return Objects.equals(this.date, other.date);
+        if (!Objects.equals(this.date, other.date)) {
+            return false;
+        }
+        return Arrays.deepEquals(this.params, other.params);
     }
 
 
+    
     @Override
     public String toString() {
-        return "LogView{" + "id=" + id + ", date=" + date + ", text=" + text + '}';
+        return "LogView{" + "wrappedEvent=" + wrappedEvent + ", id=" + id + ", date=" + date + ", levels=" + levels + ", message=" + message + ", params=" + Arrays.toString(params) + ", marker=" + marker + '}';
     }
     
     
+  
 }

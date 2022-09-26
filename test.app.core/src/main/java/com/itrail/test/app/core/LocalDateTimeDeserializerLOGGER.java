@@ -12,11 +12,11 @@ import java.time.format.DateTimeFormatter;
  *
  * @author barysevich_k
  */
-public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
+public class LocalDateTimeDeserializerLOGGER extends JsonDeserializer<LocalDateTime> {
 
     @Override
     public LocalDateTime deserialize(JsonParser jp, DeserializationContext dc) throws IOException, JsonProcessingException {
-        return LocalDateTime.parse(jp.getValueAsString(),DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
-    }
-    
+        return LocalDateTime.parse(jp.getText(),DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX"));
+       // return LocalDateTime.parse( jp.getText(),DateTimeFormatter.ISO_ZONED_DATE_TIME); 
+    }  
 }

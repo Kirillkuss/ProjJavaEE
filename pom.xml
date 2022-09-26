@@ -10,12 +10,10 @@
     <modules>
         <module>Next-rez</module>
         <module>test.log4j.plugins</module>
-        <module>test.app.model</module>
+        <module>test.app.model</module> 
         <module>test.app.core</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
     </properties>
-
-</project>
+</project>      

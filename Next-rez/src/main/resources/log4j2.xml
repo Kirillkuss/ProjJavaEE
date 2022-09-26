@@ -5,8 +5,9 @@
     
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>
+            
         </Console>
-    
+        
         
         <RollingFile name="LogToRollingFile" fileName="${sys:jboss.server.log.dir}/epd/rest.web.log" filePattern="${sys:jboss.server.log.dir}/epd/arch/$${date:MM-dd}/rest.web-%d{dd.MM.yyyy}-%i.log.gz">
             <PatternLayout>
@@ -34,32 +35,41 @@
 
             <DataSource jndiName="java:jboss/datasources/ExampleDS"/>
             <Column name="ID" pattern="%u" isUnicode="false"/>
-            <Column name="DATE_TIME" isEventTimestamp="true" isUnicode="false"/>
+            <!--Column name="DATE_TIME" isEventTimestamp="true" isUnicode="false"/>
             <Column name="CLASS" pattern="%logger" isUnicode="false"/>
             <Column name="LEVEL" pattern="%level" isUnicode="false"/>
             <Column name="MESSAGE" pattern="%message" isUnicode="false"/>
-            <Column name="EXCEPTION" pattern="%ex{full}" isClob="true" isUnicode="false"/>
+            <Column name="EXCEPTION" pattern="%ex{full}" isClob="true" isUnicode="false"/!-->
         </JDBC>
-      
+        
         <MyAppender name="ABC">
-             <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>
         </MyAppender> 
+        
+        <JPA name="JpaAppender" persistenceUnitName="default" entityClassName="com.itrail.test.app.model.LogView" ignoreExceptions="false">
+                  <MarkerFilter marker ="SQL" onMatch="ACCEPT" onMismatch="ACCEPT" />
+        </JPA>
+        
     </Appenders>
         
     <Loggers>
         <Logger name="com.itrail.test.rest.impl" additivity="true" >
             <AppenderRef ref="LogToAnimalS" />
-        </Logger>
-        
+        </Logger> 
         <AsyncLogger name="dbZooStore" level="info" includeLocation="true" >
             <AppenderRef ref="dbZooStore" />
         </AsyncLogger>
-        
-        
-        <AsyncRoot  level = "DEBUG">
+                
+        <!--AsyncLogger name="JpaAppender " level="DEBUG" >
+            <AppenderRef ref="JpaAppender" />
+        </AsyncLogger!-->
+         
+        <AsyncRoot  level = "TRACE">   
             <AppenderRef ref="Console" />
             <AppenderRef ref="LogToRollingFile" />
             <AppenderRef ref="ABC" />
-        </AsyncRoot>   
+            <AppenderRef ref="JpaAppender"/>
+        </AsyncRoot>
+              
     </Loggers>
 </Configuration>

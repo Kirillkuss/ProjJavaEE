@@ -45,8 +45,8 @@ public interface BuyResource {
         @ApiResponse(code = 401, message = "Значение ключа не может быть равным нулю или пустым, повторите попытку!"),
         @ApiResponse(code = 403, message = "Неверный ключ, повторите попытку!")})
     public BaseResponse getBuyAnimal(
-        @ApiParam(required = true, value = "Ид питомца")           @PathParam("animal") Integer idAnimal,
-        @ApiParam(required = true, value = "Ид пользователя")      @PathParam("user") Integer idUser,
+        @ApiParam(required = false, value = "Ид питомца")           @PathParam("animal") Integer idAnimal,
+        @ApiParam(required = false, value = "Ид пользователя")      @PathParam("user") Integer idUser,
         @ApiParam(value = "ключ", example = " ")                   @HeaderParam("X-API-KEY") String key
     ) throws ItException;
 

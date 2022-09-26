@@ -30,28 +30,28 @@ public class Order implements Serializable {
                       name     = "IdOrder", 
                       dataType = "Integer", 
                       example  = "1", 
-                      required = true)
+                      required = false)
     private Integer idOrder;
     
     @ApiModelProperty(value    = "Ид покупателя",
                       name     = "userID",
                       dataType = "Integer",
                       example  = "1",
-                      required = true)
+                      required = false)
     private Integer userID;
     
     @ApiModelProperty(value    = "Ид питомца",
                       name     = "animalID",
                       dataType = "Integer",
                       example  = "1",
-                      required = true)
+                      required = false)
     private Integer animalID;
     
     @ApiModelProperty(value    = "Стоипость покупки",
                       name     = "sum",
                       dataType = "String",
                       example  = "400.2",
-                      required = true)
+                      required = false)
     private BigDecimal sum;
     
     
@@ -59,8 +59,8 @@ public class Order implements Serializable {
     @ApiModelProperty(value    = "Время покупки",
                       name     = "time",
                       dataType = "String",
-                      example  = "12.04.2022 11:02:42",
-                      required = true)
+                      example  = "2022.03.08 11:08:17",
+                      required = false)
     private LocalDateTime time;
 
     public Order() {

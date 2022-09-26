@@ -30,7 +30,7 @@ public class OrderRequest implements Serializable {
     @ApiModelProperty(value = "Ид пользователя", name = "idUser", dataType = "Integer", example = "1")
     private Integer idUser;
     
-    @ApiModelProperty(value = "Время и Дата заказа", name = "time",dataType = "String", example = "08.04.2022 10:15:46")
+    @ApiModelProperty(value = "Время и Дата заказа", name = "time",dataType = "String", example = "2022.04.08 11:08:17")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class) 
     private LocalDateTime time;
 
