@@ -7,7 +7,6 @@ import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.rest.LogResource;
 import com.itrail.test.service.LogService;
-import java.util.UUID;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import org.apache.logging.log4j.Level;

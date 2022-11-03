@@ -12,6 +12,7 @@ import javax.ws.rs.core.Context;
  */
 @ApplicationPath("/api")
 public class Application extends javax.ws.rs.core.Application {
+    
     public Application(@Context ServletConfig servletconfig) {
   
         BeanConfig beanConfig = new BeanConfig();
@@ -22,12 +23,11 @@ public class Application extends javax.ws.rs.core.Application {
         beanConfig.setResourcePackage("com.itrail.test.rest.impl");
         beanConfig.setScan(true);
     }
+    
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new HashSet();
-        resources.add(io.swagger.jaxrs.listing.ApiListingResource.class);
-        resources.add(io.swagger.jaxrs.listing.SwaggerSerializers.class);
-        return new HashSet();
+        return resources;
     }
 
 }
