@@ -23,14 +23,26 @@ import javax.ws.rs.core.MediaType;
 public interface SpthinxResource {
 
     @POST
-    @Path( "/test/{record}")
-    @ApiOperation(value = "Распознование речи")
+    @Path( "/eng/{record}")
+    @ApiOperation(value = "Распознование речи англ")
     @ApiResponses(value = {         
         @ApiResponse( code = 200, message = "success",             response = BaseResponse.class ),
         @ApiResponse( code = 400, message = "Bad request",         response = BaseResponse.class ),
         @ApiResponse( code = 500, message = "System mallfunction", response = BaseResponse.class )
     })
-    public BaseResponse getRecord( @PathParam( "record" ) @ApiParam( example = "D://Project/TestJavaSphinx/src/main/resources/terminator.wav") String record ) throws Exception;
+    public BaseResponse getRecord( @PathParam( "record" ) @ApiParam( example = "D://Project/TestJavaSphinx/src/main/resources/terminator.wav")
+        String record ) throws Exception;
+    
+    @POST
+    @Path( "/ru/{record}")
+    @ApiOperation(value = "Распознование речи рус")
+    @ApiResponses(value = {         
+        @ApiResponse( code = 200, message = "success",             response = BaseResponse.class ),
+        @ApiResponse( code = 400, message = "Bad request",         response = BaseResponse.class ),
+        @ApiResponse( code = 500, message = "System mallfunction", response = BaseResponse.class )
+    })
+    public BaseResponse getRuRecord( @PathParam( "record" ) @ApiParam( example = "D://Project/TestJavaSphinx/src/main/resources/decoder-test.wav")
+        String record ) throws Exception;
     
 }
     

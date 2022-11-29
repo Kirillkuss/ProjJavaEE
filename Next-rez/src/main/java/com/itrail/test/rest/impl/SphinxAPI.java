@@ -20,5 +20,17 @@ public class SphinxAPI implements SpthinxResource{
             return BaseResponse.error( 900, ex );
         }
     }
+
+    @Override
+    public BaseResponse getRuRecord( String record ) throws Exception {
+        BaseResponse response = new BaseResponse( 200, "success" );
+        try{
+            response.setData( Record.getRuRecord(record) );
+            return response;
+        }catch( Exception ex ){
+            return BaseResponse.error( 900 , ex );
+        }
+    }
+    
     
 }
