@@ -30,7 +30,7 @@ public interface SpthinxResource {
         @ApiResponse( code = 400, message = "Bad request",         response = BaseResponse.class ),
         @ApiResponse( code = 500, message = "System mallfunction", response = BaseResponse.class )
     })
-    public BaseResponse getRecord( @PathParam( "record" ) @ApiParam( example = "D://Project/TestJavaSphinx/src/main/resources/terminator.wav")
+    public BaseResponse getRecord( @PathParam( "record" ) @ApiParam( example = "D://Project/test/Next-rez/src/main/resources/terminator.wav")
         String record ) throws Exception;
     
     @POST
@@ -41,7 +41,7 @@ public interface SpthinxResource {
         @ApiResponse( code = 400, message = "Bad request",         response = BaseResponse.class ),
         @ApiResponse( code = 500, message = "System mallfunction", response = BaseResponse.class )
     })
-    public BaseResponse getRuRecord( @PathParam( "record" ) @ApiParam( example = "D://Project/TestJavaSphinx/src/main/resources/decoder-test.wav")
+    public BaseResponse getRuRecord( @PathParam( "record" ) @ApiParam( example = "D://Project/test/Next-rez/src/main/resources/decoder-test.wav")
         String record ) throws Exception;
     
 }
