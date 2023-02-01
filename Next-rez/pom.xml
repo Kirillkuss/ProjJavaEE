@@ -19,12 +19,16 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <jakartaee>8.0</jakartaee>    
     </properties>
-        <repositories>
+    <repositories>
         <repository>
             <id>snapshots-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases><enabled>false</enabled></releases>
-            <snapshots><enabled>true</enabled></snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
     <!-- DB H2 !-->
@@ -106,6 +110,11 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>test.selenium</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>${jakartaee}</version>
@@ -183,7 +192,16 @@
             <groupId>edu.cmu.sphinx</groupId>
             <artifactId>sphinx4-data</artifactId>
             <version>5prealpha-SNAPSHOT</version>
-        </dependency> 
+        </dependency>
+        <!--JMockit !-->
+        <dependency> 
+            <groupId>org.jmockit</groupId> 
+            <artifactId>jmockit</artifactId>
+            <version>1.41</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        
     </dependencies>  
     <build>
         <finalName>rest</finalName>
@@ -208,16 +226,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
-
-            <!--plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin!-->
+           
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -256,26 +265,25 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--plugin>
-                <groupId>com.ethlo.persistence.tools</groupId>
-                <artifactId>eclipselink-maven-plugin</artifactId>
-                <version>2.7.9.1</version>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version>
                 <executions>
                     <execution>
-                        <phase>process-classes</phase>
                         <goals>
-                            <goal>weave</goal>
+                            <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>modelgen</id>
-                        <phase>generate-sources</phase>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>modelgen</goal>
+                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
-            </plugin!-->
+            </plugin>
         </plugins>
     </build>
 </project>
