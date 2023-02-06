@@ -7,6 +7,10 @@
     <artifactId>test</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
+    <ciManagement>
+        <system>hudson</system>
+        <url>http://localhost:8083/job/TestEE/</url>
+    </ciManagement>
     <modules>
         <module>Next-rez</module>
         <module>test.log4j.plugins</module>
