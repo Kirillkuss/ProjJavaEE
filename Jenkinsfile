@@ -1,5 +1,8 @@
 pipeline {
   agent 'any'
+  	triggers{
+		cron('H H(9-16)/2 * * 1-5')
+	}
   stages {
     stage('Clean') {
       steps {
