@@ -2,12 +2,9 @@
 <Configuration packages="com.itrail.test.log4j.plugins" status="WARN" monitorInterval="60">
     
     <Appenders>
-    
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>
-            
         </Console>
-        
         
         <RollingFile name="LogToRollingFile" fileName="${sys:jboss.server.log.dir}/epd/rest.web.log" filePattern="${sys:jboss.server.log.dir}/epd/arch/$${date:MM-dd}/rest.web-%d{dd.MM.yyyy}-%i.log.gz">
             <PatternLayout>
@@ -19,7 +16,6 @@
             </Policies>
         </RollingFile>
         
-        
         <RollingFile name="LogToAnimalS" fileName="${sys:jboss.server.log.dir}/requestAnimal/rest.web.log" 
                      filePattern="${sys:jboss.server.log.dir}/requestAnimal/arch/$${date:MM-dd}/requestAnimal/rest.web-%d{dd.MM.yyyy}-%i.log.gz">
             <PatternLayout>
@@ -29,18 +25,17 @@
                 <TimeBasedTriggeringPolicy />
                 <SizeBasedTriggeringPolicy size="1 MB"/>
             </Policies>
-        </RollingFile>
-        
-        <JDBC name="dbZooStore" tableName="EVENT_LOGS">
-
+        </RollingFile>   
+          
+        <!--JDBC name="dbZooStore" tableName="EVENT_LOGS">
             <DataSource jndiName="java:jboss/datasources/ExampleDS"/>
             <Column name="ID" pattern="%u" isUnicode="false"/>
-            <!--Column name="DATE_TIME" isEventTimestamp="true" isUnicode="false"/>
+            <Column name="DATE_TIME" isEventTimestamp="true" isUnicode="false"/>
             <Column name="CLASS" pattern="%logger" isUnicode="false"/>
             <Column name="LEVEL" pattern="%level" isUnicode="false"/>
             <Column name="MESSAGE" pattern="%message" isUnicode="false"/>
-            <Column name="EXCEPTION" pattern="%ex{full}" isClob="true" isUnicode="false"/!-->
-        </JDBC>
+            <Column name="EXCEPTION" pattern="%ex{full}" isClob="true" isUnicode="false">
+        </JDBC!-->
         
         <MyAppender name="ABC">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>
@@ -49,7 +44,6 @@
         <JPA name="JpaAppender" persistenceUnitName="default" entityClassName="com.itrail.test.app.model.LogView" ignoreExceptions="false">
                   <MarkerFilter marker ="SQL" onMatch="ACCEPT" onMismatch="ACCEPT" />
         </JPA>
-        
     </Appenders>
         
     <Loggers>
@@ -69,7 +63,6 @@
             <AppenderRef ref="LogToRollingFile" />
             <AppenderRef ref="ABC" />
             <AppenderRef ref="JpaAppender"/>
-        </AsyncRoot>
-              
+        </AsyncRoot> 
     </Loggers>
 </Configuration>
