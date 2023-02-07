@@ -34,8 +34,8 @@
             <Column name="CLASS" pattern="%logger" isUnicode="false"/>
             <Column name="LEVEL" pattern="%level" isUnicode="false"/>
             <Column name="MESSAGE" pattern="%message" isUnicode="false"/>
-            <Column name="EXCEPTION" pattern="%ex{full}" isClob="true" isUnicode="false"/!-->
-        </JDBC>
+            <Column name="EXCEPTION" pattern="%ex{full}" isClob="true" isUnicode="false"/>
+        </JDBC!-->
         
         <MyAppender name="ABC">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %msg%n"/>

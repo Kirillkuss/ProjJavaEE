@@ -15,6 +15,10 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        <wildfly-hostname>0.0.0.0</wildfly-hostname>
+        <wildfly-port>9990</wildfly-port>
+        <wildfly-username>admin</wildfly-username>
+        <wildfly-password>admin</wildfly-password>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <jakartaee>8.0</jakartaee>    
@@ -237,7 +241,7 @@
                     <dependency>
                         <groupId>org.aspectj</groupId>
                         <artifactId>aspectjweaver</artifactId>
-                        <version>1.9.19</version>
+                        <version>1.9.19</version>   
                     </dependency>
                 </dependencies>
             </plugin>
