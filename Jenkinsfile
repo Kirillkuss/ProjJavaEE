@@ -30,6 +30,7 @@ pipeline {
   }
     post {
         always {
+			allure includeProperties: false, jdk: '', properties: [[key: 'allure.results.directory', value: 'Next-rez/target/allure-results']], report: 'Next-rez/target/allure-report', results: [[path: 'Next-rez/target/allure-results']]
             junit(testResults: '**/target/surefire-reports/*.xml', allowEmptyResults : true, skipPublishingChecks: true)
             }
         }
