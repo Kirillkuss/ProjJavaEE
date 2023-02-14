@@ -205,18 +205,19 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-junit5</artifactId>
-            <version>2.20.1</version>
-            <scope>test</scope>
-        </dependency>
         <!--Jacoco!-->
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.agent</artifactId>
             <classifier>runtime</classifier>
             <version>0.8.8</version>
+            <scope>test</scope>
+        </dependency>
+        <!--Allure!-->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>2.20.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
