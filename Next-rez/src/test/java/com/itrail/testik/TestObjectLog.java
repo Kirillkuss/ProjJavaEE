@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itrail.test.app.model.FilterLog;
 import com.itrail.test.app.model.LogData;
 import com.itrail.test.domain.BaseResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,38 +17,15 @@ import java.util.NoSuchElementException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
 /**
  *
  * @author barysevich_k
  */
 public class TestObjectLog {
+    
     public static final Marker MAR = MarkerManager.getMarker("SALAM");
-    
-    public TestObjectLog() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
     
     public LogData createLogData(){
        LogData data = new LogData();

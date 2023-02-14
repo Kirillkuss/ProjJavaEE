@@ -1,16 +1,10 @@
-
 package com.itrail.testik;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 /**
@@ -18,66 +12,6 @@ import static org.junit.Assert.*;
  * @author barysevich_k
  */
 public class SomeTest {
-    
-    public SomeTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-    
-//    @Test
-//    public void testSomeMethodr() {        
-//        String dateFrom, monthYear,strFileName;
-//        LocalDate my, from, date ;
-//        date = LocalDate.now();
-//        String dateTo = date.plusMonths(1).format( DateTimeFormatter.ofPattern( "dd.MM.yyyy" )); 
-//        int monthName; 
-//        if ( date.getDayOfMonth() == 3 & date.getDayOfMonth() == 4 ) {
-//           // return unloadStatus;
-//        }
-//        if ( date.getDayOfMonth() == 1 | date.getDayOfMonth() == 2){//!2
-//            if(date.getMonthValue() == 12){
-//                my =  date.minusYears(1);      
-//            } else{
-//                my = date.minusMonths(1);      
-//            }
-//        }else{
-//            my = date;  
-//        }
-//        monthYear = my.format(DateTimeFormatter.ofPattern( "MM.yyyy" ));
-//        if( date.getDayOfMonth() == 2 ){
-//           if ( date.getMonthValue() == 12 ){
-//                from = LocalDate.of( date.minusYears(1).getYear(), date.getMonthValue(), 5 );
-//           } else{
-//                from = LocalDate.of( date.getYear(), date.getMonthValue(), 5 );
-//            }   
-//        }else {
-//            from = date;
-//        }
-//        monthName = date.getMonthValue();
-//        dateFrom  = from.format(DateTimeFormatter.ofPattern( "dd.MM.yyyy" ));
-//        strFileName = "VED " + date.format(DateTimeFormatter.ofPattern( "dd.MM" ));
-//        System.out.println( "MY dateFrom "    + dateFrom );
-//        System.out.println( "MY dateTo "      + dateTo );
-//        System.out.println( "MY monthName "   + monthName );
-//        System.out.println( "MY strFileName " + strFileName );
-//        System.out.println( "MY monthYear "   + monthYear );
-//    }
-    
-    
     
     @Test
     public void testSomeMethod() {
