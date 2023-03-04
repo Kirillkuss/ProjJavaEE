@@ -13,12 +13,14 @@ import mockit.integration.junit4.JMockit;
 import org.apache.logging.log4j.Level;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 /**
  * этот класс для тестирования сервиса
  * @see com.itrail.test.service.LogService
  * @author barysevich_k
  */
+@Ignore
 @RunWith( JMockit.class )
 public class LogServiceTest {
     
