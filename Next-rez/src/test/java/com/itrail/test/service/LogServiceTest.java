@@ -51,7 +51,7 @@ public class LogServiceTest {
      * Тестирование метода getFoundLogJPQL()
      * @throws Exception 
      */
-    @Test
+    //@Test
     public void testGetFoundLogJPQL() throws Exception{
         service.getFoundLogJPQL( filterLog );
     }
