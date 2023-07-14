@@ -1,2 +1,4 @@
 # ProjJavaEE
-Java EE + WildFly + H2DB
+* Java EE
+* WildFly
+* H2DB
