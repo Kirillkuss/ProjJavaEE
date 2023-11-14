@@ -3,9 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
+    
     <c:set var="url">${pageContext.request.requestURL}</c:set>
     <c:set var="path">${fn:substring(pageContext.request.requestURL, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/</c:set>
-
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Swagger UI</title>
