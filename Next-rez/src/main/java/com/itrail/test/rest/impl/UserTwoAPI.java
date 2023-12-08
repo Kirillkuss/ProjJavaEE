@@ -3,6 +3,7 @@ package com.itrail.test.rest.impl;
 
 import com.itrail.test.domain.BaseResponse;
 import com.itrail.test.domain.User;
+import com.itrail.test.mqtt.Publish;
 import com.itrail.test.rest.UserResourceTwo;
 import com.itrail.test.service.UserServiceTwo;
 import java.util.List;
@@ -18,6 +19,7 @@ public class UserTwoAPI implements UserResourceTwo {
     @EJB private UserServiceTwo service;
     @Override
     public BaseResponse getAllUsers() {
+        Publish.getPublish();
         BaseResponse bs = new BaseResponse(200,"success");
         List<User> rezult =  service.getAllUser();
         bs.setData(rezult);

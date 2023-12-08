@@ -3,17 +3,23 @@ package com.itrail.test;
 import com.itrail.test.app.model.LogView;
 import com.itrail.test.domain.Animal;
 import com.itrail.test.domain.User;
+import com.itrail.test.mqtt.Publish;
+import com.itrail.test.mqtt.Subscribe;
 import com.itrail.test.service.AnimalServiceTwo;
 import com.itrail.test.service.BuyService;
 import com.itrail.test.service.LogService;
 import com.itrail.test.service.UserServiceTwo;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 /**
  *
  * @author barysevich_k
@@ -25,9 +31,12 @@ public class ApplicationTest  {
     @EJB private AnimalServiceTwo service2;
     @EJB private BuyService service3;
     @EJB private LogService service4;
-
+    
+    MqttClient client = null;
+    
     @PostConstruct
-    public void init(){
+    public void init() {
+        client = Subscribe.getSubcribe();
         service.createUsers(
                 new User(null,"Petr","ppp@mail.ru","+3752508878",new BigDecimal("10000.23")),
                 new User(null, "Robert", "rrrrr@ty.ru", "+37529894545", new BigDecimal("5000.34")),
@@ -40,11 +49,14 @@ public class ApplicationTest  {
                               new Animal(null,"snake",new BigDecimal("300.87"),5)); 
         service3.createOrder();    
         service4.createLog();
+        Publish.getPublish();
     }
 
+    
     @PreDestroy
-    public void destroy(){
-        
+    public void destroy() throws MqttException{
+        client.disconnect();
+        client.close();
     }
        
 }
