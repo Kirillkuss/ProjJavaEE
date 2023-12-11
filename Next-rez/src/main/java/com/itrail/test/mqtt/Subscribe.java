@@ -19,13 +19,13 @@ public class Subscribe {
     
     public static MqttClient getSubcribe(){
 
-        String broker = "tcp://broker.emqx.io:1883";
+        //String broker = "tcp://broker.emqx.io:1883";
+        String broker = "ssl://broker.emqx.io:8883";
         String topic = "mqtt/myTest";
         String username = "test";
         String password = "test";
         String clientid = "subscribe_client_test";
         int qos = 0;
-
         try {
             MqttClient client = new MqttClient(broker, clientid, new MemoryPersistence());
 
@@ -37,20 +37,19 @@ public class Subscribe {
             options.setKeepAliveInterval(60);
             options.setAutomaticReconnect(true );
             client.setCallback(new MqttCallback() {
-            
                 @Override
                 public void connectionLost(Throwable cause) {
-                    LOGGER.info( "connectionLost: {0}", cause.getMessage());
+                    LOGGER.info( "connectionLost: " + cause.getMessage());
                 }
 
                 @Override
                 public void messageArrived(String topic, MqttMessage message) {
-                    LOGGER.info(  "Subscribe: Topic >>>" + topic + " Qos >>> " + message.getQos() +" Message content >>> " + new String(message.getPayload()));
+                    LOGGER.info( "Topic >>>" + topic + " Qos >>> " + message.getQos() +" Message >>> " + new String(message.getPayload()));
                 }
 
                 @Override
                 public void deliveryComplete(IMqttDeliveryToken token) {
-                    LOGGER.info(  "deliveryComplete---------{0}", token.isComplete());
+                    LOGGER.info(  "deliveryComplete >>>" + token.isComplete());
                 }
 
             });
